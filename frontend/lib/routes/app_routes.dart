@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:vaibhav_s_application2/presentation/add_avatar_screen/add_avatar_screen.dart';
+import 'package:vaibhav_s_application2/presentation/add_avatar_screen/binding/add_avatar_binding.dart';
 import '../presentation/splash_screen/splash_screen.dart';
 import '../presentation/splash_screen/binding/splash_binding.dart';
 import '../presentation/login_screen/login_screen.dart';
@@ -56,6 +58,8 @@ class AppRoutes {
   static const String forgotPasswordScreen = '/forgot_password_screen';
 
   static const String signUpScreen = '/sign_up_screen';
+
+  static const String addAvatarScreen = '/add_avatar_screen';
 
   static const String notificationScreen = '/notification_screen';
 
@@ -149,6 +153,13 @@ class AppRoutes {
       bindings: [
         SignUpBinding(),
       ],
+    ),
+    GetPage(
+        name: addAvatarScreen,
+        page: () => AddAvatarScreen(),
+      bindings: [
+        AddAvatarBinding()
+      ]
     ),
     GetPage(
       name: notificationScreen,

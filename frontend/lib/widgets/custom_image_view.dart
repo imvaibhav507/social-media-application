@@ -74,6 +74,7 @@ class CustomImageView extends StatelessWidget {
     if (border != null) {
       return Container(
         decoration: BoxDecoration(
+          color: Colors.white,
           border: border,
           borderRadius: radius,
         ),

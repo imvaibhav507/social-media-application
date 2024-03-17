@@ -244,6 +244,7 @@ class PrimaryColors {
 
   // Yellow
   Color get yellowA200 => Color(0XFFFFFC00);
+
 }
 
 PrimaryColors get appTheme => ThemeHelper().themeColor();

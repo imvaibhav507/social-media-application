@@ -37,6 +37,7 @@ class ImageConstant {
   static String imgRadiobuttonunchecked =
       '$imagePath/img_radiobuttonunchecked.svg';
 
+  static String imgUserProfile = '$imagePath/img_user_profile.png';
   // Notification images
   static String imgNotificationBell = '$imagePath/img_notification_bell.png';
 
@@ -295,4 +296,9 @@ class ImageConstant {
   static String imgGroup9036 = '$imagePath/img_group_9036.svg';
 
   static String imageNotFound = 'assets/images/image_not_found.png';
+
+  static String imgEdit = 'assets/images/img_edit.png';
+
+  static String imgEdit2 = 'assets/images/img_edit2.png';
+
 }

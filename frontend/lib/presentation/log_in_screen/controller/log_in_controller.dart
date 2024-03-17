@@ -1,5 +1,4 @@
 import '../../../core/app_export.dart';
-import '../models/log_in_model.dart';
 import 'package:flutter/material.dart';
 
 /// A controller class for the LogInScreen.
@@ -11,7 +10,7 @@ class LogInController extends GetxController {
 
   TextEditingController passwordController = TextEditingController();
 
-  Rx<LogInModel> logInModelObj = LogInModel().obs;
+  // Rx<LogInModel> logInModelObj = LogInModel().obs;
 
   Rx<bool> isShowPassword = true.obs;
 

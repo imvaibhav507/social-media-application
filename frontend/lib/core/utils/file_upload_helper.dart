@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:images_picker/images_picker.dart';
-
+import 'package:image_picker/image_picker.dart';
 class FileManager {
   /// Shows a modal bottom sheet for selecting images from the gallery or camera.
   ///

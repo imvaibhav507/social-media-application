@@ -14,9 +14,13 @@ dependencies:
   google_sign_in: ^5.0.7
   flutter_login_facebook: ^1.6.2
   intl: ^0.18.0
-  permission_handler: ^11.1.0
+  permission_handler: ^11.3.0
   images_picker: ^1.2.11
   url_launcher: ^6.2.4
+  http: ^1.2.1
+  fluttertoast: ^8.2.4
+  image_picker: ^1.0.7
+  video_player: ^2.8.3
 dev_dependencies: 
   flutter_test: 
     sdk: flutter

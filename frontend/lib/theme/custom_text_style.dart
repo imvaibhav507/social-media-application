@@ -72,6 +72,7 @@ class CustomTextStyles {
       );
   static get headlineLargePrimary => theme.textTheme.headlineLarge!.copyWith(
         color: theme.colorScheme.primary,
+        fontWeight: FontWeight.w100,
       );
   // Label text style
   static get labelLargeBluegray400 => theme.textTheme.labelLarge!.copyWith(

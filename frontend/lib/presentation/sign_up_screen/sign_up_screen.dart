@@ -1,8 +1,9 @@
+import 'package:vaibhav_s_application2/data/models/sign_up_model.dart';
+import 'package:vaibhav_s_application2/presentation/log_in_screen/models/log_in_model.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart';
 import 'package:vaibhav_s_application2/core/utils/validation_functions.dart';
 import 'package:vaibhav_s_application2/widgets/custom_text_form_field.dart';
-import 'package:vaibhav_s_application2/widgets/custom_radio_button.dart';
 import 'package:vaibhav_s_application2/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
@@ -14,6 +15,8 @@ class SignUpScreen extends GetWidget<SignUpController> {
       : super(
           key: key,
         );
+
+  SignUpController controller = Get.find<SignUpController>();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -57,14 +60,14 @@ class SignUpScreen extends GetWidget<SignUpController> {
                     SizedBox(height: 16.v),
                     _buildPhone(),
                     SizedBox(height: 16.v),
-                    _buildDateOfBirth(),
+                    _buildPassword(),
+                    SizedBox(height: 16.v),
+                    _buildDateOfBirth(context),
                     SizedBox(height: 26.v),
                     Text(
                       "lbl_gender".tr,
                       style: theme.textTheme.titleMedium,
                     ),
-                    SizedBox(height: 8.v),
-                    _buildGenderRadioGroup(),
                     SizedBox(height: 42.v),
                     Container(
                       width: 367.h,
@@ -172,15 +175,14 @@ class SignUpScreen extends GetWidget<SignUpController> {
     );
   }
 
-  /// Section Widget
-  Widget _buildPhone() {
+  Widget _buildPassword() {
     return CustomTextFormField(
-      controller: controller.phoneController,
-      hintText: "lbl_phone_no".tr,
-      textInputType: TextInputType.phone,
+      controller: controller.passwordController,
+      hintText: "password".tr,
+      textInputType: TextInputType.emailAddress,
       validator: (value) {
-        if (!isValidPhone(value)) {
-          return "err_msg_please_enter_valid_phone_number".tr;
+        if (value == null || (!isValidEmail(value, isRequired: true))) {
+          return "err_msg_please_enter_valid_email".tr;
         }
         return null;
       },
@@ -188,7 +190,16 @@ class SignUpScreen extends GetWidget<SignUpController> {
   }
 
   /// Section Widget
-  Widget _buildDateOfBirth() {
+  Widget _buildPhone() {
+    return CustomTextFormField(
+      controller: controller.usernameController,
+      hintText: "Username".tr,
+      textInputType: TextInputType.text,
+    );
+  }
+
+  /// Section Widget
+  Widget _buildDateOfBirth(BuildContext context){
     return CustomTextFormField(
       controller: controller.dateOfBirthController,
       hintText: "lbl_date_of_birth".tr,
@@ -196,6 +207,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
       suffix: Container(
         margin: EdgeInsets.fromLTRB(30.h, 13.v, 16.h, 13.v),
         child: CustomImageView(
+          onTap:() => _selectDate(context),
           imagePath: ImageConstant.imgCalendartoday,
           height: 24.adaptSize,
           width: 24.adaptSize,
@@ -213,41 +225,65 @@ class SignUpScreen extends GetWidget<SignUpController> {
   }
 
   /// Section Widget
-  Widget _buildGenderRadioGroup() {
+  Widget _buildSignUpButton() {
     return Obx(
-      () => Row(
-        children: [
-          CustomRadioButton(
-            text: "lbl_female".tr,
-            value: controller.signUpModelObj.value.radioList.value[0],
-            groupValue: controller.genderRadioGroup.value,
-            padding: EdgeInsets.fromLTRB(8.h, 14.v, 30.h, 14.v),
-            onChange: (value) {
-              controller.genderRadioGroup.value = value;
+        ()=> CustomElevatedButton(
+          onPressed: () {
+             onPressUserSignup();
             },
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 16.h),
-            child: CustomRadioButton(
-              text: "lbl_male".tr,
-              value: controller.signUpModelObj.value.radioList.value[1],
-              groupValue: controller.genderRadioGroup.value,
-              padding: EdgeInsets.fromLTRB(8.h, 14.v, 30.h, 14.v),
-              onChange: (value) {
-                controller.genderRadioGroup.value = value;
-              },
-            ),
-          ),
-        ],
-      ),
+          text: (controller.loading.value)? "Loading...":"lbl_sign_up".tr,
+          buttonStyle: CustomButtonStyles.fillPrimary,
+        ),
     );
   }
 
-  /// Section Widget
-  Widget _buildSignUpButton() {
-    return CustomElevatedButton(
-      text: "lbl_sign_up".tr,
-      buttonStyle: CustomButtonStyles.fillPrimary,
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        builder: (context, child) {
+          return Theme(
+              data: ThemeData.light().copyWith(
+                buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.accent)
+              ), child: child!);
+        },
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900,1),
+        lastDate: DateTime.now(),
+        confirmText: 'Confirm',
+        cancelText: 'Cancel',
+
     );
+
+    final date = pickedDate?.format();
+    print(date);
+    if(date!=null) {
+      controller.dateOfBirthController.text = date;
+    }
+  }
+
+  void onPressUserSignup() async{
+
+
+    final name = '${controller.firstNameRowController.value.text} ${controller.lastNameRowController.value.text}';
+    final email = controller.emailController.value.text;
+    final username = controller.usernameController.value.text;
+    final dob = controller.emailController.value.text;
+    final password = controller.passwordController.value.text;
+
+    SignUpModel user = SignUpModel(
+      fullName: name,
+      email: email,
+      username: username,
+      password: password,
+      dateOfBirth: dob,
+    );
+    await controller.userSignup(user.toJson());
+
+    LoginModel loginModel = LoginModel(
+      email: email,
+      password: password
+    );
+    await controller.userLogin(loginModel.toJson());
+
   }
 }
