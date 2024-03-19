@@ -69,7 +69,7 @@ class TrendinglistItemWidget extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                            left: 16.h,
+                            left: 18.h,
                             top: 138.v,
                           ),
                           child: Column(

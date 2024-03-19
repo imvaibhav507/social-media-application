@@ -104,6 +104,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
       height: 47.v,
       leadingWidth: double.maxFinite,
       leading: AppbarLeadingImage(
+        onTap: ()=>Get.back(),
         imagePath: ImageConstant.imgArrowDown,
         margin: EdgeInsets.fromLTRB(26.h, 10.v, 364.h, 10.v),
       ),

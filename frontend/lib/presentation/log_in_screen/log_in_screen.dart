@@ -1,3 +1,4 @@
+import 'package:vaibhav_s_application2/presentation/log_in_screen/models/log_in_model.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart';
 import 'package:vaibhav_s_application2/core/utils/validation_functions.dart';
@@ -97,6 +98,7 @@ class LogInScreen extends GetWidget<LogInController> {
                                               .bodyLargePrimary)),
                                   SizedBox(height: 30.v),
                                   CustomElevatedButton(
+                                    onPressed: () => onPressedLogin(),
                                       text: "lbl_log_in".tr,
                                       buttonStyle:
                                           CustomButtonStyles.fillPrimary),
@@ -110,6 +112,7 @@ class LogInScreen extends GetWidget<LogInController> {
         height: 47.v,
         leadingWidth: double.maxFinite,
         leading: AppbarLeadingImage(
+          onTap: () => Get.back(),
             imagePath: ImageConstant.imgArrowDown,
             margin: EdgeInsets.fromLTRB(26.h, 10.v, 364.h, 10.v)),
         styleType: Style.bgFill);
@@ -130,5 +133,16 @@ class LogInScreen extends GetWidget<LogInController> {
     Get.toNamed(
       AppRoutes.forgotPasswordScreen,
     );
+  }
+
+  onPressedLogin() async{
+    final email = controller.emailController.value.text;
+    final password = controller.passwordController.value.text;
+    LoginModel loginModel = LoginModel(
+        email: email,
+        password: password
+    );
+    await controller.userLogin(loginModel.toJson());
+
   }
 }

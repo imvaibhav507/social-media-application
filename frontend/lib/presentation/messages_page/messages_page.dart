@@ -28,11 +28,6 @@ class MessagesPage extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                          padding: EdgeInsets.only(left: 16.h),
-                          child: Text("lbl_messages".tr,
-                              style: theme.textTheme.headlineLarge)),
-                      SizedBox(height: 18.v),
                       _buildStories(),
                       SizedBox(height: 23.v),
                       _buildMessagesList()
@@ -42,13 +37,12 @@ class MessagesPage extends StatelessWidget {
   /// Section Widget
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
-        leadingWidth: 40.h,
-        leading: AppbarLeadingImage(
-            imagePath: ImageConstant.imgArrowBackDeepPurpleA200,
-            margin: EdgeInsets.only(left: 16.h, top: 13.v, bottom: 13.v),
-            onTap: () {
-              onTapArrowBack();
-            }),
+        leadingWidth: 250.h,
+        height: 80.v,
+        leading:Padding(
+            padding: EdgeInsets.all(16.adaptSize),
+            child: Text("lbl_messages".tr,
+                style: theme.textTheme.headlineLarge)),
         actions: [
           AppbarTrailingImage(
               imagePath: ImageConstant.imgAddDeepPurpleA200,
@@ -61,7 +55,7 @@ class MessagesPage extends StatelessWidget {
     return Align(
         alignment: Alignment.centerRight,
         child: SizedBox(
-            height: 81.v,
+            height: 84.v,
             child: Obx(() => ListView.separated(
                 padding: EdgeInsets.only(left: 16.h),
                 scrollDirection: Axis.horizontal,
@@ -79,26 +73,29 @@ class MessagesPage extends StatelessWidget {
 
   /// Section Widget
   Widget _buildMessagesList() {
-    return Obx(() => ListView.separated(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        separatorBuilder: (context, index) {
-          return Padding(
-              padding: EdgeInsets.symmetric(vertical: 12.0.v),
-              child: SizedBox(
-                  width: double.maxFinite,
-                  child: Divider(
-                      height: 2.v,
-                      thickness: 2.v,
-                      color: theme.colorScheme.secondaryContainer)));
-        },
-        itemCount:
-            controller.messagesModelObj.value.messageslistItemList.value.length,
-        itemBuilder: (context, index) {
-          MessageslistItemModel model = controller
-              .messagesModelObj.value.messageslistItemList.value[index];
-          return MessageslistItemWidget(model);
-        }));
+    return Expanded(
+      child: Obx(() => ListView.separated(
+        scrollDirection: Axis.vertical,
+          physics: BouncingScrollPhysics(),
+          shrinkWrap: true,
+          separatorBuilder: (context, index) {
+            return Padding(
+                padding: EdgeInsets.symmetric(vertical: 12.0.v),
+                child: SizedBox(
+                    width: double.maxFinite,
+                    child: Divider(
+                        height: 2.v,
+                        thickness: 2.v,
+                        color: theme.colorScheme.secondaryContainer)));
+          },
+          itemCount:
+              controller.messagesModelObj.value.messageslistItemList.value.length,
+          itemBuilder: (context, index) {
+            MessageslistItemModel model = controller
+                .messagesModelObj.value.messageslistItemList.value[index];
+            return MessageslistItemWidget(model);
+          })),
+    );
   }
 
   /// Navigates to the previous screen.

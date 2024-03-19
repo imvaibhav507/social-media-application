@@ -158,11 +158,14 @@ class AddAvatarScreen extends GetWidget<AddAvatarController> {
 
   Widget _buildDoneButton() {
     return CustomElevatedButton(
-      text: "Done".tr,
-      buttonStyle: CustomButtonStyles.fillPrimary,
-      onPressed: () {
-        onTapUpdateGender();
-      },
+        text: "Done".tr,
+        buttonStyle: CustomButtonStyles.fillPrimary,
+        onPressed: () {
+          onTapUpdateGender();
+          if(controller.isUpdated.value) {
+            Get.offNamed(AppRoutes.containerScreen);
+          }
+        },
     );
   }
 
@@ -175,5 +178,6 @@ class AddAvatarScreen extends GetWidget<AddAvatarController> {
       gender: controller.genderRadioGroup.value,
     );
     await controller.updateGender(addGenderModel.toJson());
+
   }
 }

@@ -1,5 +1,5 @@
-import '../models/storieslist_item_model.dart';
-import '../controller/stories_controller.dart';
+import '../../home_screen/models/storieslist_item_model.dart';
+import '../../home_screen/controller/stories_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 

@@ -1,3 +1,6 @@
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vaibhav_s_application2/repositories/auth_repository/auth_repository.dart';
+
 import '../../../core/app_export.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +13,14 @@ class LogInController extends GetxController {
 
   TextEditingController passwordController = TextEditingController();
 
+  AuthRepository _authRepository = AuthRepository();
+
+  RxBool loading = false.obs;
+
+  void setLoading(value) {
+    loading.value = value;
+  }
+
   // Rx<LogInModel> logInModelObj = LogInModel().obs;
 
   Rx<bool> isShowPassword = true.obs;
@@ -21,10 +32,26 @@ class LogInController extends GetxController {
     passwordController.dispose();
   }
 
-  @override
-  void onReady() {
-    Get.toNamed(
-      AppRoutes.forgotPasswordScreen,
-    );
+  Future<void> userLogin(var data) async {
+    setLoading(true);
+    await _authRepository.loginApi(data)
+        .then((value) async {
+      setLoading(false);
+      final response = ApiResponse.completed(value).data as Map<String,dynamic>;
+      print(response);
+      String accessToken = response['accessToken'].toString();
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      sp.setString('accessToken', accessToken.trim());
+      if(response['statusCode']==200) {
+        Get.offAllNamed(AppRoutes.containerScreen);
+      }
+    });
   }
+
+  // @override
+  // void onReady() {
+  //   Get.toNamed(
+  //     AppRoutes.forgotPasswordScreen,
+  //   );
+  // }
 }

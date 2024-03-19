@@ -46,7 +46,7 @@ class TrendingPage extends StatelessWidget {
               index,
             ) {
               return SizedBox(
-                height: 24.v,
+                height: 26.v,
               );
             },
             itemCount: controller

@@ -19,10 +19,10 @@ class CustomBottomBar extends StatelessWidget {
       type: BottomBarEnum.Home,
     ),
     BottomMenuModel(
-      icon: ImageConstant.imgNavStreams,
-      activeIcon: ImageConstant.imgNavStreams,
-      title: "lbl_streams".tr,
-      type: BottomBarEnum.Streams,
+      icon: ImageConstant.imgSearch,
+      activeIcon: ImageConstant.imgSearch,
+      title: "Search".tr,
+      type: BottomBarEnum.Search,
     ),
     BottomMenuModel(
       icon: ImageConstant.imgNavMessages,
@@ -137,6 +137,7 @@ enum BottomBarEnum {
   Home,
   Streams,
   Messages,
+  Search,
   Notifications,
   Profile,
 }

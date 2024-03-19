@@ -21,21 +21,23 @@ class DiscoverPage extends StatelessWidget {
         body: Container(
           width: double.maxFinite,
           decoration: AppDecoration.fillPrimary,
-          child: Column(
-            children: [
-              SizedBox(height: 31.v),
-              Padding(
-                padding: EdgeInsets.only(left: 16.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildProfilesList(),
-                    SizedBox(height: 30.v),
-                    _buildPostStack(),
-                  ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 31.v),
+                Padding(
+                  padding: EdgeInsets.only(left: 16.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildProfilesList(),
+                      SizedBox(height: 30.v),
+                      _buildPostStack(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

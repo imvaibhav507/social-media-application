@@ -1,6 +1,10 @@
 import 'package:get/get.dart';
 import 'package:vaibhav_s_application2/presentation/add_avatar_screen/add_avatar_screen.dart';
 import 'package:vaibhav_s_application2/presentation/add_avatar_screen/binding/add_avatar_binding.dart';
+import 'package:vaibhav_s_application2/presentation/container_screen/binding/container_binding.dart';
+import 'package:vaibhav_s_application2/presentation/messages_page/messages_page.dart';
+import 'package:vaibhav_s_application2/presentation/notifications_page/notifications_page.dart';
+import 'package:vaibhav_s_application2/presentation/profile_page/profile_page.dart';
 import '../presentation/splash_screen/splash_screen.dart';
 import '../presentation/splash_screen/binding/splash_binding.dart';
 import '../presentation/login_screen/login_screen.dart';
@@ -47,6 +51,7 @@ import '../presentation/detailed_profile_screen/detailed_profile_screen.dart';
 import '../presentation/detailed_profile_screen/binding/detailed_profile_binding.dart';
 import '../presentation/app_navigation_screen/app_navigation_screen.dart';
 import '../presentation/app_navigation_screen/binding/app_navigation_binding.dart';
+import '../presentation/container_screen/container_screen.dart';
 
 class AppRoutes {
   static const String splashScreen = '/splash_screen';
@@ -118,6 +123,10 @@ class AppRoutes {
 
   static const String initialRoute = '/initialRoute';
 
+  static const String containerScreen = '/container_screen';
+
+  static const String homeScreen = '/home_screen';
+
   static List<GetPage> pages = [
     GetPage(
       name: splashScreen,
@@ -166,6 +175,13 @@ class AppRoutes {
       page: () => NotificationScreen(),
       bindings: [
         NotificationBinding(),
+      ],
+    ),
+    GetPage(
+      name: containerScreen,
+      page: () => ContainerScreen(),
+      bindings: [
+        ContainerBinding(),
       ],
     ),
     GetPage(
@@ -293,6 +309,10 @@ class AppRoutes {
       bindings: [
         SplashBinding(),
       ],
-    )
+    ),
+
+    GetPage(name: messagesPage, page: () => MessagesPage()),
+    GetPage(name: notificationsPage, page: () => NotificationsPage()),
+    GetPage(name: profilePage, page: () => ProfilePage()),
   ];
 }

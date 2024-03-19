@@ -35,7 +35,7 @@ class DailyNewTabContainerScreen
                 height: 662.v,
                 child: TabBarView(
                   controller: controller.tabviewController,
-                  children: [
+                 children: [
                     DailyNewPage(),
                     DailyNewPage(),
                     DiscoverPage(),

@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../core/app_export.dart';
 import '../models/splash_model.dart';
 
@@ -10,10 +12,16 @@ class SplashController extends GetxController {
 
   @override
   void onReady() {
-    Future.delayed(const Duration(milliseconds: 3000), () {
-      Get.toNamed(
-        AppRoutes.loginScreen,
-      );
+    Future.delayed(const Duration(milliseconds: 3000), () async{
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      String? token = sp.getString('accessToken');
+      if(token == null || token.isEmpty) {
+        Get.toNamed(
+          AppRoutes.loginScreen,
+        );
+      }
+      else Get.offAllNamed(AppRoutes.containerScreen);
+
     });
   }
 }

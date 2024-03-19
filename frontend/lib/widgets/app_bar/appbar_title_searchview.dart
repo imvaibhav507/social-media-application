@@ -24,6 +24,7 @@ class AppbarTitleSearchview extends StatelessWidget {
     return Padding(
       padding: margin ?? EdgeInsets.zero,
       child: CustomSearchView(
+        autofocus: false,
         width: 323.h,
         controller: controller,
         hintText: "lbl_search".tr,

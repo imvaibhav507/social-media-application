@@ -8,12 +8,12 @@ import 'package:vaibhav_s_application2/core/app_export.dart';
 import 'controller/search_controller.dart';
 
 // ignore_for_file: must_be_immutable
-class SearchScreen extends GetWidget<SearchController> {
-  const SearchScreen({Key? key})
+class SearchScreen extends StatelessWidget {
+  SearchScreen({Key? key})
       : super(
           key: key,
         );
-
+  SearchController controller = Get.put(SearchController());
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -23,31 +23,33 @@ class SearchScreen extends GetWidget<SearchController> {
         body: Container(
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(vertical: 20.v),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 16.h),
-                  child: Text(
-                    "lbl_search".tr,
-                    style: theme.textTheme.headlineLarge,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16.h),
+                    child: Text(
+                      "lbl_search".tr,
+                      style: theme.textTheme.headlineLarge,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 14.v),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.h),
-                child: CustomSearchView(
-                  controller: controller.searchController,
-                  hintText: "lbl_search".tr,
+                SizedBox(height: 14.v),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.h),
+                  child: CustomSearchView(
+                    controller: controller.searchController,
+                    hintText: "lbl_search".tr,
+                  ),
                 ),
-              ),
-              SizedBox(height: 28.v),
-              _buildSearchClearAll(),
-              SizedBox(height: 24.v),
-              _buildRecentSearches(),
-            ],
+                SizedBox(height: 28.v),
+                _buildSearchClearAll(),
+                SizedBox(height: 24.v),
+                _buildRecentSearches(),
+              ],
+            ),
           ),
         ),
       ),

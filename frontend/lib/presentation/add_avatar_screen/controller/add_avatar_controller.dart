@@ -18,6 +18,8 @@ class AddAvatarController extends GetxController{
   
   RxBool loading = false.obs;
 
+  RxBool isUpdated = false.obs;
+
   RxString imgUrl = "".obs;
 
   void setLoading(value) {
@@ -59,7 +61,9 @@ class AddAvatarController extends GetxController{
       await _updateRepository.addGender(data)
           .then((value) {
             final response = ApiResponse.completed(value).data as Map<String,dynamic>;
-            print(response);
+            if(response['statusCode']==200) {
+              isUpdated.value = true;
+            }
       });
     } catch(error) {
       print(error.toString());

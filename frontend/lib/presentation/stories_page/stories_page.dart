@@ -1,14 +1,12 @@
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_title_searchview.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_trailing_iconbutton.dart';
-import 'widgets/storieslist_item_widget.dart';
-import 'models/storieslist_item_model.dart';
-import 'widgets/eventslist_item_widget.dart';
-import 'models/eventslist_item_model.dart';
+import '../home_screen/models/storieslist_item_model.dart';
+import '../home_screen/models/eventslist_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
-import 'controller/stories_controller.dart';
-import 'models/stories_model.dart';
+import '../home_screen/controller/stories_controller.dart';
+import '../home_screen/models/stories_model.dart';
 
 class StoriesPage extends StatelessWidget {
   StoriesPage({Key? key})
@@ -37,7 +35,7 @@ class StoriesPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20.v),
-              _buildStoriesList(),
+              // _buildStoriesList(),
               SizedBox(height: 21.v),
               _buildPost(),
               SizedBox(height: 27.v),
@@ -49,7 +47,7 @@ class StoriesPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16.v),
-              _buildEventsList(),
+              // _buildEventsList(),
             ],
           ),
         ),
@@ -75,37 +73,37 @@ class StoriesPage extends StatelessWidget {
   }
 
   /// Section Widget
-  Widget _buildStoriesList() {
-    return Align(
-      alignment: Alignment.center,
-      child: SizedBox(
-        height: 89.v,
-        child: Obx(
-          () => ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 15.h),
-            scrollDirection: Axis.horizontal,
-            separatorBuilder: (
-              context,
-              index,
-            ) {
-              return SizedBox(
-                width: 16.h,
-              );
-            },
-            itemCount: controller
-                .storiesModelObj.value.storieslistItemList.value.length,
-            itemBuilder: (context, index) {
-              StorieslistItemModel model = controller
-                  .storiesModelObj.value.storieslistItemList.value[index];
-              return StorieslistItemWidget(
-                model,
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildStoriesList() {
+  //   return Align(
+  //     alignment: Alignment.center,
+  //     child: SizedBox(
+  //       height: 89.v,
+  //       child: Obx(
+  //         () => ListView.separated(
+  //           padding: EdgeInsets.symmetric(horizontal: 15.h),
+  //           scrollDirection: Axis.horizontal,
+  //           separatorBuilder: (
+  //             context,
+  //             index,
+  //           ) {
+  //             return SizedBox(
+  //               width: 16.h,
+  //             );
+  //           },
+  //           itemCount: controller
+  //               .storiesModelObj.value.storieslistItemList.value.length,
+  //           itemBuilder: (context, index) {
+  //             StorieslistItemModel model = controller
+  //                 .storiesModelObj.value.storieslistItemList.value[index];
+  //             return StorieslistItemWidget(
+  //               model,
+  //             );
+  //           },
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   /// Section Widget
   Widget _buildPost() {
@@ -241,32 +239,32 @@ class StoriesPage extends StatelessWidget {
   }
 
   /// Section Widget
-  Widget _buildEventsList() {
-    return Padding(
-      padding: EdgeInsets.only(left: 16.h),
-      child: Obx(
-        () => ListView.separated(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          separatorBuilder: (
-            context,
-            index,
-          ) {
-            return SizedBox(
-              height: 1.v,
-            );
-          },
-          itemCount:
-              controller.storiesModelObj.value.eventslistItemList.value.length,
-          itemBuilder: (context, index) {
-            EventslistItemModel model = controller
-                .storiesModelObj.value.eventslistItemList.value[index];
-            return EventslistItemWidget(
-              model,
-            );
-          },
-        ),
-      ),
-    );
-  }
+  // Widget _buildEventsList() {
+  //   return Padding(
+  //     padding: EdgeInsets.only(left: 16.h),
+  //     child: Obx(
+  //       () => ListView.separated(
+  //         physics: NeverScrollableScrollPhysics(),
+  //         shrinkWrap: true,
+  //         separatorBuilder: (
+  //           context,
+  //           index,
+  //         ) {
+  //           return SizedBox(
+  //             height: 1.v,
+  //           );
+  //         },
+  //         itemCount:
+  //             controller.storiesModelObj.value.eventslistItemList.value.length,
+  //         itemBuilder: (context, index) {
+  //           EventslistItemModel model = controller
+  //               .storiesModelObj.value.eventslistItemList.value[index];
+  //           return EventslistItemWidget(
+  //             model,
+  //           );
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 }
