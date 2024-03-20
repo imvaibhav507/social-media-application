@@ -10,11 +10,11 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.route("/users/register").post(upload.single("avatar"), registerUser);
-router.route("/users/login").post(loginUser);
+router.route("/register").post(upload.single("avatar"), registerUser);
+router.route("/login").post(loginUser);
 router
-  .route("/users/update-avatar")
+  .route("/update-avatar")
   .patch(verifyJWT, upload.single("avatar"), changeAvatar);
-router.route("/users/add-gender").patch(verifyJWT, addGender);
+router.route("/add-gender").patch(verifyJWT, addGender);
 
 export default router;

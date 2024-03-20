@@ -1,5 +1,7 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_trailing_image.dart';
+import 'package:vaibhav_s_application2/widgets/custom_elevated_button.dart';
 import 'widgets/profilelist_item_widget.dart';
 import 'models/profilelist_item_model.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +65,14 @@ class ProfilePage extends StatelessWidget {
 
   /// Section Widget
   PreferredSizeWidget _buildAppBar() {
-    return CustomAppBar(actions: [
+    return CustomAppBar(height: 50.v, actions: [
+      CustomElevatedButton(
+        buttonTextStyle: TextStyle(color: Colors.white, fontSize: 16),
+        text: "Logout",
+        height: 40.v,
+        width: 100.h,
+        onPressed: () => onPressedLogout(),
+      ),
       AppbarTrailingImage(
           imagePath: ImageConstant.imgVectorDeepPurpleA200,
           margin: EdgeInsets.symmetric(horizontal: 18.h, vertical: 20.v))
@@ -155,5 +164,9 @@ class ProfilePage extends StatelessWidget {
     Get.toNamed(
       AppRoutes.detailedProfileScreen,
     );
+  }
+
+  onPressedLogout() async{
+    await controller.logoutUser();
   }
 }

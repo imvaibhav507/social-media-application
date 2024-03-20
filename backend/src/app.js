@@ -16,6 +16,8 @@ app.use(express.static("public"));
 
 // routes import
 import userRouter from "./routes/user.routes.js";
-app.use("/api/v1", userRouter);
+import chatroomRouter from "./routes/chatroom.routes.js";
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/chatroom", chatroomRouter);
 
 export { app };
