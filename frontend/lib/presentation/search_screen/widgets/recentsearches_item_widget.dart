@@ -1,4 +1,4 @@
-import '../models/recentsearches_item_model.dart';
+import '../models/recent_searches_model.dart';
 import '../controller/search_controller.dart';
 import 'package:vaibhav_s_application2/widgets/custom_outlined_button.dart';
 import 'package:flutter/material.dart' hide SearchController;
@@ -81,3 +81,5 @@ class RecentsearchesItemWidget extends StatelessWidget {
     );
   }
 }
+
+

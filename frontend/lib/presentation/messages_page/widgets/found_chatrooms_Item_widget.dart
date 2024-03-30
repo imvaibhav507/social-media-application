@@ -1,21 +1,19 @@
-import '../models/messageslist_item_model.dart';
-import '../controller/messages_controller.dart';
+import 'package:vaibhav_s_application2/presentation/messages_page/models/search_chatroom_model.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 
 // ignore: must_be_immutable
-class MessageslistItemWidget extends StatelessWidget {
+class FoundChatroomItemWidget extends StatelessWidget {
 
-  MessageslistItemWidget(
-    this.messageslistItemModelObj, {
-    Key? key,
-  }) : super(
-          key: key,
-        );
+  FoundChatroomItemWidget(
+      this.foundChatroomItemObj, {
+        Key? key,
+      }) : super(
+    key: key,
+  );
 
-  MessagesItemModel messageslistItemModelObj;
-
-  var controller = Get.find<MessagesController>();
+  FoundChatroom foundChatroomItemObj;
+  List<Member> members = [];
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,7 @@ class MessageslistItemWidget extends StatelessWidget {
               alignment: Alignment.bottomRight,
               children: [
                 CustomImageView(
-                  imagePath: messageslistItemModelObj.avatar!.value,
+                  imagePath: ImageConstant.imgEllipse22,
                   height: 54.v,
                   width: 52.h,
                   radius: BorderRadius.circular(
@@ -73,36 +71,56 @@ class MessageslistItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Obx(
-                  () => Text(
-                    messageslistItemModelObj.name!.value,
+                      () => Text(
+                    foundChatroomItemObj.name!.value,
                     style: CustomTextStyles.titleMediumBlack90001,
                   ),
                 ),
                 SizedBox(height: 8.v),
-                Obx(
-                  () => Text(
-                    messageslistItemModelObj.lastMessage!.value,
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                ),
+                      Container(
+                        height: 35.v,
+                        child: Row(
+
+                          children: [
+                            (foundChatroomItemObj.isGroupChat?.value==true)?
+                            Text("Members:", style: CustomTextStyles.titleMediumGray600,):
+                            Container(),
+                            _buildUsernames(foundChatroomItemObj.members)
+                          ],
+
+                        ),
+                      ),
               ],
             ),
           ),
           Spacer(),
-          Padding(
-            padding: EdgeInsets.only(
-              top: 3.v,
-              bottom: 30.v,
-            ),
-            child: Obx(
-              () => Text(
-                messageslistItemModelObj.time!.value,
-                style: theme.textTheme.bodyLarge,
-              ),
-            ),
-          ),
         ],
       ),
+    );
+  }
+
+  Widget _buildUsernames(RxList<Member>? members) {
+    return Container(
+      height: 25.v,
+      width: 200.h,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: members!.length,
+          itemBuilder: (context, index) {
+          final member = foundChatroomItemObj.members![index];
+          if(foundChatroomItemObj.isGroupChat!.value==true){
+            print(member.fullname);
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal:  8),
+              child: Text('${member.fullname}', style: CustomTextStyles.titleMediumGray600,),
+            );
+          }
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text('@${member.username}', style: CustomTextStyles.titleMediumGray600),
+            );
+          },
+          ),
     );
   }
 }

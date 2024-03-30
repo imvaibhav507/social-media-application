@@ -167,6 +167,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   onPressedLogout() async{
+
     await controller.logoutUser();
   }
 }

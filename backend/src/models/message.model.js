@@ -6,14 +6,11 @@ const messageSchema = new Schema(
   {
     content: {
       type: String,
+      default: "",
     },
 
     attachments: [
       {
-        public_id: {
-          type: String,
-          required: true,
-        },
         url: {
           type: String,
           required: true,
@@ -23,7 +20,7 @@ const messageSchema = new Schema(
 
     sender: {
       type: Schema.Types.ObjectId,
-      ref: "ChatParticipant",
+      ref: "User",
     },
 
     chatRoom: {

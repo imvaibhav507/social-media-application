@@ -303,4 +303,6 @@ class ImageConstant {
 
   static String imgSearch = 'assets/images/img_search.png';
 
+  static String imgThreeDot = 'assets/images/img_three_dot.png';
+
 }

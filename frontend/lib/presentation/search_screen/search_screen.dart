@@ -1,8 +1,8 @@
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart';
 import 'package:vaibhav_s_application2/widgets/custom_search_view.dart';
+import 'models/recent_searches_model.dart';
 import 'widgets/recentsearches_item_widget.dart';
-import 'models/recentsearches_item_model.dart';
 import 'package:flutter/material.dart' hide SearchController;
 import 'package:vaibhav_s_application2/core/app_export.dart';
 import 'controller/search_controller.dart';
@@ -26,24 +26,7 @@ class SearchScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 16.h),
-                    child: Text(
-                      "lbl_search".tr,
-                      style: theme.textTheme.headlineLarge,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 14.v),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.h),
-                  child: CustomSearchView(
-                    controller: controller.searchController,
-                    hintText: "lbl_search".tr,
-                  ),
-                ),
+                _buildSearchResults(),
                 SizedBox(height: 28.v),
                 _buildSearchClearAll(),
                 SizedBox(height: 24.v),
@@ -59,10 +42,25 @@ class SearchScreen extends StatelessWidget {
   /// Section Widget
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
-      leadingWidth: double.maxFinite,
+      height: 70.v,
+      leadingWidth: 50.h,
       leading: AppbarLeadingImage(
+        onTap: onTapBack,
         imagePath: ImageConstant.imgVector,
-        margin: EdgeInsets.fromLTRB(19.h, 16.v, 377.h, 16.v),
+        margin: EdgeInsets.all(12.0)
+      ),
+      title: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: CustomSearchView(
+          textStyle: CustomTextStyles.titleLargeBlack900,
+          hintStyle: CustomTextStyles.titleLargeGray500,
+          alignment: Alignment.bottomCenter,
+          controller: controller.searchController,
+          hintText: "lbl_search".tr,
+          onChanged: (text) {
+
+          },
+        ),
       ),
     );
   }
@@ -124,4 +122,41 @@ class SearchScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildSearchResults() {
+    return  ListView.separated(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        separatorBuilder: (
+            context,
+            index,
+            ) {
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0.v),
+            child: SizedBox(
+              width: double.maxFinite,
+              child: Divider(
+                height: 2.v,
+                thickness: 2.v,
+                color: theme.colorScheme.secondaryContainer,
+              ),
+            ),
+          );
+        },
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          RecentsearchesItemModel model = controller
+              .searchModelObj.value.recentsearchesItemList.value[index];
+          return RecentsearchesItemWidget(
+            model,
+          );
+        },
+    );
+  }
+
+  onTapBack() {
+    Get.back();
+  }
 }
+
+

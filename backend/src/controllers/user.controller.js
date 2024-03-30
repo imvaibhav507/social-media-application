@@ -155,4 +155,8 @@ const addGender = AsyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, gender, "Gender added successfully"));
 });
+
+const getUserProfile = AsyncHandler(async (req, res) => {
+  const userId = req.user._id;
+});
 export { registerUser, loginUser, changeAvatar, addGender };

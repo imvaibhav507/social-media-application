@@ -11,9 +11,15 @@ class NetworkApiServices extends BaseApiServices {
   @override
   Future getApi(String url) async {
     dynamic jsonResponse;
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String? token = sp.getString('accessToken').toString();
     try {
       final response = await http.get(
-          Uri.parse(url)
+          Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
       ).timeout(const Duration(seconds: 10));
       jsonResponse = returnResponse(response);
     }on SocketException {
@@ -27,11 +33,14 @@ class NetworkApiServices extends BaseApiServices {
   @override
   Future postApi(String url, dynamic data) async {
     dynamic jsonResponse;
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String? token = sp.getString('accessToken').toString();
     try {
       final response = await http.post(
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: jsonEncode(data),
       ).timeout(const Duration(seconds: 10));

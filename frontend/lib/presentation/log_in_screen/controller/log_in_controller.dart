@@ -39,9 +39,11 @@ class LogInController extends GetxController {
       setLoading(false);
       final response = ApiResponse.completed(value).data as Map<String,dynamic>;
       print(response);
-      String accessToken = response['accessToken'].toString();
+      String accessToken = response['data']['accessToken'].toString();
+      String userId = response['data']['userId'].toString();
       SharedPreferences sp = await SharedPreferences.getInstance();
-      sp.setString('accessToken', accessToken.trim());
+      await sp.setString('accessToken', accessToken.trim());
+      await sp.setString('userId', userId.trim());
       if(response['statusCode']==200) {
         Get.offAllNamed(AppRoutes.containerScreen);
       }

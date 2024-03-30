@@ -1,6 +1,7 @@
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_trailing_image.dart';
+import 'package:vaibhav_s_application2/widgets/custom_drop_down_menu.dart';
 import 'widgets/stories1_item_widget.dart';
 import 'models/stories1_item_model.dart';
 import 'widgets/messageslist_item_widget.dart';
@@ -15,7 +16,7 @@ class MessagesPage extends StatelessWidget {
   MessagesPage({Key? key}) : super(key: key);
 
   MessagesController controller =
-      Get.put(MessagesController(MessagesModel().obs));
+      Get.put(MessagesController(MessageslistModel().obs));
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +25,12 @@ class MessagesPage extends StatelessWidget {
             appBar: _buildAppBar(),
             body: Container(
                 width: double.maxFinite,
-                padding: EdgeInsets.symmetric(vertical: 24.v),
+                padding: EdgeInsets.symmetric(vertical: 15.v),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildStories(),
-                      SizedBox(height: 23.v),
+                      // _buildStories(),
+                      // SizedBox(height: 23.v),
                       _buildMessagesList()
                     ]))));
   }
@@ -44,62 +45,62 @@ class MessagesPage extends StatelessWidget {
             child: Text("lbl_messages".tr,
                 style: theme.textTheme.headlineLarge)),
         actions: [
+          IconButton(onPressed: () async{
+            await controller.getChatroomList();
+          }, icon: Icon(Icons.tap_and_play_outlined)),
           AppbarTrailingImage(
-              imagePath: ImageConstant.imgAddDeepPurpleA200,
-              margin: EdgeInsets.symmetric(horizontal: 16.h, vertical: 13.v))
+            onTap: onTapSearchPage,
+              imagePath: ImageConstant.imgSearch,
+              margin: EdgeInsets.symmetric(horizontal: 16.h, vertical: 13.v)),
+          CustomPopupMenuButton()
         ]);
-  }
-
-  /// Section Widget
-  Widget _buildStories() {
-    return Align(
-        alignment: Alignment.centerRight,
-        child: SizedBox(
-            height: 84.v,
-            child: Obx(() => ListView.separated(
-                padding: EdgeInsets.only(left: 16.h),
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (context, index) {
-                  return SizedBox(width: 20.h);
-                },
-                itemCount: controller
-                    .messagesModelObj.value.stories1ItemList.value.length,
-                itemBuilder: (context, index) {
-                  Stories1ItemModel model = controller
-                      .messagesModelObj.value.stories1ItemList.value[index];
-                  return Stories1ItemWidget(model);
-                }))));
   }
 
   /// Section Widget
   Widget _buildMessagesList() {
     return Expanded(
-      child: Obx(() => ListView.separated(
+
+      child: Obx(() {
+        final messagesListModel = controller.messagesListModelObj.value;
+        if (messagesListModel.messagesItems == null) {
+          // Show a loading indicator while data is being fetched
+          return Center(child: CircularProgressIndicator(color: Colors.black,));
+        } else if (messagesListModel.messagesItems!.value.isEmpty) {
+          // Show a message if there are no messages
+          return Center(child: Text("No messages available"));
+        }
+        return ListView.separated(
         scrollDirection: Axis.vertical,
           physics: BouncingScrollPhysics(),
           shrinkWrap: true,
           separatorBuilder: (context, index) {
-            return Padding(
-                padding: EdgeInsets.symmetric(vertical: 12.0.v),
-                child: SizedBox(
-                    width: double.maxFinite,
-                    child: Divider(
-                        height: 2.v,
-                        thickness: 2.v,
-                        color: theme.colorScheme.secondaryContainer)));
+
+            return SizedBox(
+                width: double.maxFinite,
+                child: Divider(
+                    height: 2.v,
+                    thickness: 2.v,
+                    color: theme.colorScheme.secondaryContainer));
           },
-          itemCount:
-              controller.messagesModelObj.value.messageslistItemList.value.length,
+          itemCount: messagesListModel.messagesItems!.value.length,
           itemBuilder: (context, index) {
-            MessageslistItemModel model = controller
-                .messagesModelObj.value.messageslistItemList.value[index];
-            return MessageslistItemWidget(model);
-          })),
+            MessagesItemModel model = messagesListModel.messagesItems!.value[index];
+            String chatRoomId = messagesListModel.messagesItems!.value[index].sId!.value;
+            return GestureDetector(
+              onTap: ()=>Get.toNamed(AppRoutes.chatScreen, arguments: chatRoomId),
+                child: MessageslistItemWidget(model,));
+          });
+      }),
     );
   }
 
   /// Navigates to the previous screen.
   onTapArrowBack() {
     Get.back();
+  }
+
+  onTapSearchPage() {
+
+    Get.toNamed(AppRoutes.chatsSearchScreen);
   }
 }

@@ -1,24 +1,20 @@
 import '../../../core/app_export.dart';
 
 /// This class is used in the [messageslist_item_widget] screen.
-class MessageslistItemModel {
-  MessageslistItemModel({
-    this.richardAlves,
-    this.heyBroWhereAre,
-    this.time,
-    this.id,
-  }) {
-    richardAlves = richardAlves ?? Rx("Richard Alves");
-    heyBroWhereAre = heyBroWhereAre ?? Rx("Hey bro, where are you?");
-    time = time ?? Rx("10:00 AM");
-    id = id ?? Rx("");
-  }
-
-  Rx<String>? richardAlves;
-
-  Rx<String>? heyBroWhereAre;
-
+class MessagesItemModel {
+  Rx<String>? sId;
+  Rx<String>? name;
+  Rx<String>? lastMessage;
+  Rx<String>? avatar;
   Rx<String>? time;
 
-  Rx<String>? id;
+  MessagesItemModel({this.sId, this.name, this.lastMessage, this.time, this.avatar});
+
+  MessagesItemModel.fromJson(Map<String, dynamic> json) {
+    sId = Rx(json['_id']);
+    name = Rx(json['name']);
+    avatar = Rx(json['avatar']);
+    lastMessage = (json['lastMessage']==null)? Rx("") : Rx(json['lastMessage']);
+    time = (json['time']==null)? Rx(""): Rx(json['time']);
+  }
 }

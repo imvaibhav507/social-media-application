@@ -1,6 +1,4 @@
 import mongoose, { Schema, Types } from "mongoose";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 const chatRoomSchema = new Schema(
   {
@@ -19,6 +17,13 @@ const chatRoomSchema = new Schema(
       required: true,
       default: false,
     },
+
+    members: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
 
     creator: {
       type: Schema.Types.ObjectId,
