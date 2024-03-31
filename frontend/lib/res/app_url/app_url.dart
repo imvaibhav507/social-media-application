@@ -13,4 +13,6 @@ class AppUrl {
   static const String getMessagesListApi = '$baseUrl/chatroom/get-messages/';
   static const String sendMessageApi = '$baseUrl/chatroom/send-message';
   static const String getSearchResultApi = '$baseUrl/chatroom/search-chatrooms';
+
+  static const String getSearchedUsersApi = '$baseUrl/users/search-users/';
 }

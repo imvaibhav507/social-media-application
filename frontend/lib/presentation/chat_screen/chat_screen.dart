@@ -5,6 +5,7 @@ import 'package:vaibhav_s_application2/presentation/chat_screen/models/chat_mode
 import 'package:vaibhav_s_application2/presentation/chat_screen/models/chatroom_details_model.dart';
 import 'package:vaibhav_s_application2/presentation/chat_screen/models/send_message_model.dart';
 import 'package:vaibhav_s_application2/presentation/chat_screen/widgets/chatroom_appbar_widget.dart';
+import 'package:vaibhav_s_application2/presentation/chat_screen/widgets/custom_chatscreen_popup_menu_widget.dart';
 import 'package:vaibhav_s_application2/presentation/chat_screen/widgets/message_receiver_widget.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_title_image.dart';
@@ -26,16 +27,23 @@ class ChatScreen extends GetWidget<ChatController> {
     return SafeArea(
       child: Scaffold(
           appBar: _buildAppBar(),
-          body: Column(
-            children: [
-              Expanded(
-                  // width: double.maxFinite,
-                  // height: 730.v,
-                  child:Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 5.v),
-                      child: _buildMessagesList())),
-              _buildMessageBoxRow(context),
-            ],
+          body: Container(
+            padding: EdgeInsets.zero,
+            margin: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage(ImageConstant.imgChatBkg),fit: BoxFit.cover)
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                    // width: double.maxFinite,
+                    // height: 730.v,
+                    child:Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 5.v),
+                        child: _buildMessagesList())),
+                _buildMessageBoxRow(context),
+              ],
+            ),
           ))
           // bottomNavigationBar: ),
     );
@@ -44,7 +52,7 @@ class ChatScreen extends GetWidget<ChatController> {
   /// Section Widget
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
-        height: 75.v,
+        height: 72.v,
         centerTitle: true,
         title: Obx(() {
           final chatDetailsModel = controller.chatroomDetailsObj.value;
@@ -53,7 +61,14 @@ class ChatScreen extends GetWidget<ChatController> {
           }
           return ChatroomAppBarWidget(chatDetailsModel.chatDetails!.value);
         }),
-        actions: [],
+        actions: [
+          CustomPopupMenuButton(
+            onTapShowGroupInfo: onTapShowGroupInfo,
+            onTapAddMember: onTapAddMember,
+            onTapDeleteGroup: onTapDeleteGroup,
+            onTapLeaveGroup: onTapLeaveGroup,
+          )
+        ],
         styleType: Style.bgFill_1);
   }
 
@@ -133,6 +148,20 @@ class ChatScreen extends GetWidget<ChatController> {
     await controller.sendMessage(sendMessage);
     controller.addNewMessage(sendMessage.toJson());
     controller.update();
+  }
+
+  void onTapShowGroupInfo() {
+  }
+
+  void onTapAddMember() {
+    print("tapped");
+    Get.toNamed(AppRoutes.addMembersScreen, arguments: controller.chatroomId);
+  }
+
+  void onTapLeaveGroup() {
+  }
+
+  void onTapDeleteGroup() {
   }
 }
 

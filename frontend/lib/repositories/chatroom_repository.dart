@@ -29,4 +29,9 @@ class ChatroomRepository {
     dynamic response = await _apiServices.getApi(AppUrl.getSearchResultApi + '?search=${key}');
     return response;
   }
+  
+  Future<dynamic> getSearchedUsers(String chatroomId, String key) async {
+    dynamic response = await _apiServices.getApi(AppUrl.getSearchedUsersApi + '?chatroomId=${chatroomId}&searchQuery=${key}');
+    return response;
+  }
 }

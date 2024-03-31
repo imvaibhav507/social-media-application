@@ -159,4 +159,65 @@ const addGender = AsyncHandler(async (req, res) => {
 const getUserProfile = AsyncHandler(async (req, res) => {
   const userId = req.user._id;
 });
-export { registerUser, loginUser, changeAvatar, addGender };
+
+const searchUsers = AsyncHandler(async (req, res) => {
+  const { chatroomId, searchQuery } = req.query;
+  console.log(chatroomId, searchQuery);
+  const foundUsers = await User.aggregate([
+    {
+      $match: {
+        $or: [
+          {
+            fullName: {
+              $regex: searchQuery,
+              $options: "i",
+            },
+          },
+          {
+            username: {
+              $regex: searchQuery,
+              $options: "i",
+            },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "chatrooms",
+        let: { userId: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $in: ["$$userId", "$members"],
+              },
+              _id: new mongoose.Types.ObjectId(chatroomId),
+            },
+          },
+        ],
+        as: "chatroom",
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        fullName: 1,
+        avatar: 1,
+        username: 1,
+        isAdded: {
+          $cond: {
+            if: { $gt: [{ $size: "$chatroom" }, 0] },
+            then: true,
+            else: false,
+          },
+        },
+      },
+    },
+  ]);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, foundUsers, "User fetched successfully !!"));
+});
+export { registerUser, loginUser, changeAvatar, addGender, searchUsers };

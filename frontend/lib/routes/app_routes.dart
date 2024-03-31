@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:vaibhav_s_application2/presentation/add_avatar_screen/add_avatar_screen.dart';
 import 'package:vaibhav_s_application2/presentation/add_avatar_screen/binding/add_avatar_binding.dart';
+import 'package:vaibhav_s_application2/presentation/add_member_screen/add_member_screen.dart';
+import 'package:vaibhav_s_application2/presentation/add_member_screen/binding/add_member_binding.dart';
 import 'package:vaibhav_s_application2/presentation/container_screen/binding/container_binding.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/bindings/chat_search_binding.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/chats_search_screen.dart';
@@ -130,6 +132,8 @@ class AppRoutes {
   static const String homeScreen = '/home_screen';
 
   static const String chatsSearchScreen = '/chats_search_screen';
+
+  static const String addMembersScreen = '/chat_add_member';
 
   static List<GetPage> pages = [
     GetPage(
@@ -325,6 +329,12 @@ class AppRoutes {
         name: chatsSearchScreen,
         page: () => ChatsSearchScreen(),
       bindings: [ChatsSearchBinding()]
+    ),
+
+    GetPage(
+        name: addMembersScreen,
+        page: () => AddMemberScreen(),
+      bindings: [AddMemberBinding()]
     ),
 
     GetPage(name: messagesPage, page: () => MessagesPage()),

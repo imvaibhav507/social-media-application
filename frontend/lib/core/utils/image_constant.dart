@@ -305,4 +305,6 @@ class ImageConstant {
 
   static String imgThreeDot = 'assets/images/img_three_dot.png';
 
+  static String imgChatBkg = 'assets/images/img_chat_bkg.jpeg';
+
 }

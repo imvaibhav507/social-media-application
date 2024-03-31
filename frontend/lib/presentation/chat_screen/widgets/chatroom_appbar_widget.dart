@@ -23,7 +23,7 @@ class ChatroomAppBarWidget extends StatelessWidget {
     }
     return Column(children: [
       SizedBox(
-        height: 16.v,
+        height: 28.v,
       ),
       Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.h),
@@ -42,23 +42,16 @@ class ChatroomAppBarWidget extends StatelessWidget {
                     margin: EdgeInsets.only(left: 108.h, top: 8.v, bottom: 6.v)),
             ),
             SizedBox(width: 10.h,),
-            Container(
-                height: 60.v,
-                width: 60.h,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    border: Border.all(color: Colors.white, width: 3)),
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                child: Obx(
-                  ()=> ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child:Image.network(
-                          chatDetailsModelObj!.avatar!.value ?? '',
-                          fit: BoxFit.cover, // Adjust as needed
-                        ),
+                CustomImageView(
+                  imagePath: chatDetailsModelObj!.avatar!.value,
+                  height: 54.v,
+                  width: 52.h,
+                  radius: BorderRadius.circular(
+                    27.h,
                   ),
+                  border: Border.all(width: 0.95),
+                  alignment: Alignment.center,
                 ),
-              ),
           ])),
       SizedBox(height: 29.v),
       SizedBox(width: double.maxFinite, child: Divider())
