@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:vaibhav_s_application2/presentation/chat_screen/models/chatroom_details_model.dart';
 import 'package:vaibhav_s_application2/presentation/chat_screen/models/send_message_model.dart';
+import 'package:vaibhav_s_application2/presentation/messages_page/controller/messages_controller.dart';
 import 'package:vaibhav_s_application2/repositories/chatroom_repository.dart';
 import 'package:vaibhav_s_application2/res/app_url/app_url.dart';
 
@@ -23,6 +24,7 @@ class ChatController extends GetxController {
   final ChatroomRepository chatroomRepository = ChatroomRepository();
   TextEditingController textMessageController = TextEditingController();
   ScrollController scrollController = ScrollController();
+  MessagesController messagesController = Get.find<MessagesController>();
   String? chatroomId;
   String? userId;
 
@@ -65,6 +67,7 @@ class ChatController extends GetxController {
       content : Rx(data['message']!),
     );
     chatScreenModelObj.value.chatItems!.insert(0,chatModel);
+
     socket.emit("message sent", data);
     print(chatModel.content);
   }
@@ -146,6 +149,7 @@ class ChatController extends GetxController {
     .then((value) async {
       final response = await ApiResponse.completed(value);
       print(response.data);
+      await messagesController.getSingleChatroomListItem(chatroomId!);
     });
   }
 

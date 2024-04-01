@@ -52,7 +52,7 @@ class ChatScreen extends GetWidget<ChatController> {
   /// Section Widget
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
-        height: 72.v,
+        height: 90.v,
         centerTitle: true,
         title: Obx(() {
           final chatDetailsModel = controller.chatroomDetailsObj.value;
@@ -69,7 +69,7 @@ class ChatScreen extends GetWidget<ChatController> {
             onTapLeaveGroup: onTapLeaveGroup,
           )
         ],
-        styleType: Style.bgFill_1);
+        );
   }
 
   /// Section Widget
@@ -145,8 +145,8 @@ class ChatScreen extends GetWidget<ChatController> {
       chatroomId: controller.chatroomId,
       message: controller.textMessageController.value.text.toString(),
     );
-    await controller.sendMessage(sendMessage);
     controller.addNewMessage(sendMessage.toJson());
+    await controller.sendMessage(sendMessage);
     controller.update();
   }
 

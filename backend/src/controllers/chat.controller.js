@@ -128,6 +128,64 @@ const getChatRoomsList = AsyncHandler(async (req, res) => {
     },
 
     {
+      $sort: {
+        "lastMessage.createdAt": -1,
+      },
+    },
+
+    {
+      $project: {
+        name: 1,
+        lastMessage: "$lastMessage.content",
+        avatar: 1,
+        time: {
+          $dateToString: {
+            format: "%H:%M", // Specify the format to show only time
+            date: "$lastMessage.createdAt",
+            timezone: "Asia/Kolkata", // Specify the timezone if needed
+          },
+        },
+      },
+    },
+    {
+      $sort: {
+        "lastMessage.createdAt": -1,
+      },
+    },
+  ]);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, chatrooms, "chatrooms fetched successfully !!"));
+});
+
+const getSingleChatRoom = AsyncHandler(async (req, res) => {
+  const chatroomId = req.query.chatroomId;
+  console.log(chatroomId);
+
+  const chatroom = await ChatRoom.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(chatroomId),
+      },
+    },
+
+    {
+      $lookup: {
+        from: "messages",
+        localField: "_id",
+        foreignField: "chatRoom",
+        as: "fetchedMessages",
+      },
+    },
+
+    {
+      $addFields: {
+        lastMessage: { $last: "$fetchedMessages" },
+      },
+    },
+
+    {
       $project: {
         name: 1,
         lastMessage: "$lastMessage.content",
@@ -145,7 +203,9 @@ const getChatRoomsList = AsyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, chatrooms, "chatrooms fetched successfully !!"));
+    .json(
+      new ApiResponse(200, chatroom[0], "chatroom fetched successfully !!")
+    );
 });
 
 const getChatRoomDetails = AsyncHandler(async (req, res) => {
@@ -348,22 +408,16 @@ const addParticipants = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Chatroom does not exist");
   }
 
-  const findChatroomWithGivenUsers = await ChatRoom.aggregate([
-    {
-      $match: {
-        _id: chatroomId,
-        members: {
-          $in: [req.user._id],
-        },
-      },
-    },
-  ]);
+  const findExistingParticipants = await ChatRoom.findOne({
+    _id: chatroomId,
+    members: { $in: participants },
+  });
 
-  if (findChatroomWithGivenUsers.length > 0) {
+  if (findExistingParticipants) {
     throw new ApiError(409, "Some participants already exist");
   }
 
-  await ChatRoom.findByIdAndUpdate(
+  const updatedChatroom = await ChatRoom.findByIdAndUpdate(
     chatroomId,
     {
       $push: {
@@ -373,13 +427,15 @@ const addParticipants = AsyncHandler(async (req, res) => {
     { new: true }
   );
 
-  res.status(200).json(
-    new ApiResponse(
-      200,
-      // participantPromises,
-      `Participants added successfully to chatroom: ${chatroomId}`
-    )
-  );
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        updatedChatroom.members,
+        `Participants added successfully to chatroom: ${chatroomId}`
+      )
+    );
 });
 
 const sendMessages = AsyncHandler(async (req, res) => {
@@ -543,6 +599,7 @@ export {
   createGroupChat,
   createPersonalChat,
   getChatRoomsList,
+  getSingleChatRoom,
   addParticipants,
   searchChatRooms,
   getChatRoomDetails,

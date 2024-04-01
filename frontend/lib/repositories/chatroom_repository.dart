@@ -34,4 +34,14 @@ class ChatroomRepository {
     dynamic response = await _apiServices.getApi(AppUrl.getSearchedUsersApi + '?chatroomId=${chatroomId}&searchQuery=${key}');
     return response;
   }
+
+  Future<dynamic> addMembersToChatroom(var data) async {
+    dynamic response = await _apiServices.patchApi(AppUrl.addMembersToChatroomApi, data);
+    return response;
+  }
+
+  Future<dynamic> getSingleChatroomListItem(String chatroomId) async {
+    dynamic response = await _apiServices.getApi(AppUrl.getSingleChatroomListItemApi + '?chatroomId=${chatroomId}');
+    return response;
+  }
 }

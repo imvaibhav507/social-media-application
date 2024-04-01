@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/presentation/add_member_screen/controller/add_members_controller.dart';
+import 'package:vaibhav_s_application2/presentation/add_member_screen/models/add_members_model.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/models/search_chatroom_model.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/widgets/found_chatrooms_Item_widget.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
@@ -184,7 +185,12 @@ class AddMemberScreen extends StatelessWidget {
     );
   }
 
-  void onPressedAddMembers() {
-    
+  void onPressedAddMembers() async{
+    final memberIds = controller.userModels.map((user) => user.sId).toList();
+    AddMembersModel model = AddMembersModel(
+      chatroomId: controller.chatroomId,
+      participants: memberIds
+    );
+    await controller.addMembersToChatroom(model.toJson());
   }
 }

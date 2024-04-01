@@ -79,7 +79,7 @@ class MessagesPage extends StatelessWidget {
                 width: double.maxFinite,
                 child: Divider(
                     height: 2.v,
-                    thickness: 2.v,
+                    thickness: 3.v,
                     color: theme.colorScheme.secondaryContainer));
           },
           itemCount: messagesListModel.messagesItems!.value.length,
@@ -88,7 +88,7 @@ class MessagesPage extends StatelessWidget {
             String chatRoomId = messagesListModel.messagesItems!.value[index].sId!.value;
             return GestureDetector(
               onTap: ()=>Get.toNamed(AppRoutes.chatScreen, arguments: chatRoomId),
-                child: MessageslistItemWidget(model,));
+                child: MessageslistItemWidget(model,index));
           });
       }),
     );

@@ -5,6 +5,7 @@ import {
   createGroupChat,
   createPersonalChat,
   getChatRoomsList,
+  getSingleChatRoom,
   addParticipants,
   getChatRoomDetails,
   searchChatRooms,
@@ -20,7 +21,8 @@ chatroomRouter
   .post(verifyJWT, upload.single("avatar"), createGroupChat);
 chatroomRouter.route("/new-personal-chat").post(verifyJWT, createPersonalChat);
 chatroomRouter.route("/chatrooms").get(verifyJWT, getChatRoomsList);
-chatroomRouter.route("/add-participants").put(verifyJWT, addParticipants);
+chatroomRouter.route("/single-chatroom/").get(verifyJWT, getSingleChatRoom);
+chatroomRouter.route("/add-participants").patch(verifyJWT, addParticipants);
 chatroomRouter.route("/search-chatrooms/").get(verifyJWT, searchChatRooms);
 chatroomRouter.route("/rename-chatroom").patch(verifyJWT, renameChatRoom);
 chatroomRouter

@@ -7,7 +7,7 @@ import 'package:vaibhav_s_application2/core/app_export.dart';
 class MessageslistItemWidget extends StatelessWidget {
 
   MessageslistItemWidget(
-    this.messageslistItemModelObj, {
+    this.messageslistItemModelObj, this.currentIndex, {
     Key? key,
   }) : super(
           key: key,
@@ -15,15 +15,22 @@ class MessageslistItemWidget extends StatelessWidget {
 
   MessagesItemModel messageslistItemModelObj;
 
+  int currentIndex;
+
   var controller = Get.find<MessagesController>();
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.adaptSize),
+        color: (currentIndex.isEven)? appTheme.indigo100:appTheme.gray200
+      ),
       width: double.maxFinite,
+      margin: EdgeInsets.symmetric(horizontal: 8.h, vertical: 3.v),
       padding: EdgeInsets.symmetric(
         horizontal: 16.h,
-        vertical: 26.v,
+        vertical: 20.v,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -75,14 +82,14 @@ class MessageslistItemWidget extends StatelessWidget {
                 Obx(
                   () => Text(
                     messageslistItemModelObj.name!.value,
-                    style: CustomTextStyles.titleMediumBlack90001,
+                    style: CustomTextStyles.titleLargeBlack900,
                   ),
                 ),
                 SizedBox(height: 8.v),
                 Obx(
                   () => Text(
                     messageslistItemModelObj.lastMessage!.value,
-                    style: theme.textTheme.bodyLarge,
+                    style: CustomTextStyles.bodyLargeBlack90001,
                   ),
                 ),
               ],
@@ -97,7 +104,7 @@ class MessageslistItemWidget extends StatelessWidget {
             child: Obx(
               () => Text(
                 messageslistItemModelObj.time!.value,
-                style: theme.textTheme.bodyLarge,
+                style: CustomTextStyles.bodyLargeBlack90001,
               ),
             ),
           ),

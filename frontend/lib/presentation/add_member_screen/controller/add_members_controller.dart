@@ -39,4 +39,14 @@ class AddMemberController extends GetxController {
     });
   }
 
+  Future<void> addMembersToChatroom(var data) async {
+    await chatroomRepository.addMembersToChatroom(data).then(
+            (value) async{
+              final response = await ApiResponse.completed(value);
+              print(response.data);
+            }).onError((error, stackTrace) {
+            print(error.toString());
+    });
+  }
+
 }
