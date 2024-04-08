@@ -64,6 +64,13 @@ class AddMemberScreen extends StatelessWidget {
         Container(
           child: Obx((){
             if(controller.userModels.isNotEmpty) {
+              if(controller.isAddMemberLoading==true){
+                return Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: CircularProgressIndicator(
+                    color: appTheme.black900,),
+                );
+              }
               return IconButton(
                 icon: Icon(Icons.done),
                 onPressed: onPressedAddMembers,
@@ -81,7 +88,7 @@ class AddMemberScreen extends StatelessWidget {
       flex: 5,
       child: Obx(() {
         final searchResultListModel = controller.searchUsersModelObj.value;
-        if (controller.isLoading == true) {
+        if (controller.isListLoading == true) {
           // Show a loading indicator while data is being fetched
           return Center(
               child: CircularProgressIndicator(

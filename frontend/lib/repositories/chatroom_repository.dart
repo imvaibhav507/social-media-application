@@ -15,6 +15,21 @@ class ChatroomRepository {
     return response;
   }
 
+  Future<dynamic> renameChatroom(String id, String name) async {
+    dynamic response = await _apiServices.patchApi(AppUrl.renameChatroom + '?id=${id}&name=${name}', {});
+    return response;
+  }
+
+  Future<dynamic> deleteChatroom(String id) async {
+    dynamic response = await _apiServices.deleteApi(AppUrl.deleteChatroom + '?id=${id}', {});
+    return response;
+  }
+
+  Future<dynamic> leaveChatroom(String id) async {
+    dynamic response = await _apiServices.getApi(AppUrl.leaveChatroom + '?id=${id}');
+    return response;
+  }
+
   Future<dynamic> getMessagesList(String id, int page, int limit) async{
     dynamic response = await _apiServices.getApi(AppUrl.getMessagesListApi + '?id=${id}&page=${page}&limit=${limit}');
     return response;

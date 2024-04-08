@@ -34,6 +34,7 @@ class AddAvatarController extends GetxController{
       context: context,
       maxFileSize: 15 * 1024 * 1024, // 5 MB maximum
       allowedExtensions: ['jpg', 'jpeg', 'png'],
+      isMultiImage: false,
       getFiles: (List<XFile?> files) async {
         // Handle the selected images here
         var imageFile = files[0];

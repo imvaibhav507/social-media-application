@@ -1,7 +1,9 @@
-import 'widgets/profileslist1_item_widget.dart';
-import 'models/profileslist1_item_model.dart';
-import 'widgets/forty_item_widget.dart';
-import 'models/forty_item_model.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
+import 'package:vaibhav_s_application2/presentation/daily_new_page/models/post_model.dart';
+import 'package:vaibhav_s_application2/presentation/daily_new_page/widgets/post_item_widget.dart';
+import 'package:vaibhav_s_application2/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 import 'controller/daily_new_controller.dart';
@@ -14,7 +16,7 @@ class DailyNewPage extends StatelessWidget {
         );
 
   DailyNewController controller =
-      Get.put(DailyNewController(DailyNewModel().obs));
+      Get.put(DailyNewController(DailyNewModel().obs, PostsModel().obs));
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +30,15 @@ class DailyNewPage extends StatelessWidget {
               children: [
                 SizedBox(height: 28.v),
                 Padding(
-                  padding: EdgeInsets.only(left: 16.h),
+                  padding: EdgeInsets.symmetric(horizontal: 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildProfilesList(),
                       SizedBox(height: 30.v),
-                      _buildPostColumn(),
+                      Container(
+                          child: _buildPostsList()
+                      ),
                     ],
                   ),
                 ),
@@ -47,52 +51,47 @@ class DailyNewPage extends StatelessWidget {
   }
 
   /// Section Widget
-  Widget _buildProfilesList() {
-    return SizedBox(
-      height: 179.v,
-      child: Obx(
-        () => ListView.separated(
-          scrollDirection: Axis.horizontal,
-          separatorBuilder: (
-            context,
-            index,
-          ) {
-            return SizedBox(
-              width: 16.h,
-            );
-          },
-          itemCount: controller
-              .dailyNewModelObj.value.profileslist1ItemList.value.length,
-          itemBuilder: (context, index) {
-            Profileslist1ItemModel model = controller
-                .dailyNewModelObj.value.profileslist1ItemList.value[index];
-            return Profileslist1ItemWidget(
-              model,
-            );
-          },
+
+
+  Widget _buildPostsList() {
+    return Obx(
+          ()=> ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            separatorBuilder: (context, index) {
+              return SizedBox(height: 0.v,);
+            },
+            itemCount: controller.postsModelObj.value.posts!.length,
+            itemBuilder: (context, index) {
+              Post postModel = controller.postsModelObj.value.posts![index];
+              return _buildPostWidget(postModel);
+            },
         ),
-      ),
     );
   }
-
   /// Section Widget
-  Widget _buildPostColumn() {
+  Widget _buildPostWidget(Post postModel) {
     return Container(
-      margin: EdgeInsets.only(right: 16.h),
-      padding: EdgeInsets.all(16.h),
-      decoration: AppDecoration.outlineBlack.copyWith(
+      margin: EdgeInsets.symmetric(vertical: 2.v),
+      padding: EdgeInsets.all(10.h),
+      decoration: AppDecoration.fillPrimary.copyWith(
         borderRadius: BorderRadiusStyle.roundedBorder15,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Divider(
+              height: 2.v,
+              thickness: 2.v,
+              color: theme.colorScheme.secondaryContainer),
+          SizedBox(height: 8.v),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.h),
             child: Row(
               children: [
                 CustomImageView(
-                  imagePath: ImageConstant.imgEllipse2150x50,
+                  imagePath: postModel.creator!.avatar,
                   height: 50.adaptSize,
                   width: 50.adaptSize,
                   radius: BorderRadius.circular(
@@ -109,12 +108,12 @@ class DailyNewPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "lbl_avari_kudhra".tr,
-                        style: CustomTextStyles.titleMedium18,
+                        postModel.creator!.fullName!,
+                        style: CustomTextStyles.titleLargeBlack900,
                       ),
                       SizedBox(height: 3.v),
                       Text(
-                        "lbl_1_hour_ago".tr,
+                        postModel.createdAt!,
                         style: CustomTextStyles.labelMediumBluegray100,
                       ),
                     ],
@@ -125,74 +124,77 @@ class DailyNewPage extends StatelessWidget {
                   imagePath: ImageConstant.imgGrid,
                   height: 6.v,
                   width: 30.h,
+                  color: appTheme.black90001,
                   margin: EdgeInsets.symmetric(vertical: 22.v),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 33.v),
-          SizedBox(
-            height: 167.v,
-            child: Obx(
-              () => ListView.separated(
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (
-                  context,
-                  index,
-                ) {
-                  return SizedBox(
-                    width: 16.h,
-                  );
-                },
-                itemCount: controller
-                    .dailyNewModelObj.value.fortyItemList.value.length,
-                itemBuilder: (context, index) {
-                  FortyItemModel model = controller
-                      .dailyNewModelObj.value.fortyItemList.value[index];
-                  return FortyItemWidget(
-                    model,
-                  );
-                },
-              ),
-            ),
-          ),
-          SizedBox(height: 17.v),
-          Container(
-            width: 340.h,
-            margin: EdgeInsets.only(right: 8.h),
-            child: Text(
-              "msg_this_is_a_very_rare".tr,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: CustomTextStyles.bodyLargePrimary.copyWith(
-                height: 1.50,
-              ),
-            ),
-          ),
           SizedBox(height: 8.v),
+          CarouselSlider(
+            options: CarouselOptions(
+              height: 400.0,
+              autoPlay: true,
+              enableInfiniteScroll: false,
+              aspectRatio: 1/1,
+              autoPlayCurve: Curves.fastOutSlowIn,
+              autoPlayAnimationDuration: Duration(milliseconds: 800),
+              viewportFraction: 1,
+            ),
+            items: postModel.attachments?.map(
+                    (item) => Container(
+                      child: PostItemWidget(
+                        item,
+                      ),
+                    )).toList(),
+          ),
+          SizedBox(height: 12.v),
           Row(
             children: [
-              Text(
-                "lbl_animal".tr,
-                style: theme.textTheme.bodyMedium,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 30.h),
-                child: Text(
-                  "lbl_forest".tr,
-                  style: theme.textTheme.bodyMedium,
+              SizedBox(width: 10.h,),
+              CustomIconButton(
+                height: 35.v,
+                width: 35.h,
+                decoration: BoxDecoration(
+                    color: Colors.transparent
                 ),
+                child: Image.asset(ImageConstant.imgHeart),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 30.h),
-                child: Text(
-                  "lbl_rabbit".tr,
-                  style: theme.textTheme.bodyMedium,
+              SizedBox(width: 22.h,),
+              CustomIconButton(
+                height: 32.v,
+                width: 32.h,
+                decoration: BoxDecoration(
+                    color: Colors.transparent
                 ),
+                child: Image.asset(ImageConstant.imgComment),
+              ),
+              SizedBox(width: 22.h,),
+              CustomIconButton(
+                height: 32.v,
+                width: 32.h,
+                decoration: BoxDecoration(
+                  color: Colors.transparent
+                ),
+                child: Image.asset(ImageConstant.imgShare),
               ),
             ],
           ),
-          SizedBox(height: 10.v),
+          SizedBox(height: 10.v,),
+          Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.only(left: 8.h),
+            margin: EdgeInsets.only(right: 8.h),
+            child: Text(
+              postModel.caption!,
+              maxLines: 2,
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
+              style: CustomTextStyles.bodyLargeBlack90001.copyWith(
+                height: 1.25,
+              ),
+            ),
+          ),
         ],
       ),
     );

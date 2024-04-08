@@ -328,17 +328,17 @@ const searchChatRooms = AsyncHandler(async (req, res) => {
 });
 
 const renameChatRoom = AsyncHandler(async (req, res) => {
-  const { chatroomId, newName } = req.body;
+  const { id, name } = req.query;
 
-  if (!newName) {
+  if (!name) {
     throw new ApiError(400, "Name is required");
   }
 
   const updatedChatRoom = await ChatRoom.findByIdAndUpdate(
-    chatroomId,
+    id,
     {
       $set: {
-        name: newName,
+        name: name,
       },
     },
     { new: true }
@@ -354,7 +354,7 @@ const renameChatRoom = AsyncHandler(async (req, res) => {
 });
 
 const deleteChatRoom = AsyncHandler(async (req, res) => {
-  const chatroomId = req.body;
+  const chatroomId = req.query.id;
 
   const messagesToDelete = await Message.deleteMany({
     chatRoom: chatroomId,
@@ -378,7 +378,7 @@ const deleteChatRoom = AsyncHandler(async (req, res) => {
 });
 
 const leaveChatRoom = AsyncHandler(async (req, res) => {
-  const { chatroomId } = req.body;
+  const { chatroomId } = req.query.id;
 
   const chatroom = await ChatRoom.findByIdAndUpdate(
     chatroomId,

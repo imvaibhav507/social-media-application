@@ -12,6 +12,8 @@ import {
   renameChatRoom,
   sendMessages,
   getMessages,
+  deleteChatRoom,
+  leaveChatRoom,
 } from "../controllers/chat.controller.js";
 
 const chatroomRouter = Router();
@@ -24,12 +26,16 @@ chatroomRouter.route("/chatrooms").get(verifyJWT, getChatRoomsList);
 chatroomRouter.route("/single-chatroom/").get(verifyJWT, getSingleChatRoom);
 chatroomRouter.route("/add-participants").patch(verifyJWT, addParticipants);
 chatroomRouter.route("/search-chatrooms/").get(verifyJWT, searchChatRooms);
-chatroomRouter.route("/rename-chatroom").patch(verifyJWT, renameChatRoom);
+chatroomRouter.route("/leave-chatroom").patch(verifyJWT, leaveChatRoom);
 chatroomRouter
   .route("/send-message")
   .post(verifyJWT, upload.array("attachments", 10), sendMessages);
 chatroomRouter.route("/get-messages/").get(verifyJWT, getMessages);
 
-chatroomRouter.route("/").get(verifyJWT, getChatRoomDetails);
+chatroomRouter
+  .route("/")
+  .get(verifyJWT, getChatRoomDetails)
+  .delete(verifyJWT, deleteChatRoom)
+  .patch(verifyJWT, renameChatRoom);
 
 export default chatroomRouter;

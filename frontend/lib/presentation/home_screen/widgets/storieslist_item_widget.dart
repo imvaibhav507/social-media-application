@@ -1,60 +1,80 @@
-import '../../home_screen/models/storieslist_item_model.dart';
-import '../../home_screen/controller/stories_controller.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:vaibhav_s_application2/presentation/home_screen/controller/stories_controller.dart';
+import 'package:vaibhav_s_application2/presentation/home_screen/models/storieslist_item_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 
 // ignore: must_be_immutable
-class StorieslistItemWidget extends StatelessWidget {
-  StorieslistItemWidget(
-    this.storieslistItemModelObj, {
-    Key? key,
-  }) : super(
-          key: key,
-        );
+class Profileslist1ItemWidget extends StatelessWidget {
+  Profileslist1ItemWidget(
+      this.storiesListItemModelObj, {
+        Key? key,
+      }) : super(
+    key: key,
+  );
 
-  StorieslistItemModel storieslistItemModelObj;
+  StoriesListItemModel storiesListItemModelObj;
 
   var controller = Get.find<StoriesController>();
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 64.h,
-      child: Align(
+      height: 120.v,
+      width: 100.h,
+      child: Stack(
         alignment: Alignment.center,
-        child: Column(
-          children: [
-            Container(
-              height: 64.adaptSize,
-              width: 64.adaptSize,
-              padding: EdgeInsets.symmetric(
-                horizontal: 4.h,
-                vertical: 3.v,
-              ),
-              decoration: AppDecoration.outlineDeepPurpleA.copyWith(
-                borderRadius: BorderRadiusStyle.circleBorder32,
-              ),
-              child: Obx(
+        children: [
+          Obx(
                 () => CustomImageView(
-                  imagePath: storieslistItemModelObj.roy!.value,
-                  height: 54.v,
-                  width: 52.h,
-                  radius: BorderRadius.circular(
-                    27.h,
+              imagePath: storiesListItemModelObj.nineteen!.value,
+              height: 120.v,
+              width: 100.h,
+              radius: BorderRadius.circular(
+                15.h,
+              ),
+              alignment: Alignment.center,
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 15.v),
+              decoration:
+              AppDecoration.gradientOnPrimaryContainerToBlueGray.copyWith(
+                borderRadius: BorderRadiusStyle.roundedBorder15,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  CustomImageView(
+                    imagePath: ImageConstant.imgPlay,
+                    height: 30.adaptSize,
+                    width: 30.adaptSize,
+                    margin: EdgeInsets.only(left: 4.h),
                   ),
-                  alignment: Alignment.center,
-                ),
+                  SizedBox(
+                    width: 50.h,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 70.v,
+                        bottom: 8.v,
+                      ),
+                      child: Obx(
+                            () => Text(
+                          storiesListItemModelObj.agnessMonica!.value,
+                          style: CustomTextStyles.labelMediumPrimary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 10.v),
-            Obx(
-              () => Text(
-                storieslistItemModelObj.roy1!.value,
-                style: theme.textTheme.labelLarge,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

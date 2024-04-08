@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:vaibhav_s_application2/presentation/home_screen/controller/home_screen_controller.dart';
 import 'package:vaibhav_s_application2/presentation/home_screen/widgets/storieslist_item_widget.dart';
-import 'package:vaibhav_s_application2/presentation/home_screen/widgets/user_story_item_widget.dart';
 import 'package:vaibhav_s_application2/presentation/trending_page/trending_page.dart';
 import 'package:vaibhav_s_application2/presentation/daily_new_page/daily_new_page.dart';
 import 'package:vaibhav_s_application2/presentation/discover_page/discover_page.dart';
@@ -34,7 +31,7 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 29.v),
+              SizedBox(height: 16.v),
               _buildTabview(),
               Expanded(
                 child: TabBarView(
@@ -57,20 +54,28 @@ class HomeScreen extends StatelessWidget {
   /// Section Widget
   SliverAppBar _buildAppBar() {
     return SliverAppBar(
-      toolbarHeight: 170.v,
+      toolbarHeight: 220.v,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 30.v),
-          Padding(
-            padding: EdgeInsets.only(left: 16.h),
-            child: Text(
-              "lbl_stories".tr,
-              style: theme.textTheme.headlineSmall,
-            ),
-          ),
           SizedBox(height: 20.v),
-          _buildStoriesList(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 16.h),
+                child: Text(
+                  "lbl_stories".tr,
+                  style: theme.textTheme.headlineSmall,
+                ),
+              ),
+              CustomImageView(
+                imagePath: ImageConstant.imgNavNotificationsDeepPurpleA200,
+                onTap: ()=> Get.toNamed(AppRoutes.notificationsPage),
+              )
+            ],
+          ),
+          _buildProfilesList(),
         ],
       ),
       // actions: [
@@ -85,11 +90,11 @@ class HomeScreen extends StatelessWidget {
   /// Section Widget
   Widget _buildTabview() {
     return Container(
-      height: 30.v,
-      width: 410.h,
+      height: 50.v,
       child: TabBar(
         controller: controller.tabviewController,
         isScrollable: true,
+        splashBorderRadius: BorderRadius.circular(10),
         labelColor: appTheme.deepPurpleA200,
         unselectedLabelColor: appTheme.indigo100,
         tabs: [
@@ -118,45 +123,31 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildYourStoryItem() {
-    return UserStoryItemWidget(
-        storiesController.storiesModelObj.value.storieslistItemList.value[3]);
-  }
-
-  /// Section Widget
-  Widget _buildStoriesList() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        width: double.maxFinite,
-        height: 94.v,
-        child: Obx(
-          () => ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 15.h),
-            scrollDirection: Axis.horizontal,
-            separatorBuilder: (
+  Widget _buildProfilesList() {
+    return SizedBox(
+      height: 150.v,
+      child: Obx(
+            () => ListView.separated(
+          scrollDirection: Axis.horizontal,
+          separatorBuilder: (
               context,
               index,
-            ) {
-              return SizedBox(
-                width: 16.h,
-              );
-            },
-            itemCount: storiesController
-                .storiesModelObj.value.storieslistItemList.value.length,
-            itemBuilder: (context, index) {
-              if(index==0) return _buildYourStoryItem();
-              else {
-                StorieslistItemModel model = storiesController
-                    .storiesModelObj.value.storieslistItemList.value[index];
-                return StorieslistItemWidget(
-                  model,
-                );
-              }
-            },
-          ),
+              ) {
+            return SizedBox(
+              width: 16.h,
+            );
+          },
+          itemCount: storiesController.storiesModelObj.value.storiesListItemList.value.length,
+          itemBuilder: (context, index) {
+            StoriesListItemModel model = storiesController.storiesModelObj.value
+                .storiesListItemList.value[index];
+            return Profileslist1ItemWidget(
+              model,
+            );
+          },
         ),
       ),
     );
   }
+
 }

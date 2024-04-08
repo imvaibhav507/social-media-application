@@ -15,31 +15,26 @@ class CustomBottomBar extends StatelessWidget {
     BottomMenuModel(
       icon: ImageConstant.imgNavHome,
       activeIcon: ImageConstant.imgNavHome,
-      title: "lbl_home".tr,
       type: BottomBarEnum.Home,
     ),
     BottomMenuModel(
       icon: ImageConstant.imgSearch,
       activeIcon: ImageConstant.imgSearch,
-      title: "Search".tr,
       type: BottomBarEnum.Search,
+    ),
+    BottomMenuModel(
+      icon: ImageConstant.imgAdd,
+      activeIcon: ImageConstant.imgAddDeepPurpleA200,
+      type: BottomBarEnum.CreatePost,
     ),
     BottomMenuModel(
       icon: ImageConstant.imgNavMessages,
       activeIcon: ImageConstant.imgNavMessages,
-      title: "lbl_messages".tr,
       type: BottomBarEnum.Messages,
-    ),
-    BottomMenuModel(
-      icon: ImageConstant.imgNavNotifications,
-      activeIcon: ImageConstant.imgNavNotifications,
-      title: "lbl_notifications".tr,
-      type: BottomBarEnum.Notifications,
     ),
     BottomMenuModel(
       icon: ImageConstant.imgNavProfile,
       activeIcon: ImageConstant.imgNavProfile,
-      title: "lbl_profile".tr,
       type: BottomBarEnum.Profile,
     )
   ];
@@ -88,15 +83,6 @@ class CustomBottomBar extends StatelessWidget {
                     width: 30.adaptSize,
                     color: appTheme.blueGray400,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 8.v),
-                    child: Text(
-                      bottomMenuList[index].title ?? "",
-                      style: theme.textTheme.labelMedium!.copyWith(
-                        color: appTheme.blueGray400,
-                      ),
-                    ),
-                  ),
                 ],
               ),
               activeIcon: Column(
@@ -109,15 +95,6 @@ class CustomBottomBar extends StatelessWidget {
                     width: 30.adaptSize,
                     color: appTheme.blueGray400,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 8.v),
-                    child: Text(
-                      bottomMenuList[index].title ?? "",
-                      style: theme.textTheme.labelMedium!.copyWith(
-                        color: appTheme.blueGray400,
-                      ),
-                    ),
-                  ),
                 ],
               ),
               label: '',
@@ -125,6 +102,10 @@ class CustomBottomBar extends StatelessWidget {
           }),
           onTap: (index) {
             selectedIndex.value = index;
+            if(bottomMenuList[index].type == BottomBarEnum.CreatePost) {
+              Get.toNamed(AppRoutes.createPostPage);
+              return;
+            }
             onChanged?.call(bottomMenuList[index].type);
           },
         ),
@@ -139,6 +120,7 @@ enum BottomBarEnum {
   Messages,
   Search,
   Notifications,
+  CreatePost,
   Profile,
 }
 

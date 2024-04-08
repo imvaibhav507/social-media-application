@@ -22,29 +22,37 @@ class AddMemberController extends GetxController {
 
   RxList<User> userModels = <User>[].obs;
 
-  get isLoading => _isLoading;
-  RxBool _isLoading = false.obs;
+  get isListLoading => _isListLoading;
+  get isAddMemberLoading => _isAddMemberLoading;
+
+  RxBool _isListLoading = false.obs;
+  RxBool _isAddMemberLoading = false.obs;
 
   Future<void> getFoundUsersList(String chatroomId, String key) async{
-    _isLoading.value = true;
+    _isListLoading.value = true;
     await chatroomRepository.getSearchedUsers(chatroomId, key)
         .then((value) async {
       final response = await ApiResponse.completed(value);
       print(response.data);
       final data = response.data as Map<String, dynamic>;
       searchUsersModelObj.value = new SearchUsersModel.fromJson(data);
-      _isLoading.value = false;
+      _isListLoading.value = false;
     }).onError((error, stackTrace) {
+      _isListLoading.value = false;
       print(error.toString());
     });
   }
 
   Future<void> addMembersToChatroom(var data) async {
+    _isAddMemberLoading.value = true;
     await chatroomRepository.addMembersToChatroom(data).then(
             (value) async{
               final response = await ApiResponse.completed(value);
               print(response.data);
+              _isAddMemberLoading.value = false;
+              Get.back();
             }).onError((error, stackTrace) {
+              _isAddMemberLoading.value = false;
             print(error.toString());
     });
   }

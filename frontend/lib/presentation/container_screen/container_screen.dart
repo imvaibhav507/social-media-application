@@ -1,3 +1,4 @@
+import 'package:vaibhav_s_application2/presentation/create_post_page/create_post_page.dart';
 import 'package:vaibhav_s_application2/presentation/home_screen/home_screen.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/messages_page.dart';
 import 'package:vaibhav_s_application2/presentation/notifications_page/notifications_page.dart';
@@ -27,7 +28,6 @@ class ContainerScreen extends GetWidget<ContainerController> {
     return CustomBottomBar(
       onChanged: (BottomBarEnum type) {
         currentRoute.value = getCurrentRoute(type);
-        // Get.toNamed(getCurrentRoute(type));
       },
     );
   }
@@ -41,8 +41,8 @@ class ContainerScreen extends GetWidget<ContainerController> {
         return AppRoutes.searchScreen;
       case BottomBarEnum.Messages:
         return AppRoutes.messagesPage;
-      case BottomBarEnum.Notifications:
-        return AppRoutes.notificationsPage;
+      case BottomBarEnum.CreatePost:
+        return AppRoutes.createPostPage;
       case BottomBarEnum.Profile:
         return AppRoutes.profilePage;
       default:
@@ -55,8 +55,8 @@ class ContainerScreen extends GetWidget<ContainerController> {
     switch (currentRoute) {
       case AppRoutes.messagesPage:
         return MessagesPage();
-      case AppRoutes.notificationsPage:
-        return NotificationsPage();
+      case AppRoutes.createPostPage:
+        return CreatePostPage();
       case AppRoutes.searchScreen:
         return SearchScreen();
       case AppRoutes.profilePage:

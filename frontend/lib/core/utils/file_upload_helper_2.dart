@@ -33,6 +33,7 @@ class FileManagerTwo {
     List<String> allowedExtensions = const [],
     void Function(List<XFile?>)? getFiles,
     required BuildContext context,
+    required bool isMultiImage
   }) async {
     await Get.bottomSheet(
         SafeArea(
@@ -44,7 +45,7 @@ class FileManagerTwo {
                     List<XFile>? filesList =
                     await _onImageButtonPressed(
                         ImageSource.gallery,
-                        isMultiImage: false,
+                        isMultiImage: isMultiImage,
                         isMedia: false,
                         context: context);
                     if (getFiles != null) {

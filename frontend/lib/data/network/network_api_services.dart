@@ -86,7 +86,7 @@ class NetworkApiServices extends BaseApiServices {
   }
 
   @override
-  Future patchApi(String url, data) async {
+  Future patchApi(String url,dynamic data) async {
 
     SharedPreferences sp = await SharedPreferences.getInstance();
     String? token = sp.getString('accessToken');
@@ -100,6 +100,31 @@ class NetworkApiServices extends BaseApiServices {
           "Authorization": "Bearer $token"
         },
         body: jsonEncode(data)
+      ).timeout(const Duration(seconds: 10));
+      jsonResponse = returnResponse(response);
+    }on SocketException {
+      throw InternetException('No internet available');
+    }on RequestTimedOutException {
+      throw RequestTimedOutException('Request timed out');
+    }
+    return jsonResponse;
+  }
+
+  @override
+  Future deleteApi(String url,dynamic data) async {
+
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String? token = sp.getString('accessToken');
+    print(token);
+    dynamic jsonResponse;
+    try{
+      final response = await http.delete(
+          Uri.parse(url),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token"
+          },
+          body: jsonEncode(data)
       ).timeout(const Duration(seconds: 10));
       jsonResponse = returnResponse(response);
     }on SocketException {

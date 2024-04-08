@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 import 'package:vaibhav_s_application2/presentation/add_avatar_screen/controller/add_avatar_controller.dart';
 import 'package:vaibhav_s_application2/presentation/add_avatar_screen/models/add_gender_model.dart';

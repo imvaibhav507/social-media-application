@@ -161,7 +161,9 @@ class ChatScreen extends GetWidget<ChatController> {
   void onTapLeaveGroup() {
   }
 
-  void onTapDeleteGroup() {
+  void onTapDeleteGroup() async{
+    await controller.deleteGroup();
+    print("group deleted");
   }
 }
 

@@ -1,20 +1,20 @@
 import '../../../core/app_export.dart';
 
 /// This class is used in the [storieslist_item_widget] screen.
-class StorieslistItemModel {
-  StorieslistItemModel({
-    this.roy,
-    this.roy1,
+class StoriesListItemModel {
+  StoriesListItemModel({
+    this.nineteen,
+    this.agnessMonica,
     this.id,
   }) {
-    roy = roy ?? Rx(ImageConstant.imgEllipse15);
-    roy1 = roy1 ?? Rx("Roy");
+    nineteen = nineteen ?? Rx(ImageConstant.img19);
+    agnessMonica = agnessMonica ?? Rx("Agness Monica");
     id = id ?? Rx("");
   }
 
-  Rx<String>? roy;
+  Rx<String>? nineteen;
 
-  Rx<String>? roy1;
+  Rx<String>? agnessMonica;
 
   Rx<String>? id;
 }

@@ -153,6 +153,19 @@ class ChatController extends GetxController {
     });
   }
 
+  Future<void> deleteGroup() async {
+    await chatroomRepository.deleteChatroom(chatroomId!)
+    .then((value) async {
+      final response = await ApiResponse.completed(value);
+      print(response.data);
+      messagesController.messagesListModelObj.value.messagesItems!
+          .update((list) {
+            list?.removeWhere((item) => item.sId == chatroomId);
+      });
+      Get.back();
+    });
+  }
+
 
 
   void scrollListener() {

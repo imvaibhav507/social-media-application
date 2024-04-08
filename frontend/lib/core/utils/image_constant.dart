@@ -307,4 +307,10 @@ class ImageConstant {
 
   static String imgChatBkg = 'assets/images/img_chat_bkg.jpeg';
 
+  static String imgComment = 'assets/images/img_comment.png';
+
+  static String imgHeart = 'assets/images/img_heart.png';
+
+  static String imgShare = 'assets/images/img_share.png';
+
 }
