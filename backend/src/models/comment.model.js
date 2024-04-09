@@ -5,7 +5,6 @@ const commentSchema = new Schema(
     post: {
       type: Schema.Types.ObjectId,
       ref: "Post",
-      unique: true,
     },
 
     content: {
@@ -16,7 +15,6 @@ const commentSchema = new Schema(
     commentedBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      unique: true,
     },
 
     subComments: {

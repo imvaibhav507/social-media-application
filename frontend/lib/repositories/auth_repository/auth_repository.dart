@@ -13,4 +13,9 @@ class AuthRepository {
     dynamic response = _apiService.postApi(AppUrl.loginApi, data);
     return response;
   }
+
+  Future<dynamic> loggedInUser() async {
+    dynamic response = _apiService.getApi(AppUrl.getLoggedInUserApi);
+    return response;
+  }
 }

@@ -8,4 +8,5 @@ abstract class BaseApiServices {
   Future<dynamic> postApi(String url, var data);
   Future<dynamic> uploadImageApi(String url, XFile imageFile);
   Future<dynamic> patchApi(String url, var data);
+  Future<dynamic> putApi(String url, var data);
 }

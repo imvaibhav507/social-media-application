@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 import 'package:vaibhav_s_application2/widgets/custom_icon_button.dart';
 import 'package:vaibhav_s_application2/widgets/custom_text_form_field.dart';
-import 'controller/for_you_controller.dart';
+import 'controller/stories_controller.dart';
 
 // ignore_for_file: must_be_immutable
-class ForYouScreen extends GetWidget<ForYouController> {
-  const ForYouScreen({Key? key})
+class StoriesScreen extends GetWidget<StoriesController> {
+  const StoriesScreen({Key? key})
       : super(
           key: key,
         );

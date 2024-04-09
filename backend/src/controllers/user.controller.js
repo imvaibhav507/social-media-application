@@ -156,8 +156,31 @@ const addGender = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, gender, "Gender added successfully"));
 });
 
-const getUserProfile = AsyncHandler(async (req, res) => {
+const getUser = AsyncHandler(async (req, res) => {
   const userId = req.user._id;
+
+  const fetchedUser = await User.aggregate([
+    {
+      $match: {
+        _id: userId,
+      },
+    },
+
+    {
+      $project: {
+        email: 1,
+        username: 1,
+        fullname: "$fullName",
+        avatar: 1,
+        gender: 1,
+        dateOfBirth: 1,
+      },
+    },
+  ]);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, fetchedUser[0], "User fetched successfully!!"));
 });
 
 const searchUsers = AsyncHandler(async (req, res) => {
@@ -220,4 +243,11 @@ const searchUsers = AsyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, foundUsers, "User fetched successfully !!"));
 });
-export { registerUser, loginUser, changeAvatar, addGender, searchUsers };
+export {
+  registerUser,
+  loginUser,
+  changeAvatar,
+  addGender,
+  searchUsers,
+  getUser,
+};

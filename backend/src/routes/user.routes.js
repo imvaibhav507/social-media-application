@@ -5,6 +5,7 @@ import {
   changeAvatar,
   addGender,
   searchUsers,
+  getUser,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -18,5 +19,5 @@ router
   .patch(verifyJWT, upload.single("avatar"), changeAvatar);
 router.route("/add-gender").patch(verifyJWT, addGender);
 router.route("/search-users/").get(verifyJWT, searchUsers);
-
+router.route("/get-user").get(verifyJWT, getUser);
 export default router;

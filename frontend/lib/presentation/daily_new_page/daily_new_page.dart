@@ -1,13 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:vaibhav_s_application2/presentation/daily_new_page/models/post_model.dart';
+import 'package:vaibhav_s_application2/presentation/daily_new_page/widgets/commentlist_item_widget.dart';
 import 'package:vaibhav_s_application2/presentation/daily_new_page/widgets/post_item_widget.dart';
 import 'package:vaibhav_s_application2/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
+import 'package:vaibhav_s_application2/widgets/custom_text_form_field.dart';
 import 'controller/daily_new_controller.dart';
-import 'models/daily_new_model.dart';
+import 'models/comments_model.dart';
+import 'models/like_model.dart';
 
 class DailyNewPage extends StatelessWidget {
   DailyNewPage({Key? key})
@@ -16,7 +17,8 @@ class DailyNewPage extends StatelessWidget {
         );
 
   DailyNewController controller =
-      Get.put(DailyNewController(DailyNewModel().obs, PostsModel().obs));
+      Get.put(DailyNewController(PostsModel().obs, LikeModel().obs, CommentsModel().obs));
+  RxBool bottomSheetOpened = RxBool(false);
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +56,10 @@ class DailyNewPage extends StatelessWidget {
 
 
   Widget _buildPostsList() {
+    var postsModelObj = controller.postsModelObj.value.posts;
+    if(postsModelObj == null || postsModelObj.isEmpty) {
+      return CircularProgressIndicator();
+    }
     return Obx(
           ()=> ListView.separated(
             shrinkWrap: true,
@@ -61,16 +67,16 @@ class DailyNewPage extends StatelessWidget {
             separatorBuilder: (context, index) {
               return SizedBox(height: 0.v,);
             },
-            itemCount: controller.postsModelObj.value.posts!.length,
+            itemCount: postsModelObj.length,
             itemBuilder: (context, index) {
-              Post postModel = controller.postsModelObj.value.posts![index];
-              return _buildPostWidget(postModel);
+              return _buildPostWidget(postsModelObj[index]);
             },
         ),
     );
   }
   /// Section Widget
   Widget _buildPostWidget(Post postModel) {
+    print(postModel.isLikedBy?.value);
     return Container(
       margin: EdgeInsets.symmetric(vertical: 2.v),
       padding: EdgeInsets.all(10.h),
@@ -108,12 +114,12 @@ class DailyNewPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        postModel.creator!.fullName!,
+                        postModel.creator?.fullName ?? "null",
                         style: CustomTextStyles.titleLargeBlack900,
                       ),
                       SizedBox(height: 3.v),
                       Text(
-                        postModel.createdAt!,
+                        postModel.createdAt ?? "null",
                         style: CustomTextStyles.labelMediumBluegray100,
                       ),
                     ],
@@ -152,14 +158,22 @@ class DailyNewPage extends StatelessWidget {
           Row(
             children: [
               SizedBox(width: 10.h,),
-              CustomIconButton(
-                height: 35.v,
-                width: 35.h,
-                decoration: BoxDecoration(
-                    color: Colors.transparent
-                ),
-                child: Image.asset(ImageConstant.imgHeart),
-              ),
+              Obx(
+                  ()=> CustomIconButton(
+                    height: 35.v,
+                    width: 35.h,
+                    decoration: BoxDecoration(
+                        color: Colors.transparent
+                    ),
+                    onTap: (){
+                      onTapLikePost(postModel);
+                    },
+                    child: (postModel.isLikedBy?.value == true)?
+                    Image.asset(ImageConstant.imgLikedHeart):
+                    Image.asset(ImageConstant.imgHeart)),
+              )
+              ,
+
               SizedBox(width: 22.h,),
               CustomIconButton(
                 height: 32.v,
@@ -167,6 +181,10 @@ class DailyNewPage extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: Colors.transparent
                 ),
+                onTap: () async {
+                  await controller.getAllComments(postModel.sId!);
+                  onTapShowBottomSheet(postModel);
+                },
                 child: Image.asset(ImageConstant.imgComment),
               ),
               SizedBox(width: 22.h,),
@@ -199,4 +217,125 @@ class DailyNewPage extends StatelessWidget {
       ),
     );
   }
+
+  onTapLikePost(Post postModel) async{
+    if(postModel.isLikedBy?.value == true) {
+      postModel.isLikedBy?.value = false;
+      await controller.unlikePost(postModel.sId!);
+      return;
+    }
+    else {
+      postModel.isLikedBy?.value = true;
+      await controller.likePost(postModel.sId!);
+      return;
+    }
+  }
+
+  onTapShowBottomSheet(Post postModel) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      showDragHandle: true,
+        context: Get.context!, builder: (_){
+        return Container(
+          width: double.infinity,
+          height: double.maxFinite,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(Get.context!).viewInsets.bottom),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0.adaptSize),
+                  child: Text(
+                    "Comments",
+                    style: CustomTextStyles.titleLargeDeeppurpleA200,
+                  ),
+                ),
+                // Container(
+                //   height: 200.v,
+                //     child: Center(child: Text('No Comments', style: CustomTextStyles.titleLargeBlack900,))),
+                _buildCommentsList(),
+                _buildCommentBox(Get.context!, postModel)
+              ],
+            ),
+          ),
+        );
+    },);
+  }
+
+  Widget _buildCommentBox(BuildContext context, Post postModel) {
+    return Padding(
+        padding: EdgeInsets.only(left: 16.h, right: 16.h, bottom: 12.v),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Expanded(
+            child: CustomTextFormField(
+              hintText: "Add your comment here...".tr,
+              controller: controller.commentController,
+              textInputAction: TextInputAction.done,
+              textStyle: CustomTextStyles.titleLargeBlack900,
+              hintStyle: CustomTextStyles.titleMediumGray600,
+              borderDecoration: TextFormFieldStyleHelper.fillSecondaryContainer,
+              fillColor: theme.colorScheme.secondaryContainer,
+
+            ),
+          ),
+          // _buildTextField(),
+          Padding(
+            padding: EdgeInsets.only(left: 10.h),
+            child: CustomIconButton(
+                height: 50.adaptSize,
+                width: 50.adaptSize,
+                padding: EdgeInsets.all(13.h),
+                decoration: IconButtonStyleHelper.fillDeepPurpleATL25,
+                onTap: (){
+                  onTapAddComment(postModel);
+                },
+                child:
+                CustomImageView(imagePath: ImageConstant.imgGroup9143)),
+          )
+        ]));
+  }
+
+  Widget _buildCommentsList() {
+    return Obx(
+          () => Expanded(
+            child: ListView.separated(
+              physics: BouncingScrollPhysics(),
+                    separatorBuilder: (
+              context,
+              index,
+              ) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0.v),
+              child: SizedBox(
+                width: 382.h,
+                child: Divider(
+                  height: 2.v,
+                  thickness: 2.v,
+                  color: theme.colorScheme.secondaryContainer,
+                ),
+              ),
+            );
+                    },
+                    itemCount:
+                    controller.commentsModelObj.value.commentItemModelList!.length,
+                    itemBuilder: (context, index) {
+            CommentItemModel model = controller
+                .commentsModelObj.value.commentItemModelList![index];
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18.h, vertical: 10.v),
+              child: CommentlistItemWidget(
+                model,
+              ),
+            );
+                    },
+                  ),
+          ),
+    );
+  }
+
+  void onTapAddComment(Post postModel) async {
+    await controller.addComment(postModel);
+    controller.commentController.clear();
+  }
+
 }

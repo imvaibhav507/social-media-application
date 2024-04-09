@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vaibhav_s_application2/presentation/home_screen/models/logged_in_user_model.dart';
 import 'package:vaibhav_s_application2/repositories/auth_repository/auth_repository.dart';
 
 import '../../../core/app_export.dart';
@@ -21,10 +22,9 @@ class LogInController extends GetxController {
     loading.value = value;
   }
 
-  // Rx<LogInModel> logInModelObj = LogInModel().obs;
 
   Rx<bool> isShowPassword = true.obs;
-
+  Rx<LoggedInUserModel> loggedInUserModelObj = LoggedInUserModel().obs;
   @override
   void onClose() {
     super.onClose();
@@ -49,6 +49,8 @@ class LogInController extends GetxController {
       }
     });
   }
+
+
 
   // @override
   // void onReady() {

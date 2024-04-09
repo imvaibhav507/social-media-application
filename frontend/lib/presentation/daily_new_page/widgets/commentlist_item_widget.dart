@@ -1,20 +1,18 @@
-import '../models/commentlist_item_model.dart';
-import '../controller/comments_controller.dart';
+import 'package:vaibhav_s_application2/presentation/daily_new_page/models/comments_model.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 
 // ignore: must_be_immutable
 class CommentlistItemWidget extends StatelessWidget {
   CommentlistItemWidget(
-    this.commentlistItemModelObj, {
+    this.commentItemModelObj, {
     Key? key,
   }) : super(
           key: key,
         );
 
-  CommentlistItemModel commentlistItemModelObj;
+  CommentItemModel commentItemModelObj;
 
-  var controller = Get.find<CommentsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +22,7 @@ class CommentlistItemWidget extends StatelessWidget {
         Row(
           children: [
             CustomImageView(
-              imagePath: ImageConstant.imgEllipse21,
+              imagePath: commentItemModelObj.avatar,
               height: 50.adaptSize,
               width: 50.adaptSize,
               radius: BorderRadius.circular(
@@ -40,30 +38,25 @@ class CommentlistItemWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Obx(
-                    () => Text(
-                      commentlistItemModelObj.rizalReynaldhi!.value,
+                  Text(
+                      commentItemModelObj.fullname!,
                       style: CustomTextStyles.titleMediumGray600,
                     ),
-                  ),
                   SizedBox(height: 2.v),
-                  Obx(
-                    () => Text(
-                      commentlistItemModelObj.duration!.value,
+                  Text(
+                      commentItemModelObj.createdAt!,
                       style: CustomTextStyles.labelMediumGray500,
                     ),
-                  ),
                 ],
               ),
             ),
           ],
         ),
-        SizedBox(height: 18.v),
+        SizedBox(height: 10.v),
         SizedBox(
           width: 382.h,
-          child: Obx(
-            () => Text(
-              commentlistItemModelObj.mostPeopleNever!.value,
+          child: Text(
+              commentItemModelObj.content!,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
               style: CustomTextStyles.bodyLargeBluegray700.copyWith(
@@ -71,14 +64,11 @@ class CommentlistItemWidget extends StatelessWidget {
               ),
             ),
           ),
-        ),
-        SizedBox(height: 17.v),
-        Obx(
-          () => Text(
-            commentlistItemModelObj.reply!.value,
+        SizedBox(height: 10.v),
+        Text(
+            "Reply",
             style: CustomTextStyles.titleMediumDeeppurpleA200SemiBold_1,
           ),
-        ),
       ],
     );
   }

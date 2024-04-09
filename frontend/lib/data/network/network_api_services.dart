@@ -146,6 +146,29 @@ class NetworkApiServices extends BaseApiServices {
     }
   }
 
+  @override
+  Future putApi(String url, data) async {
+    dynamic jsonResponse;
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String? token = sp.getString('accessToken').toString();
+    try {
+      final response = await http.put(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(data),
+      ).timeout(const Duration(seconds: 10));
+      jsonResponse = returnResponse(response);
+    }on SocketException {
+      throw InternetException('No internet available');
+    }on RequestTimedOutException {
+      throw RequestTimedOutException('Request timed out');
+    }
+    return jsonResponse;
+  }
+
 
 
 }

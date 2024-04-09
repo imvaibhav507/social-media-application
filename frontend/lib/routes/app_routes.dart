@@ -11,6 +11,8 @@ import 'package:vaibhav_s_application2/presentation/messages_page/chats_search_s
 import 'package:vaibhav_s_application2/presentation/messages_page/messages_page.dart';
 import 'package:vaibhav_s_application2/presentation/notifications_page/notifications_page.dart';
 import 'package:vaibhav_s_application2/presentation/profile_page/profile_page.dart';
+import 'package:vaibhav_s_application2/presentation/stories_screen/binding/stories_binding.dart';
+import 'package:vaibhav_s_application2/presentation/stories_screen/stories_screen.dart';
 import '../presentation/splash_screen/splash_screen.dart';
 import '../presentation/splash_screen/binding/splash_binding.dart';
 import '../presentation/login_screen/login_screen.dart';
@@ -39,12 +41,8 @@ import '../presentation/search_screen/search_screen.dart';
 import '../presentation/search_screen/binding/search_binding.dart';
 import '../presentation/live_screen/live_screen.dart';
 import '../presentation/live_screen/binding/live_binding.dart';
-import '../presentation/for_you_screen/for_you_screen.dart';
-import '../presentation/for_you_screen/binding/for_you_binding.dart';
 import '../presentation/page_view_screen/page_view_screen.dart';
 import '../presentation/page_view_screen/binding/page_view_binding.dart';
-import '../presentation/comments_screen/comments_screen.dart';
-import '../presentation/comments_screen/binding/comments_binding.dart';
 import '../presentation/account_view_screen/account_view_screen.dart';
 import '../presentation/account_view_screen/binding/account_view_binding.dart';
 import '../presentation/account_details_screen/account_details_screen.dart';
@@ -254,9 +252,9 @@ class AppRoutes {
     ),
     GetPage(
       name: forYouScreen,
-      page: () => ForYouScreen(),
+      page: () => StoriesScreen(),
       bindings: [
-        ForYouBinding(),
+        StoriesBinding(),
       ],
     ),
     GetPage(
@@ -264,13 +262,6 @@ class AppRoutes {
       page: () => PageViewScreen(),
       bindings: [
         PageViewBinding(),
-      ],
-    ),
-    GetPage(
-      name: commentsScreen,
-      page: () => CommentsScreen(),
-      bindings: [
-        CommentsBinding(),
       ],
     ),
     GetPage(

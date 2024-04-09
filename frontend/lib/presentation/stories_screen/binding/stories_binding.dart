@@ -1,13 +1,14 @@
-import 'package:vaibhav_s_application2/presentation/for_you_screen/controller/for_you_controller.dart';
 import 'package:get/get.dart';
+import 'package:vaibhav_s_application2/presentation/home_screen/models/stories_model.dart';
+import '../../home_screen/controller/stories_controller.dart';
 
 /// A binding class for the ForYouScreen.
 ///
 /// This class ensures that the ForYouController is created when the
 /// ForYouScreen is first loaded.
-class ForYouBinding extends Bindings {
+class StoriesBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => ForYouController());
+    Get.lazyPut(() => StoriesController(StoriesModel().obs));
   }
 }

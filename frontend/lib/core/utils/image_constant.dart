@@ -313,4 +313,6 @@ class ImageConstant {
 
   static String imgShare = 'assets/images/img_share.png';
 
+  static String imgLikedHeart = 'assets/images/img_liked_heart.png';
+
 }

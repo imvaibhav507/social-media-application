@@ -97,6 +97,7 @@ class HomeScreen extends StatelessWidget {
         splashBorderRadius: BorderRadius.circular(10),
         labelColor: appTheme.deepPurpleA200,
         unselectedLabelColor: appTheme.indigo100,
+        labelStyle: CustomTextStyles.titleMediumDeeppurpleA200SemiBold,
         tabs: [
           Tab(
             child: Text(
@@ -141,13 +142,20 @@ class HomeScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             StoriesListItemModel model = storiesController.storiesModelObj.value
                 .storiesListItemList.value[index];
-            return Profileslist1ItemWidget(
-              model,
+            return GestureDetector(
+              onTap: onTapOpenStories,
+              child: Profileslist1ItemWidget(
+                model,
+              ),
             );
           },
         ),
       ),
     );
+  }
+
+  void onTapOpenStories() {
+    Get.toNamed(AppRoutes.forYouScreen);
   }
 
 }

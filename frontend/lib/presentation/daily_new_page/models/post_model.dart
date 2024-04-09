@@ -38,9 +38,9 @@ class Post {
   List<String>? attachments;
   Creator? creator;
   String? createdAt;
-
+  RxBool? isLikedBy;
   Post(
-      {this.sId, this.caption, this.attachments, this.creator, this.createdAt});
+      {this.sId, this.caption, this.attachments, this.creator, this.createdAt, this.isLikedBy});
 
   Post.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -49,6 +49,7 @@ class Post {
     creator =
     json['creator'] != null ? new Creator.fromJson(json['creator']) : null;
     createdAt = json['createdAt'];
+    isLikedBy = RxBool(json['isLikedBy']);
   }
 
   Map<String, dynamic> toJson() {

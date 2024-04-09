@@ -85,6 +85,9 @@ class LiveScreen extends GetWidget<LiveController> {
       ),
       actions: [
         AppbarTrailingImage(
+          onTap: (){
+            Get.back();
+          },
           imagePath: ImageConstant.imgClosePrimary,
           margin: EdgeInsets.fromLTRB(16.h, 13.v, 16.h, 180.v),
         ),
