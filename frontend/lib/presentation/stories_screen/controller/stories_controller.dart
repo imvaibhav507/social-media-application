@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../../core/app_export.dart';
 import '../models/for_you_model.dart';
 
@@ -7,4 +9,5 @@ import '../models/for_you_model.dart';
 /// current forYouModelObj
 class ForYouController extends GetxController {
   Rx<ForYouModel> forYouModelObj = ForYouModel().obs;
+  TextEditingController commentController = TextEditingController();
 }
