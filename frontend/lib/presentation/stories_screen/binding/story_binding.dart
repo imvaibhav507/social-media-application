@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:vaibhav_s_application2/presentation/home_screen/models/stories_model.dart';
-import '../../home_screen/controller/stories_controller.dart';
+import 'package:vaibhav_s_application2/presentation/stories_screen/controller/stories_controller.dart';
+import '../models/stories_model.dart';
 
 /// A binding class for the ForYouScreen.
 ///
@@ -9,6 +9,6 @@ import '../../home_screen/controller/stories_controller.dart';
 class StoriesBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => StoriesController(StoriesModel().obs));
+    Get.lazyPut(() => StoriesController());
   }
 }
