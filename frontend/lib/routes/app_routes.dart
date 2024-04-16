@@ -3,6 +3,10 @@ import 'package:vaibhav_s_application2/presentation/add_avatar_screen/add_avatar
 import 'package:vaibhav_s_application2/presentation/add_avatar_screen/binding/add_avatar_binding.dart';
 import 'package:vaibhav_s_application2/presentation/add_member_screen/add_member_screen.dart';
 import 'package:vaibhav_s_application2/presentation/add_member_screen/binding/add_member_binding.dart';
+import 'package:vaibhav_s_application2/presentation/add_story_page/add_story_page.dart';
+import 'package:vaibhav_s_application2/presentation/add_story_page/binding/add_story_bindings.dart';
+import 'package:vaibhav_s_application2/presentation/capture_image_screen/binding/capture-image_bindings.dart';
+import 'package:vaibhav_s_application2/presentation/capture_image_screen/capture_image_page.dart';
 import 'package:vaibhav_s_application2/presentation/container_screen/binding/container_binding.dart';
 import 'package:vaibhav_s_application2/presentation/create_post_page/binding/create_post_binding.dart';
 import 'package:vaibhav_s_application2/presentation/create_post_page/create_post_page.dart';
@@ -11,7 +15,8 @@ import 'package:vaibhav_s_application2/presentation/messages_page/chats_search_s
 import 'package:vaibhav_s_application2/presentation/messages_page/messages_page.dart';
 import 'package:vaibhav_s_application2/presentation/notifications_page/notifications_page.dart';
 import 'package:vaibhav_s_application2/presentation/profile_page/profile_page.dart';
-import 'package:vaibhav_s_application2/presentation/stories_screen/binding/stories_binding.dart';
+import 'package:vaibhav_s_application2/presentation/searched_profile_page/searched_profile_page.dart';
+import 'package:vaibhav_s_application2/presentation/stories_screen/binding/story_binding.dart';
 import 'package:vaibhav_s_application2/presentation/stories_screen/stories_screen.dart';
 import '../presentation/splash_screen/splash_screen.dart';
 import '../presentation/splash_screen/binding/splash_binding.dart';
@@ -27,14 +32,8 @@ import '../presentation/notification_screen/notification_screen.dart';
 import '../presentation/notification_screen/binding/notification_binding.dart';
 import '../presentation/invite_friends_screen/invite_friends_screen.dart';
 import '../presentation/invite_friends_screen/binding/invite_friends_binding.dart';
-import '../presentation/daily_new_tab_container_screen/daily_new_tab_container_screen.dart';
-import '../presentation/daily_new_tab_container_screen/binding/daily_new_tab_container_binding.dart';
-import '../presentation/trending_tab_container_screen/trending_tab_container_screen.dart';
-import '../presentation/trending_tab_container_screen/binding/trending_tab_container_binding.dart';
 import '../presentation/stories_container_screen/stories_container_screen.dart';
 import '../presentation/stories_container_screen/binding/stories_container_binding.dart';
-import '../presentation/trending_posts_tab_container_screen/trending_posts_tab_container_screen.dart';
-import '../presentation/trending_posts_tab_container_screen/binding/trending_posts_tab_container_binding.dart';
 import '../presentation/stories_and_tweets_screen/stories_and_tweets_screen.dart';
 import '../presentation/stories_and_tweets_screen/binding/stories_and_tweets_binding.dart';
 import '../presentation/search_screen/search_screen.dart';
@@ -101,7 +100,7 @@ class AppRoutes {
 
   static const String liveScreen = '/live_screen';
 
-  static const String forYouScreen = '/for_you_screen';
+  static const String storyScreen = '/for_you_screen';
 
   static const String pageViewScreen = '/page_view_screen';
 
@@ -137,6 +136,12 @@ class AppRoutes {
 
   static const String createPostPage = '/create_post_page';
 
+  static const String addStoryScreen = '/add_story_screen';
+
+  static const String captureImageScreen = '/capture_image_screen';
+
+  static const String searchedProfileScreen = '/searched_profile_screen';
+
   static List<GetPage> pages = [
     GetPage(
       name: splashScreen,
@@ -145,6 +150,7 @@ class AppRoutes {
         SplashBinding(),
       ],
     ),
+
     GetPage(
       name: loginScreen,
       page: () => LoginScreen(),
@@ -202,31 +208,10 @@ class AppRoutes {
       ],
     ),
     GetPage(
-      name: dailyNewTabContainerScreen,
-      page: () => DailyNewTabContainerScreen(),
-      bindings: [
-        DailyNewTabContainerBinding(),
-      ],
-    ),
-    GetPage(
-      name: trendingTabContainerScreen,
-      page: () => TrendingTabContainerScreen(),
-      bindings: [
-        TrendingTabContainerBinding(),
-      ],
-    ),
-    GetPage(
       name: storiesContainerScreen,
       page: () => StoriesContainerScreen(),
       bindings: [
         StoriesContainerBinding(),
-      ],
-    ),
-    GetPage(
-      name: trendingPostsTabContainerScreen,
-      page: () => TrendingPostsTabContainerScreen(),
-      bindings: [
-        TrendingPostsTabContainerBinding(),
       ],
     ),
     GetPage(
@@ -251,10 +236,10 @@ class AppRoutes {
       ],
     ),
     GetPage(
-      name: forYouScreen,
-      page: () => StoriesScreen(),
+      name: storyScreen,
+      page: () => StoryScreen(),
       bindings: [
-        StoriesBinding(),
+        StoryBinding(),
       ],
     ),
     GetPage(
@@ -338,7 +323,20 @@ class AppRoutes {
       bindings: [CreatePostBinding()],
     ),
 
+    GetPage(
+        name: addStoryScreen,
+        page: () => AddStoryScreen(),
+      bindings: [AddStoryBinding()],
+    ),
+
+    GetPage(
+        name: captureImageScreen,
+        page: () => CaptureImageScreen(),
+      bindings: [CaptureImageBinding()],
+    ),
+
     GetPage(name: messagesPage, page: () => MessagesPage()),
+    GetPage(name: searchedProfileScreen, page: () => SearchedProfilePage()),
     GetPage(name: notificationsPage, page: () => NotificationsPage()),
     GetPage(name: profilePage, page: () => ProfilePage()),
 

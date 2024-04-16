@@ -10,8 +10,8 @@ import '../../home_screen/controller/home_screen_controller.dart';
 ///
 /// This class manages the state of the ProfilePage, including the
 /// current profileModelObj
-class ProfileController extends GetxController {
-  ProfileController(this.userPostListItemObj, this.userProfileModelObj);
+class SearchedProfileController extends GetxController {
+  SearchedProfileController(this.userPostListItemObj, this.userProfileModelObj);
 
   Rx<UserPostsList> userPostListItemObj;
   Rx<UserProfileModel> userProfileModelObj;
@@ -33,21 +33,8 @@ class ProfileController extends GetxController {
 
   AuthRepository authRepository = AuthRepository();
 
-  Future<void> logoutUser() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    await sp.clear().then((value) {
-      isClear.value = value;
-      if(isClear.value) {
-        Get.offAllNamed(AppRoutes.loginScreen);
-      }
-    });
-  }
-
   Future<void> getUserPostsList() async {
-    var homeScreenController = Get.find<HomeScreenController>();
-    if(Get.arguments == null || Get.arguments.isBlank) {
-      userId.value = homeScreenController.loggedInUserModelObj.value.data!.sId!;
-    }
+
     await postsRepository.getUserPostsList(userId.value).then((value) async {
       final response = await ApiResponse.completed(value);
       print(response.data);
@@ -58,7 +45,8 @@ class ProfileController extends GetxController {
   }
 
   Future<void> getUserProfile() async{
-    await authRepository.getUserProfile().then((value) async {
+
+    await authRepository.getUserProfile(userId.value).then((value) async {
       final response = await ApiResponse.completed(value);
       print(response.data);
       final data = response.data as Map<String, dynamic>;

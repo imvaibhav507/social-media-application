@@ -97,20 +97,13 @@ class CustomSearchView extends StatelessWidget {
           onChanged: (String value) {
             onChanged!.call(value);
           },
+          showCursor: true,
+          cursorColor: appTheme.deepPurpleA200,
         ),
       );
   InputDecoration get decoration => InputDecoration(
         hintText: hintText ?? "",
         hintStyle: hintStyle ?? CustomTextStyles.bodyMediumBluegray400,
-        // prefixIcon: Padding(
-        //   padding: EdgeInsets.all(
-        //     15.h,
-        //   ),
-        //   child: Icon(
-        //     Icons.search,
-        //     color: Colors.grey.shade600,
-        //   ),
-        // ),
         prefixIconConstraints: prefixConstraints ??
             BoxConstraints(
               maxHeight: 40.v,

@@ -18,4 +18,15 @@ class AuthRepository {
     dynamic response = _apiService.getApi(AppUrl.getLoggedInUserApi);
     return response;
   }
+
+  Future<dynamic> getUserProfile(String userId) async {
+    dynamic response = _apiService.getApi(AppUrl.getUserProfileApi + '?userId=${userId}');
+    return response;
+  }
+
+  Future<dynamic> searchUserProfile(String query) async {
+    dynamic response = _apiService.getApi(AppUrl.searchUserProfileApi + '?searchQuery=${query}');
+    return response;
+  }
+
 }

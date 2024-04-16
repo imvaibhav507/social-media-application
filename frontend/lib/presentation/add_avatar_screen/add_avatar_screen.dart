@@ -157,10 +157,10 @@ class AddAvatarScreen extends GetWidget<AddAvatarController> {
     return CustomElevatedButton(
         text: "Done".tr,
         buttonStyle: CustomButtonStyles.fillPrimary,
-        onPressed: () {
-          onTapUpdateGender();
+        onPressed: () async{
+          await onTapUpdateGender();
           if(controller.isUpdated.value) {
-            Get.offNamed(AppRoutes.containerScreen);
+            Get.offAllNamed(AppRoutes.containerScreen);
           }
         },
     );
@@ -170,7 +170,7 @@ class AddAvatarScreen extends GetWidget<AddAvatarController> {
     await controller.uploadAvatar(context);
   }
 
-  void onTapUpdateGender() async {
+  Future<void> onTapUpdateGender() async {
     AddGenderModel addGenderModel = AddGenderModel(
       gender: controller.genderRadioGroup.value,
     );

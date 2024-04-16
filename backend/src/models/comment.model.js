@@ -20,7 +20,6 @@ const commentSchema = new Schema(
     subComments: {
       type: Schema.Types.ObjectId,
       ref: "Comment",
-      unique: true,
     },
   },
   { timestamps: true }

@@ -43,7 +43,7 @@ class FileManagerTwo {
                   title: const Text('Gallery'),
                   onTap: () async {
                     List<XFile>? filesList =
-                    await _onImageButtonPressed(
+                    await onImageButtonPressed(
                         ImageSource.gallery,
                         isMultiImage: isMultiImage,
                         isMedia: false,
@@ -58,7 +58,7 @@ class FileManagerTwo {
                   title: const Text('Camera'),
                   onTap: () async {
                     List<XFile>? filesList =
-                    await _onImageButtonPressed(
+                    await onImageButtonPressed(
                         ImageSource.camera,
                         isMultiImage: false,
                         isMedia: false,
@@ -70,6 +70,24 @@ class FileManagerTwo {
                   })
             ])),
         backgroundColor: Colors.white);
+  }
+
+  openGallery({
+    int maxFileSize = 10 * 1024,
+    List<String> allowedExtensions = const [],
+    void Function(List<XFile?>)? getFiles,
+    required BuildContext context,
+    required bool isMultiImage
+}) async {
+    List<XFile>? filesList =
+        await onImageButtonPressed(
+        ImageSource.gallery,
+        isMultiImage: isMultiImage,
+        isMedia: false,
+        context: context);
+    if (getFiles != null) {
+      getFiles(filesList!);
+    }
   }
 
   /// Retrieves a list of image paths selected from the gallery.
@@ -122,7 +140,7 @@ class FileManagerTwo {
     return files;
   }
 
-  Future<List<XFile>?> _onImageButtonPressed(
+  Future<List<XFile>?> onImageButtonPressed(
       ImageSource source, {
         required BuildContext context,
         bool isMultiImage = false,

@@ -1,20 +1,18 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:vaibhav_s_application2/presentation/profile_page/models/user_posts_list.dart';
+import 'package:vaibhav_s_application2/presentation/profile_page/models/user_profile_model.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
-import 'package:vaibhav_s_application2/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:vaibhav_s_application2/widgets/custom_elevated_button.dart';
-import 'widgets/profilelist_item_widget.dart';
-import 'models/profilelist_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 import 'controller/profile_controller.dart';
-import 'models/profile_model.dart';
 
 // ignore_for_file: must_be_immutable
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key}) : super(key: key);
 
-  ProfileController controller = Get.put(ProfileController(ProfileModel().obs));
-
+  ProfileController controller =
+      Get.put(ProfileController(UserPostsList().obs, UserProfileModel().obs), permanent: false);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -23,7 +21,6 @@ class ProfilePage extends StatelessWidget {
             body: SizedBox(
                 width: double.maxFinite,
                 child: Column(children: [
-                  SizedBox(height: 24.v),
                   Align(
                       alignment: Alignment.centerLeft,
                       child: GestureDetector(
@@ -33,49 +30,63 @@ class ProfilePage extends StatelessWidget {
                           child: Padding(
                               padding: EdgeInsets.only(left: 16.h),
                               child: Row(children: [
-                                CustomImageView(
-                                    imagePath: ImageConstant.imgEllipse1480x80,
-                                    height: 80.adaptSize,
-                                    width: 80.adaptSize,
-                                    radius: BorderRadius.circular(40.h)),
+                                Obx(
+                                  () => CustomImageView(
+                                      imagePath: controller.userProfileModelObj
+                                          .value.profileDetails?.avatar,
+                                      height: 80.adaptSize,
+                                      width: 80.adaptSize,
+                                      radius: BorderRadius.circular(40.h)),
+                                ),
                                 Padding(
                                     padding: EdgeInsets.only(
-                                        left: 24.h, top: 11.v, bottom: 4.v),
+                                        left: 16.h, top: 11.v, bottom: 4.v),
                                     child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text("lbl_rosalia".tr,
-                                              style: CustomTextStyles
-                                                  .headlineLargeBlack90001),
-                                          SizedBox(height: 8.v),
-                                          Text("lbl_rose23".tr,
-                                              style: CustomTextStyles
-                                                  .bodyMediumBluegray400)
+                                          Obx(
+                                            () => Text(
+                                                controller
+                                                        .userProfileModelObj
+                                                        .value
+                                                        .profileDetails
+                                                        ?.fullname ??
+                                                    "null",
+                                                style: CustomTextStyles
+                                                    .headlineLargeBlack90001),
+                                          ),
+                                          SizedBox(height: 4.v),
+                                          Obx(
+                                            () => Text(
+                                                "@${controller.userProfileModelObj.value.profileDetails?.username}" ??
+                                                    "null",
+                                                style: CustomTextStyles
+                                                    .bodyMediumBluegray400),
+                                          )
                                         ]))
                               ])))),
-                  SizedBox(height: 26.v),
+                  SizedBox(height: 16.v),
                   _buildCountsRow(),
-                  SizedBox(height: 26.v),
+                  SizedBox(height: 16.v),
                   _buildMenuRow(),
-                  SizedBox(height: 24.v),
+                  SizedBox(height: 2.v),
                   _buildProfileList()
                 ]))));
   }
 
   /// Section Widget
   PreferredSizeWidget _buildAppBar() {
-    return CustomAppBar(height: 50.v, actions: [
+    return CustomAppBar(height: 50.v,
+        actions: [
       CustomElevatedButton(
+        margin: EdgeInsets.only(right: 10.h),
         buttonTextStyle: TextStyle(color: Colors.white, fontSize: 16),
         text: "Logout",
         height: 40.v,
         width: 100.h,
         onPressed: () => onPressedLogout(),
       ),
-      AppbarTrailingImage(
-          imagePath: ImageConstant.imgVectorDeepPurpleA200,
-          margin: EdgeInsets.symmetric(horizontal: 18.h, vertical: 20.v))
     ]);
   }
 
@@ -88,12 +99,28 @@ class ProfilePage extends StatelessWidget {
           Column(children: [
             Text("lbl_post".tr, style: CustomTextStyles.titleLargeGray500),
             SizedBox(height: 10.v),
-            Text("lbl_75".tr, style: CustomTextStyles.titleLargeDeeppurpleA200)
+            Obx(() => Text(
+                controller.userProfileModelObj.value.profileDetails?.postsCount
+                        .toString() ??
+                    "0",
+                style: CustomTextStyles.titleLargeDeeppurpleA200))
           ]),
-          _buildFollowersColumn(
-              followersText: "lbl_following".tr, zipcodeText: "lbl_3400".tr),
-          _buildFollowersColumn(
-              followersText: "lbl_followers".tr, zipcodeText: "lbl_6500".tr)
+          Obx(
+            () => _buildFollowersColumn(
+                followersText: "lbl_following".tr,
+                zipcodeText: controller
+                        .userProfileModelObj.value.profileDetails?.followings
+                        .toString() ??
+                    "0"),
+          ),
+          Obx(
+            () => _buildFollowersColumn(
+                followersText: "lbl_followers".tr,
+                zipcodeText: controller
+                        .userProfileModelObj.value.profileDetails?.followers
+                        .toString() ??
+                    "0"),
+          )
         ]));
   }
 
@@ -126,21 +153,44 @@ class ProfilePage extends StatelessWidget {
 
   /// Section Widget
   Widget _buildProfileList() {
-    return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.h),
-        child: Obx(() => ListView.separated(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            separatorBuilder: (context, index) {
-              return SizedBox(height: 16.v);
-            },
-            itemCount: controller
-                .profileModelObj.value.profilelistItemList.value.length,
-            itemBuilder: (context, index) {
-              ProfilelistItemModel model = controller
-                  .profileModelObj.value.profilelistItemList.value[index];
-              return ProfilelistItemWidget(model);
-            })));
+    return Obx(
+      () => Expanded(
+        child: GridView.count(
+          mainAxisSpacing: 2.adaptSize,
+          crossAxisSpacing: 2.adaptSize,
+          crossAxisCount: 3,
+          children: List.generate(
+              controller.userPostListItemObj.value.userPostsList?.length ?? 0,
+              (index) {
+            return Stack(children: [
+              Obx(
+                () => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.adaptSize),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: CustomImageView(
+                    imagePath: controller.userPostListItemObj.value
+                            .userPostsList?[index].cover ??
+                        "null",
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: CustomImageView(
+                  color: appTheme.gray50.withOpacity(0.8),
+                  margin:
+                      EdgeInsets.symmetric(vertical: 10.v, horizontal: 10.h),
+                  height: 23.v,
+                  imagePath: ImageConstant.imgImages,
+                ),
+              )
+            ]);
+          }),
+        ),
+      ),
+    );
   }
 
   /// Common widget
@@ -166,8 +216,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  onPressedLogout() async{
-
+  onPressedLogout() async {
     await controller.logoutUser();
   }
 }

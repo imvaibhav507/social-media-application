@@ -1,4 +1,4 @@
-import '../models/recent_searches_model.dart';
+import 'package:vaibhav_s_application2/presentation/search_screen/models/search_model.dart';
 import '../controller/search_controller.dart';
 import 'package:vaibhav_s_application2/widgets/custom_outlined_button.dart';
 import 'package:flutter/material.dart' hide SearchController;
@@ -7,13 +7,13 @@ import 'package:vaibhav_s_application2/core/app_export.dart';
 // ignore: must_be_immutable
 class RecentsearchesItemWidget extends StatelessWidget {
   RecentsearchesItemWidget(
-    this.recentsearchesItemModelObj, {
+    this.foundUserProfileModelObj, {
     Key? key,
   }) : super(
           key: key,
         );
 
-  RecentsearchesItemModel recentsearchesItemModelObj;
+  FoundUserProfileModel foundUserProfileModelObj;
 
   var controller = Get.find<SearchController>();
 
@@ -26,9 +26,8 @@ class RecentsearchesItemWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Obx(
-            () => CustomImageView(
-              imagePath: recentsearchesItemModelObj.kevinAllsrub!.value,
+          CustomImageView(
+              imagePath: foundUserProfileModelObj.avatar,
               height: 50.adaptSize,
               width: 50.adaptSize,
               radius: BorderRadius.circular(
@@ -36,7 +35,6 @@ class RecentsearchesItemWidget extends StatelessWidget {
               ),
               margin: EdgeInsets.only(bottom: 18.v),
             ),
-          ),
           Padding(
             padding: EdgeInsets.only(
               left: 24.h,
@@ -46,24 +44,20 @@ class RecentsearchesItemWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Obx(
-                  () => Text(
-                    recentsearchesItemModelObj.kevinAllsrub1!.value,
+                Text(
+                    foundUserProfileModelObj.fullname ?? 'null',
                     style: theme.textTheme.titleLarge,
                   ),
-                ),
                 SizedBox(height: 5.v),
-                Obx(
-                  () => Text(
-                    recentsearchesItemModelObj.yourEFriendsOn!.value,
+                Text(
+                    '@${foundUserProfileModelObj.username}' ?? 'null',
                     style: CustomTextStyles.bodyMediumGray600,
                   ),
-                ),
               ],
             ),
           ),
           Spacer(),
-          _buildFollowButton1(),
+          (foundUserProfileModelObj.followedByYou == false) ? _buildFollowButton1() : Container(),
         ],
       ),
     );

@@ -9,7 +9,12 @@ class ContainerController extends GetxController with GetSingleTickerProviderSta
       ContainerModel().obs;
 
   late TabController tabviewController =
-  Get.put(TabController(vsync: this, length: 4));
+  Get.put(TabController(vsync: this, length: 2));
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
   @override
   void onClose() {
     super.onClose();

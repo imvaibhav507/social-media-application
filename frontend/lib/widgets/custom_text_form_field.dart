@@ -99,6 +99,7 @@ class CustomTextFormField extends StatelessWidget {
           maxLines: maxLines ?? 1,
           decoration: decoration,
           validator: validator,
+          cursorColor: appTheme.deepPurpleA200,
         ),
       );
   InputDecoration get decoration => InputDecoration(

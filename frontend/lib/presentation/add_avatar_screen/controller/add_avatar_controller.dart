@@ -37,10 +37,9 @@ class AddAvatarController extends GetxController{
       isMultiImage: false,
       getFiles: (List<XFile?> files) async {
         // Handle the selected images here
-        var imageFile = files[0];
         try {
           // Use a function like uploadImageApi to send the image (replace with your actual logic)
-          await _uploadRepository.uploadImageApi(imageFile)
+          await _uploadRepository.uploadImageApi(files, 'avatar')
               .then((value) {
                 setLoading(false);
                 final response = ApiResponse.completed(value).data as Map<String,dynamic>;

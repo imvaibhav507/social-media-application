@@ -17,35 +17,24 @@ class DailyNewPage extends StatelessWidget {
         );
 
   DailyNewController controller =
-      Get.put(DailyNewController(PostsModel().obs, LikeModel().obs, CommentsModel().obs));
+      Get.find<DailyNewController>();
   RxBool bottomSheetOpened = RxBool(false);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          width: double.maxFinite,
-          decoration: AppDecoration.fillPrimary,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 28.v),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 30.v),
-                      Container(
-                          child: _buildPostsList()
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Obx(
+          ()=> Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildPostsList(),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -78,22 +67,22 @@ class DailyNewPage extends StatelessWidget {
   Widget _buildPostWidget(Post postModel) {
     print(postModel.isLikedBy?.value);
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 2.v),
-      padding: EdgeInsets.all(10.h),
-      decoration: AppDecoration.fillPrimary.copyWith(
-        borderRadius: BorderRadiusStyle.roundedBorder15,
+      padding: EdgeInsets.all(4.h),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            width: 4.v,
+            color: appTheme.gray50
+          )
+        )
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(
-              height: 2.v,
-              thickness: 2.v,
-              color: theme.colorScheme.secondaryContainer),
           SizedBox(height: 8.v),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.h),
+            padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 2.v),
             child: Row(
               children: [
                 CustomImageView(
@@ -101,7 +90,7 @@ class DailyNewPage extends StatelessWidget {
                   height: 50.adaptSize,
                   width: 50.adaptSize,
                   radius: BorderRadius.circular(
-                    25.h,
+                    30.h,
                   ),
                 ),
                 Padding(
@@ -136,10 +125,8 @@ class DailyNewPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 8.v),
           CarouselSlider(
             options: CarouselOptions(
-              height: 400.0,
               autoPlay: true,
               enableInfiniteScroll: false,
               aspectRatio: 1/1,

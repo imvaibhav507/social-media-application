@@ -6,7 +6,6 @@ import 'package:vaibhav_s_application2/presentation/home_screen/models/logged_in
 import 'package:vaibhav_s_application2/repositories/posts_repository.dart';
 
 import '../../../core/app_export.dart';
-import '../../log_in_screen/controller/log_in_controller.dart';
 import '../models/comments_model.dart';
 
 /// A controller class for the DailyNewPage.
@@ -16,13 +15,7 @@ import '../models/comments_model.dart';
 class DailyNewController extends GetxController {
   DailyNewController(
       this.postsModelObj, this.likeModelObj, this.commentsModelObj);
-  var homeScreenController = Get.find<HomeScreenController>();
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    getAllPosts();
-  }
+
 
   PostsRepository postsRepository = PostsRepository();
   TextEditingController commentController = TextEditingController();
@@ -89,6 +82,7 @@ class DailyNewController extends GetxController {
   }
 
   Future<void> addComment(Post postModel) async {
+    var homeScreenController = Get.find<HomeScreenController>();
     await postsRepository
         .addComment(AddCommentModel(
                 comment: commentController.value.text, postId: postModel.sId)

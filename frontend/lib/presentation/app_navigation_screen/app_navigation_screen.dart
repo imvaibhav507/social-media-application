@@ -100,7 +100,7 @@ class AppNavigationScreen extends GetWidget<AppNavigationController> {
                         _buildScreenTitle(
                           screenTitle: "For You".tr,
                           onTapScreenTitle: () =>
-                              onTapScreenTitle(AppRoutes.forYouScreen),
+                              onTapScreenTitle(AppRoutes.storyScreen),
                         ),
                         _buildScreenTitle(
                           screenTitle: "Page View".tr,

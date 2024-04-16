@@ -8,15 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 import 'package:vaibhav_s_application2/widgets/custom_icon_button.dart';
 import 'package:vaibhav_s_application2/widgets/custom_text_form_field.dart';
-import 'controller/stories_controller.dart';
+import 'controller/story_controller.dart';
 
 // ignore_for_file: must_be_immutable
-class StoriesScreen extends GetWidget<StoriesController> {
-  const StoriesScreen({Key? key})
+class StoryScreen extends GetWidget<StoryController> {
+  StoryScreen({Key? key})
       : super(
           key: key,
         );
-
+  StoryController controller = Get.find<StoryController>();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -28,30 +28,25 @@ class StoriesScreen extends GetWidget<StoriesController> {
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          child: CarouselSlider(
-            options: CarouselOptions(
-              height: double.infinity,
-              autoPlay: true,
-              enableInfiniteScroll: false,
-              aspectRatio: 1,
-              autoPlayCurve: Curves.fastOutSlowIn,
-              autoPlayAnimationDuration: Duration(milliseconds: 800),
-              viewportFraction: 1,
+          child: Obx(
+            ()=> CarouselSlider(
+              options: CarouselOptions(
+                height: double.infinity,
+                autoPlay: true,
+                enableInfiniteScroll: false,
+                aspectRatio: 1,
+                autoPlayCurve: Curves.fastOutSlowIn,
+                autoPlayAnimationDuration: Duration(milliseconds: 800),
+                viewportFraction: 1,
+              ),
+              items: controller.storyModelObj.value.storyItemModel?.attachments?.map(
+                      (item) {
+                       return CustomImageView(
+                          fit: BoxFit.cover,
+                          imagePath: item,
+                        );
+                      }).toList()
             ),
-            items: [
-              CustomImageView(
-                fit: BoxFit.cover,
-                imagePath: ImageConstant.imgForYou,
-              ),
-              CustomImageView(
-                fit: BoxFit.cover,
-                imagePath: ImageConstant.imgForYou,
-              ),
-              CustomImageView(
-                fit: BoxFit.cover,
-                imagePath: ImageConstant.imgChatBkg,
-              ),
-            ]
           ),
         ),
         bottomNavigationBar: Padding(
@@ -99,25 +94,32 @@ class StoriesScreen extends GetWidget<StoriesController> {
     return CustomAppBar(
       height: 80.v,
       leadingWidth: 66.h,
-      leading: AppbarLeadingCircleimage(
-        imagePath: ImageConstant.imgEllipse9,
-        margin: EdgeInsets.only(
-          left: 16.h,),
+      leading: Obx(
+        ()=> AppbarLeadingCircleimage(
+          imagePath: controller.storyModelObj.value.storyItemModel?.avatar,
+          margin: EdgeInsets.fromLTRB(16.h, 24.v, 0, 0),
+        ),
       ),
       title: Padding(
         padding: EdgeInsets.only(
-          left: 24.h,
-          top: 3.v,
+          left: 15.h,
+          top: 24.v,
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppbarSubtitle(
-              text: "lbl_lucas_anna".tr,
+            Obx(
+            ()=> AppbarSubtitle(
+                text: controller.storyModelObj.value.storyItemModel?.fullname ?? "null",
+              ),
             ),
             SizedBox(height: 5.v),
-            AppbarSubtitleThree(
-              text: "lbl_35_16".tr,
-              margin: EdgeInsets.only(right: 76.h),
+            Obx(
+              ()=> AppbarSubtitleThree(
+                text: controller.storyModelObj.value.storyItemModel?.createdAt ?? "null",
+                margin: EdgeInsets.only(right: 76.h),
+              ),
             ),
           ],
         ),

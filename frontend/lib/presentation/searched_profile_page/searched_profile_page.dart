@@ -1,17 +1,17 @@
 import 'package:vaibhav_s_application2/presentation/profile_page/models/user_posts_list.dart';
 import 'package:vaibhav_s_application2/presentation/profile_page/models/user_profile_model.dart';
+import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
-import 'package:vaibhav_s_application2/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
-import 'controller/profile_controller.dart';
+import 'controller/searched_profile_controller.dart';
 
 // ignore_for_file: must_be_immutable
-class ProfilePage extends StatelessWidget {
-  ProfilePage({Key? key}) : super(key: key);
+class SearchedProfilePage extends StatelessWidget {
+  SearchedProfilePage({Key? key}) : super(key: key);
 
-  ProfileController controller =
-      Get.put(ProfileController(UserPostsList().obs, UserProfileModel().obs), permanent: false);
+  SearchedProfileController controller =
+      Get.put(SearchedProfileController(UserPostsList().obs, UserProfileModel().obs), permanent: false);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -51,7 +51,7 @@ class ProfilePage extends StatelessWidget {
                                                         .value
                                                         .profileDetails
                                                         ?.fullname ??
-                                                    "null",
+                                                    "",
                                                 style: CustomTextStyles
                                                     .headlineLargeBlack90001),
                                           ),
@@ -59,7 +59,7 @@ class ProfilePage extends StatelessWidget {
                                           Obx(
                                             () => Text(
                                                 "@${controller.userProfileModelObj.value.profileDetails?.username}" ??
-                                                    "null",
+                                                    "",
                                                 style: CustomTextStyles
                                                     .bodyMediumBluegray400),
                                           )
@@ -77,16 +77,13 @@ class ProfilePage extends StatelessWidget {
   /// Section Widget
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(height: 50.v,
-        actions: [
-      CustomElevatedButton(
-        margin: EdgeInsets.only(right: 10.h),
-        buttonTextStyle: TextStyle(color: Colors.white, fontSize: 16),
-        text: "Logout",
-        height: 40.v,
-        width: 100.h,
-        onPressed: () => onPressedLogout(),
+      leadingWidth: 50.h,
+      leading: AppbarLeadingImage(
+          onTap: (){Get.back();},
+          imagePath: ImageConstant.imgVector,
+          margin: EdgeInsets.all(12.0)
       ),
-    ]);
+    );
   }
 
   /// Section Widget
@@ -171,7 +168,7 @@ class ProfilePage extends StatelessWidget {
                   child: CustomImageView(
                     imagePath: controller.userPostListItemObj.value
                             .userPostsList?[index].cover ??
-                        "null",
+                        "",
                   ),
                 ),
               ),
@@ -213,9 +210,5 @@ class ProfilePage extends StatelessWidget {
     Get.toNamed(
       AppRoutes.detailedProfileScreen,
     );
-  }
-
-  onPressedLogout() async {
-    await controller.logoutUser();
   }
 }

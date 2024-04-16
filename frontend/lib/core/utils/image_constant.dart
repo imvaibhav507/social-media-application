@@ -315,4 +315,14 @@ class ImageConstant {
 
   static String imgLikedHeart = 'assets/images/img_liked_heart.png';
 
+  static String imgAddStory = 'assets/images/img_add_story.png';
+
+  static String imgGallery = 'assets/images/img_gallery.png';
+
+  static String imgFlip = 'assets/images/img_flip.png';
+
+  static String imgCameraClick = 'assets/images/img_camera_click.png';
+
+  static String imgImages = 'assets/images/img_images.png';
+
 }

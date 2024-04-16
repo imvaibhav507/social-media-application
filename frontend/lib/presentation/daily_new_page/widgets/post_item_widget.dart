@@ -16,12 +16,13 @@ class PostItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.adaptSize),
+      ),
       child: CustomImageView(
           imagePath: attachment,
-          radius: BorderRadius.circular(
-            16.h,
-          ),
         ),
     );
   }

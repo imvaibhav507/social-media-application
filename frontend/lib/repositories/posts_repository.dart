@@ -9,6 +9,11 @@ class PostsRepository{
     return response;
   }
 
+  Future<dynamic> getUserPostsList(String? userId) async{
+    dynamic response = await _apiServices.getApi(AppUrl.getUserPostsListApi + '?userId=${userId}');
+    return response;
+  }
+
   Future<dynamic> likePost(String postId) async {
     dynamic response = await _apiServices.putApi(AppUrl.likePostApi + '?postId=${postId}',{});
     return response;
@@ -16,6 +21,21 @@ class PostsRepository{
 
   Future<dynamic> unlikePost(String postId) async {
     dynamic response = await _apiServices.deleteApi(AppUrl.unlikePostApi + '?postId=${postId}',{});
+    return response;
+  }
+
+  Future<dynamic> getAllStories() async{
+    dynamic response = await _apiServices.getApi(AppUrl.getAllStoriesApi);
+    return response;
+  }
+
+  Future<dynamic> getSingleStory(String postId) async{
+    dynamic response = await _apiServices.getApi(AppUrl.getSingleStoryApi + '?postId=${postId}');
+    return response;
+  }
+
+  Future<dynamic> addStory(imageFiles, filename) async{
+    dynamic response = await _apiServices.uploadImageApi(AppUrl.addStoryApi, imageFiles, filename);
     return response;
   }
 

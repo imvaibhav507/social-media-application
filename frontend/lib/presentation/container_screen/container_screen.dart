@@ -1,4 +1,5 @@
 import 'package:vaibhav_s_application2/presentation/create_post_page/create_post_page.dart';
+import 'package:vaibhav_s_application2/presentation/home_screen/controller/home_screen_controller.dart';
 import 'package:vaibhav_s_application2/presentation/home_screen/home_screen.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/messages_page.dart';
 import 'package:vaibhav_s_application2/presentation/notifications_page/notifications_page.dart';
@@ -12,6 +13,7 @@ import 'controller/container_controller.dart';
 // ignore_for_file: must_be_immutable
 class ContainerScreen extends GetWidget<ContainerController> {
   ContainerScreen({Key? key}) : super(key: key);
+
   RxString currentRoute = AppRoutes.homeScreen.obs;
   @override
   Widget build(BuildContext context) {

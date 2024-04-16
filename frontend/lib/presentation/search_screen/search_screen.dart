@@ -1,7 +1,10 @@
+import 'package:vaibhav_s_application2/presentation/search_screen/models/search_model.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart';
 import 'package:vaibhav_s_application2/widgets/custom_search_view.dart';
-import 'models/recent_searches_model.dart';
+import '../profile_page/controller/profile_controller.dart';
+import '../profile_page/models/user_posts_list.dart';
+import '../profile_page/models/user_profile_model.dart';
 import 'widgets/recentsearches_item_widget.dart';
 import 'package:flutter/material.dart' hide SearchController;
 import 'package:vaibhav_s_application2/core/app_export.dart';
@@ -24,14 +27,16 @@ class SearchScreen extends StatelessWidget {
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(vertical: 20.v),
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                _buildSearchResults(),
-                SizedBox(height: 28.v),
-                _buildSearchClearAll(),
-                SizedBox(height: 24.v),
-                _buildRecentSearches(),
-              ],
+            child: Obx(
+                ()=> Column(
+                children: [
+                  _buildSearchResults(),
+                  SizedBox(height: 28.v),
+                  _buildSearchClearAll(),
+                  SizedBox(height: 24.v),
+                  // _buildRecentSearches(),
+                ],
+              ),
             ),
           ),
         ),
@@ -45,7 +50,7 @@ class SearchScreen extends StatelessWidget {
       height: 70.v,
       leadingWidth: 50.h,
       leading: AppbarLeadingImage(
-        onTap: onTapBack,
+        onTap: (){ controller.searchController.clear(); },
         imagePath: ImageConstant.imgVector,
         margin: EdgeInsets.all(12.0)
       ),
@@ -58,7 +63,7 @@ class SearchScreen extends StatelessWidget {
           controller: controller.searchController,
           hintText: "lbl_search".tr,
           onChanged: (text) {
-
+            getSearchResults(text);
           },
         ),
       ),
@@ -89,73 +94,96 @@ class SearchScreen extends StatelessWidget {
   }
 
   /// Section Widget
-  Widget _buildRecentSearches() {
-    return Obx(
-      () => ListView.separated(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        separatorBuilder: (
-          context,
-          index,
-        ) {
-          return Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0.v),
-            child: SizedBox(
-              width: double.maxFinite,
-              child: Divider(
-                height: 2.v,
-                thickness: 2.v,
-                color: theme.colorScheme.secondaryContainer,
-              ),
-            ),
-          );
-        },
-        itemCount:
-            controller.searchModelObj.value.recentsearchesItemList.value.length,
-        itemBuilder: (context, index) {
-          RecentsearchesItemModel model = controller
-              .searchModelObj.value.recentsearchesItemList.value[index];
-          return RecentsearchesItemWidget(
-            model,
-          );
-        },
-      ),
-    );
-  }
+  // Widget _buildRecentSearches() {
+  //   return Obx(
+  //     () => ListView.separated(
+  //       physics: NeverScrollableScrollPhysics(),
+  //       shrinkWrap: true,
+  //       separatorBuilder: (
+  //         context,
+  //         index,
+  //       ) {
+  //         return Padding(
+  //           padding: EdgeInsets.symmetric(vertical: 8.0.v),
+  //           child: SizedBox(
+  //             width: double.maxFinite,
+  //             child: Divider(
+  //               height: 2.v,
+  //               thickness: 2.v,
+  //               color: theme.colorScheme.secondaryContainer,
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //       itemCount:
+  //           controller.searchedUserProfilesModelObj.value.foundUserProfile?.length ?? 0,
+  //       itemBuilder: (context, index) {
+  //         FoundUserProfileModel model = controller
+  //             .searchedUserProfilesModelObj.value.foundUserProfile![index];
+  //         return RecentsearchesItemWidget(
+  //           model,
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget _buildSearchResults() {
-    return  ListView.separated(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        separatorBuilder: (
-            context,
-            index,
-            ) {
-          return Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0.v),
-            child: SizedBox(
-              width: double.maxFinite,
-              child: Divider(
-                height: 2.v,
-                thickness: 2.v,
-                color: theme.colorScheme.secondaryContainer,
+    final searchResultList = controller.searchedUserProfilesModelObj.value;
+    if (controller.isListLoading == true) {
+      return Center(
+          child: CircularProgressIndicator(
+            color: Colors.black,
+          ));
+    } else if (searchResultList.foundUserProfile == null) {
+      return Center();
+    } else if (searchResultList.foundUserProfile!.isEmpty) {
+      return Center(
+          child: Text(
+            "Nothing found",
+            style: CustomTextStyles.titleLargeBlack900,
+          ));
+    }
+    return ListView.separated(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          separatorBuilder: (
+              context,
+              index,
+              ) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0.v),
+              child: SizedBox(
+                width: double.maxFinite,
+                child: Divider(
+                  height: 2.v,
+                  thickness: 2.v,
+                  color: theme.colorScheme.secondaryContainer,
+                ),
               ),
-            ),
-          );
-        },
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          RecentsearchesItemModel model = controller
-              .searchModelObj.value.recentsearchesItemList.value[index];
-          return RecentsearchesItemWidget(
-            model,
-          );
-        },
+            );
+          },
+          itemCount: controller
+              .searchedUserProfilesModelObj.value.foundUserProfile?.length ?? 0,
+          itemBuilder: (context, index) {
+            FoundUserProfileModel model = controller
+                .searchedUserProfilesModelObj.value.foundUserProfile![index];
+            return GestureDetector(
+              onTap: () {
+                onTapGoToProfilePage(model.sId);
+              },
+              child: RecentsearchesItemWidget(model),
+            );
+          },
     );
   }
 
-  onTapBack() {
-    Get.back();
+  void getSearchResults(String text) async{
+    await controller.getSearchedUserProfiles(text.trim());
+  }
+
+  void onTapGoToProfilePage(String? userId) {
+    Get.toNamed(AppRoutes.searchedProfileScreen, arguments: userId);
   }
 }
 

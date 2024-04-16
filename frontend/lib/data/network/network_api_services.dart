@@ -55,16 +55,20 @@ class NetworkApiServices extends BaseApiServices {
 
 
   @override
-  Future uploadImageApi(String url, XFile imageFile) async {
+  Future uploadImageApi(String url, List<XFile> imageFiles, String filename) async {
 
     SharedPreferences sp = await SharedPreferences.getInstance();
     String token = await sp.get('accessToken').toString();
 
-    var multipartFile = http.MultipartFile.fromBytes(
-        'avatar', // Replace with your image field name in the API
+    var multipartFiles = <http.MultipartFile>[];
+    for (var imageFile in imageFiles) {
+      var multipartFile = http.MultipartFile.fromBytes(
+        filename, // Replace with your image field name in the API
         await imageFile.readAsBytes(),
-        filename: imageFile.path.split('/').last
-    );
+        filename: imageFile.path.split('/').last,
+      );
+      multipartFiles.add(multipartFile);
+    }
 
     dynamic jsonResponse;
     try {
@@ -72,7 +76,7 @@ class NetworkApiServices extends BaseApiServices {
       request.headers['Authorization'] = 'Bearer ${token}';
 
       // Add the image file
-      request.files.add(multipartFile);
+      request.files.addAll(multipartFiles);
 
       final streamedResponse = await request.send().timeout(const Duration(seconds: 60));
       final response = await streamedResponse.stream.bytesToString();
