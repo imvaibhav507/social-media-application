@@ -7,7 +7,7 @@ import 'messageslist_item_model.dart';
 
 class MessageslistModel {
   Rx<int>? statusCode;
-  Rx<List<MessagesItemModel>>? messagesItems;
+  RxList<MessagesItemModel>? messagesItems;
   Rx<String>? message;
   Rx<bool>? success;
 
@@ -17,9 +17,9 @@ class MessageslistModel {
   MessageslistModel.fromJson(Map<String, dynamic> json) {
     statusCode = Rx(json['statusCode']);
     if (json['data'] != null) {
-      messagesItems = Rx(<MessagesItemModel>[]);
+      messagesItems = RxList(<MessagesItemModel>[]);
       json['data'].forEach((v) {
-        messagesItems?.value.add(new MessagesItemModel.fromJson(v));
+        messagesItems?.add(new MessagesItemModel.fromJson(v));
       });
     }
     message = Rx(json['message']);

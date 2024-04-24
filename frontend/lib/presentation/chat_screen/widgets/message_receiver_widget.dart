@@ -53,20 +53,37 @@ class MessageReceiverWidget extends StatelessWidget {
                                     .copyWith(height: 1.50)))
                       ])),
           SizedBox(height: 9.v),
-          if(controller.userId! == chatModelObj.senderId!.value) _buildDeliveredRow(deliveredText: "lbl_delivered".tr),
+          if (controller.userId! == chatModelObj.senderId!.value)
+            _buildDeliveredRow(deliveredText: "lbl_delivered".tr),
         ]);
   }
 
   Widget _buildDeliveredRow({required String deliveredText}) {
     return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-      Text(deliveredText,
-          style: CustomTextStyles.bodySmallGray600
-              .copyWith(color: appTheme.gray600)),
-      CustomImageView(
-          imagePath: ImageConstant.imgSettingsDeepPurpleA200,
-          height: 10.v,
-          width: 15.h,
-          margin: EdgeInsets.only(left: 12.h, top: 2.v, bottom: 2.v))
+      Obx(() {
+        final substring = chatModelObj.sId?.value.substring(0, 7);
+        return Text((substring == 'sending') ? "Sending... " : deliveredText,
+            style: CustomTextStyles.bodySmallGray600
+                .copyWith(color: appTheme.gray600));
+      }),
+      Obx(() {
+        final substring = chatModelObj.sId?.value.substring(0, 7);
+        if (substring == 'sending') {
+          return Container(
+              height: 10.adaptSize,
+              width: 10.adaptSize,
+              padding: EdgeInsets.all(2.adaptSize),
+              child: CircularProgressIndicator(
+                color: appTheme.gray500,
+                strokeWidth: 1.2.adaptSize,
+              ));
+        }
+        return CustomImageView(
+            imagePath: ImageConstant.imgSettingsDeepPurpleA200,
+            height: 10.v,
+            width: 15.h,
+            margin: EdgeInsets.only(left: 12.h, top: 2.v, bottom: 2.v));
+      })
     ]);
   }
 }

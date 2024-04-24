@@ -5,6 +5,7 @@ import { User } from "../models/user.model.js";
 import mongoose from "mongoose";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 import { Follow } from "../models/follow.model.js";
+import { FollowRequest } from "../models/followrequest.model.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -218,6 +219,16 @@ const getUserProfile = AsyncHandler(async (req, res) => {
         as: "posts",
       },
     },
+
+    {
+      $lookup: {
+        from: "followrequests",
+        localField: "_id",
+        foreignField: "requestedTo",
+        as: "pendingRequests",
+      },
+    },
+
     {
       $addFields: {
         postsCount: {
@@ -237,6 +248,23 @@ const getUserProfile = AsyncHandler(async (req, res) => {
         followers: {
           $size: "$follower",
         },
+        imFollowing: {
+          $cond: {
+            if: {
+              $in: [req.user._id, "$follower.follower"],
+            },
+            then: "yes",
+            else: {
+              $cond: {
+                if: {
+                  $in: [req.user._id, "$pendingRequests.requestedBy"],
+                },
+                then: "requested",
+                else: "no",
+              },
+            },
+          },
+        },
       },
     },
 
@@ -248,6 +276,7 @@ const getUserProfile = AsyncHandler(async (req, res) => {
         postsCount: 1,
         followings: 1,
         followers: 1,
+        imFollowing: 1,
       },
     },
   ]);
@@ -266,6 +295,7 @@ const getUserProfile = AsyncHandler(async (req, res) => {
       )
     );
 });
+
 const searchUsers = AsyncHandler(async (req, res) => {
   const { chatroomId, searchQuery } = req.query;
   console.log(chatroomId, searchQuery);
@@ -391,6 +421,71 @@ const searchUserProfiles = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, foundUserProfiles, "found users"));
 });
 
+const sendFollowRequest = AsyncHandler(async (req, res) => {
+  const userId = req.query.userId;
+  console.log("userId", userId);
+  const searchFollow = await Follow.findOne({
+    follower: req.user._id,
+    following: userId,
+  });
+
+  if (searchFollow) {
+    throw new ApiError(400, "Already following the user");
+  }
+
+  const createdRequest = await FollowRequest.create({
+    requestedBy: req.user._id,
+    requestedTo: userId,
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, createdRequest, "Request sent successfully !!"));
+});
+
+const getFollowRequestsList = AsyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const fetchedRequestList = await FollowRequest.aggregate([
+    {
+      $match: {
+        requestedTo: new mongoose.Types.ObjectId(userId),
+      },
+    },
+
+    {
+      $lookup: {
+        from: "users",
+        localField: "requestedBy",
+        foreignField: "_id",
+        as: "users",
+      },
+    },
+
+    {
+      $unwind: "$users",
+    },
+
+    {
+      $project: {
+        userId: "$users._id",
+        name: "$users.fullName",
+        username: "$users.username",
+        avatar: "$users.avatar",
+      },
+    },
+  ]);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        fetchedRequestList,
+        "Pending requested fetched successfully"
+      )
+    );
+});
+
 const followUser = AsyncHandler(async (req, res) => {
   const userId = req.query.userId;
 
@@ -417,6 +512,34 @@ const followUser = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, createdFollow, "User followed successfully !!"));
 });
 
+const approveFollowRequest = AsyncHandler(async (req, res) => {
+  const { requestId, response } = req.query;
+
+  const pendingRequest = await FollowRequest.findById(requestId);
+  if (!pendingRequest) {
+    throw new ApiError(400, "No pending request found");
+  }
+
+  if (response == "accepted") {
+    const createdFollow = await Follow.create({
+      follower: pendingRequest.requestedBy,
+      following: pendingRequest.requestedTo,
+    });
+    if (!createdFollow) {
+      throw new ApiError(400, "Error while following the user");
+    }
+  }
+
+  const deletePendingRequest = await FollowRequest.findByIdAndDelete(requestId);
+  if (!deletePendingRequest) {
+    throw new ApiError(400, "Error while deleting the pending request");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, response, "request status updated !!"));
+});
+
 const unfollowUser = AsyncHandler(async (req, res) => {
   const userId = req.query.userId;
   const unfollowedUser = await Follow.deleteOne({
@@ -439,7 +562,10 @@ export {
   searchUsers,
   getUser,
   followUser,
+  sendFollowRequest,
+  approveFollowRequest,
   unfollowUser,
   getUserProfile,
+  getFollowRequestsList,
   searchUserProfiles,
 };

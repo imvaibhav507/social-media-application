@@ -65,7 +65,7 @@ class MessagesPage extends StatelessWidget {
         if (messagesListModel.messagesItems == null) {
           // Show a loading indicator while data is being fetched
           return Center(child: CircularProgressIndicator(color: Colors.black,));
-        } else if (messagesListModel.messagesItems!.value.isEmpty) {
+        } else if (messagesListModel.messagesItems!.isEmpty) {
           // Show a message if there are no messages
           return Center(child: Text("No messages available"));
         }
@@ -82,12 +82,17 @@ class MessagesPage extends StatelessWidget {
                     thickness: 3.v,
                     color: theme.colorScheme.secondaryContainer));
           },
-          itemCount: messagesListModel.messagesItems!.value.length,
+          itemCount: messagesListModel.messagesItems!.length,
           itemBuilder: (context, index) {
-            MessagesItemModel model = messagesListModel.messagesItems!.value[index];
-            String chatRoomId = messagesListModel.messagesItems!.value[index].sId!.value;
+            MessagesItemModel model = messagesListModel.messagesItems![index];
+            String chatRoomId = messagesListModel.messagesItems![index].sId!.value;
             return GestureDetector(
-              onTap: ()=>Get.toNamed(AppRoutes.chatScreen, arguments: chatRoomId),
+              onTap: (){
+                if(messagesListModel.messagesItems![index].isGroupChat?.value == true) {
+                  Get.toNamed(AppRoutes.chatroomScreen, arguments: {'chatroomId':chatRoomId, 'isGroupChat': true, 'index': index});
+                }
+                else Get.toNamed(AppRoutes.personalChatScreen, arguments: {'chatroomId':chatRoomId, 'isGroupChat': false, 'index': index});
+              },
                 child: MessageslistItemWidget(model,index));
           });
       }),

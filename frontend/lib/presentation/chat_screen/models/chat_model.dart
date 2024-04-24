@@ -1,3 +1,4 @@
+
 import 'package:get/get.dart';
 
 /// This class defines the variables used in the [chat_screen],
@@ -24,24 +25,36 @@ class ChatScreenModel {
 }
 
 class ChatModel {
-  Rx<String>? sId;
-  Rx<String>? content;
-  Rx<List<String>>? attachments;
-  Rx<String>? name;
-  Rx<String>? senderId;
-  Rx<String>? time;
-  Rx<String>? createdAt;
+  RxString? sId;
+  RxString? content;
+  RxList<String>? attachments;
+  RxString? name;
+  RxString? senderId;
+  RxString? time;
+  RxString? createdAt;
 
-  ChatModel({this.sId, this.content, this.attachments, this.name, this.senderId, this.time});
+  ChatModel({this.sId, this.content, this.attachments, this.name, this.senderId, this.time, this.createdAt});
 
   ChatModel.fromJson(Map<String, dynamic> json) {
-    sId = Rx(json['_id']);
-    content = Rx(json['content']);
-    attachments = Rx(json['attachments'].cast<String>());
-    name = Rx(json['name']);
-    senderId = Rx(json['senderId']);
-    time = Rx(json['time']);
-    createdAt = Rx(json['createdAt']);
+    sId = RxString(json['_id']);
+    content = RxString(json['content']);
+    attachments = RxList(json['attachments'].cast<String>());
+    name = RxString(json['name']);
+    senderId = RxString(json['senderId']);
+    time = RxString(json['time']);
+    createdAt = RxString(json['createdAt']);
   }
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId?.value;
+    data['content'] = this.content?.value;
+    if (this.attachments != null) {
+      data['attachments'] = this.attachments!.map((v) => v).toList();
+    }
+    data['senderId'] = this.senderId?.value;
+    data['createdAt'] = this.createdAt?.value;
+    return data;
+  }
 }
+

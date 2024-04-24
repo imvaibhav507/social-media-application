@@ -1,88 +1,135 @@
-import 'package:vaibhav_s_application2/presentation/profile_page/models/user_posts_list.dart';
-import 'package:vaibhav_s_application2/presentation/profile_page/models/user_profile_model.dart';
+import 'package:vaibhav_s_application2/presentation/searched_profile_page/models/user_posts_list.dart';
+import 'package:vaibhav_s_application2/presentation/searched_profile_page/models/user_profile_model.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
+import 'package:vaibhav_s_application2/widgets/custom_icon_button.dart';
 import 'controller/searched_profile_controller.dart';
 
 // ignore_for_file: must_be_immutable
 class SearchedProfilePage extends StatelessWidget {
   SearchedProfilePage({Key? key}) : super(key: key);
 
-  SearchedProfileController controller =
-      Get.put(SearchedProfileController(UserPostsList().obs, UserProfileModel().obs), permanent: false);
+  SearchedProfileController controller = Get.put(
+      SearchedProfileController(UserPostsList().obs, UserProfileModel().obs),
+      permanent: false);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            appBar: _buildAppBar(),
-            body: SizedBox(
-                width: double.maxFinite,
-                child: Column(children: [
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: GestureDetector(
-                          onTap: () {
-                            onTapProfileDetails();
-                          },
-                          child: Padding(
-                              padding: EdgeInsets.only(left: 16.h),
-                              child: Row(children: [
+      body: Container(
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+        _buildAppBar(),
+        Align(
+            alignment: Alignment.centerLeft,
+            child: GestureDetector(
+                onTap: () {
+                  onTapProfileDetails();
+                },
+                child: Padding(
+                    padding: EdgeInsets.only(left: 16.h),
+                    child: Row(children: [
+                      Obx(
+                        () => CustomImageView(
+                            imagePath: controller.userProfileModelObj.value
+                                .profileDetails?.avatar,
+                            height: 80.adaptSize,
+                            width: 80.adaptSize,
+                            radius: BorderRadius.circular(40.h)),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              left: 16.h, top: 11.v, bottom: 4.v),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Obx(
-                                  () => CustomImageView(
-                                      imagePath: controller.userProfileModelObj
-                                          .value.profileDetails?.avatar,
-                                      height: 80.adaptSize,
-                                      width: 80.adaptSize,
-                                      radius: BorderRadius.circular(40.h)),
+                                  () => Text(
+                                      controller.userProfileModelObj.value
+                                              .profileDetails?.fullname ??
+                                          "",
+                                      style: CustomTextStyles
+                                          .headlineLargeBlack90001),
                                 ),
-                                Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 16.h, top: 11.v, bottom: 4.v),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Obx(
-                                            () => Text(
-                                                controller
-                                                        .userProfileModelObj
-                                                        .value
-                                                        .profileDetails
-                                                        ?.fullname ??
-                                                    "",
-                                                style: CustomTextStyles
-                                                    .headlineLargeBlack90001),
-                                          ),
-                                          SizedBox(height: 4.v),
-                                          Obx(
-                                            () => Text(
-                                                "@${controller.userProfileModelObj.value.profileDetails?.username}" ??
-                                                    "",
-                                                style: CustomTextStyles
-                                                    .bodyMediumBluegray400),
-                                          )
-                                        ]))
-                              ])))),
-                  SizedBox(height: 16.v),
-                  _buildCountsRow(),
-                  SizedBox(height: 16.v),
-                  _buildMenuRow(),
-                  SizedBox(height: 2.v),
-                  _buildProfileList()
-                ]))));
+                                SizedBox(height: 4.v),
+                                Obx(
+                                  () => Text(
+                                      "@${controller.userProfileModelObj.value.profileDetails?.username}" ??
+                                          "",
+                                      style: CustomTextStyles
+                                          .bodyMediumBluegray400),
+                                )
+                              ]))
+                    ])))),
+        SizedBox(height: 16.v),
+        _buildCountsRow(),
+        SizedBox(height: 12.v),
+        _buildFollowSendMessageRow(),
+        SizedBox(height: 12.v),
+        _buildMenuRow(),
+        SizedBox(height: 2.v),
+        _buildProfileList()
+      ])),
+    ));
   }
 
   /// Section Widget
   PreferredSizeWidget _buildAppBar() {
-    return CustomAppBar(height: 50.v,
+    return CustomAppBar(
+      height: 50.v,
       leadingWidth: 50.h,
       leading: AppbarLeadingImage(
-          onTap: (){Get.back();},
+          onTap: () {
+            Get.back();
+          },
           imagePath: ImageConstant.imgVector,
-          margin: EdgeInsets.all(12.0)
-      ),
+          margin: EdgeInsets.all(12.0)),
+    );
+  }
+
+  Widget _buildFollowSendMessageRow() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.h),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Obx(
+          () {
+            final status = controller.userProfileModelObj.value.profileDetails?.imFollowing?.value;
+            return  CustomIconButton(
+            width: 160.h,
+            height: 40.v,
+            onTap: () {
+              onTapSendFollowRequest();
+            },
+            decoration: (status != 'no')? BoxDecoration(
+                borderRadius: BorderRadius.circular(12.adaptSize),
+                color: appTheme.blueGray100,
+                border: Border.all(width: 2.adaptSize, color: appTheme.gray200)): null,
+            child: Obx(
+              ()=> Center(
+                  child: Text(controller.followStatus!.value, style: CustomTextStyles.bodyLargePrimary,)
+                  ),
+            ),
+          );
+          }
+        ),
+        CustomIconButton(
+          width: 160.h,
+          height: 40.v,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.adaptSize),
+              color: appTheme.blueGray100,
+              border: Border.all(width: 2.adaptSize, color: appTheme.gray200)),
+          child: Center(
+              child: Text(
+            'Message',
+            style: CustomTextStyles.bodyLargeBlack90001,
+          )),
+          onTap: () {
+            onTapGoToChatScreen();
+          },
+        ),
+      ]),
     );
   }
 
@@ -149,8 +196,32 @@ class SearchedProfilePage extends StatelessWidget {
 
   /// Section Widget
   Widget _buildProfileList() {
-    return Obx(
-      () => Expanded(
+    return Obx(() {
+      if (controller.userPostListItemObj.value.userPostsList?.length == 0) {
+        return Center(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 100.v,
+              ),
+              CustomImageView(
+                height: 100,
+                width: 100,
+                color: appTheme.gray500,
+                imagePath: ImageConstant.imgSocialMedia1,
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0.adaptSize),
+                child: Text(
+                  'No Posts Yet',
+                  style: CustomTextStyles.titleLargeGray500,
+                ),
+              )
+            ],
+          ),
+        );
+      }
+      return Expanded(
         child: GridView.count(
           mainAxisSpacing: 2.adaptSize,
           crossAxisSpacing: 2.adaptSize,
@@ -185,8 +256,8 @@ class SearchedProfilePage extends StatelessWidget {
             ]);
           }),
         ),
-      ),
-    );
+      );
+    });
   }
 
   /// Common widget
@@ -210,5 +281,15 @@ class SearchedProfilePage extends StatelessWidget {
     Get.toNamed(
       AppRoutes.detailedProfileScreen,
     );
+  }
+
+  onTapGoToChatScreen() async {
+    await controller.createPersonalChat();
+  }
+
+  onTapSendFollowRequest() {
+    if(controller.followStatus?.value == "Follow") {
+      controller.sendFollowRequest();
+    }
   }
 }

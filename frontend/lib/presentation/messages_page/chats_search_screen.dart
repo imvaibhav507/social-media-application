@@ -27,9 +27,6 @@ class ChatsSearchScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildSearchResults(),
-              // _buildSearchClearAll(),
-              // SizedBox(height: 24.v),
-              // _buildRecentSearches(),
             ],
           ),
         ),
@@ -60,64 +57,6 @@ class ChatsSearchScreen extends StatelessWidget {
       ),
     );
   }
-
-  /// Section Widget
-  // Widget _buildSearchClearAll() {
-  //   return Padding(
-  //     padding: EdgeInsets.symmetric(horizontal: 16.h),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //       children: [
-  //         Text(
-  //           "lbl_recently".tr,
-  //           style: CustomTextStyles.titleLargeDeeppurpleA200Bold,
-  //         ),
-  //         Padding(
-  //           padding: EdgeInsets.only(bottom: 4.v),
-  //           child: Text(
-  //             "lbl_clear_all".tr,
-  //             style: CustomTextStyles.titleMediumDeeppurpleA200,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  /// Section Widget
-  // Widget _buildRecentSearches() {
-  //   return Obx(
-  //     () => ListView.separated(
-  //       physics: NeverScrollableScrollPhysics(),
-  //       shrinkWrap: true,
-  //       separatorBuilder: (
-  //         context,
-  //         index,
-  //       ) {
-  //         return Padding(
-  //           padding: EdgeInsets.symmetric(vertical: 8.0.v),
-  //           child: SizedBox(
-  //             width: double.maxFinite,
-  //             child: Divider(
-  //               height: 2.v,
-  //               thickness: 2.v,
-  //               color: theme.colorScheme.secondaryContainer,
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //       itemCount:
-  //           controller.searchModelObj.value.recentsearchesItemList.value.length,
-  //       itemBuilder: (context, index) {
-  //         RecentsearchesItemModel model = controller
-  //             .searchModelObj.value.recentsearchesItemList.value[index];
-  //         return RecentsearchesItemWidget(
-  //           model,
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
 
   Widget _buildSearchResults() {
     return Expanded(
@@ -169,7 +108,7 @@ class ChatsSearchScreen extends StatelessWidget {
   }
 
   void onTapGotoChatroom(String chatroomId) {
-    Get.offNamed(AppRoutes.chatScreen, arguments: chatroomId);
+    Get.offNamed(AppRoutes.chatroomScreen, arguments: chatroomId);
   }
 }
 

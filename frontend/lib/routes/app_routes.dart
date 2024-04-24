@@ -7,9 +7,11 @@ import 'package:vaibhav_s_application2/presentation/add_story_page/add_story_pag
 import 'package:vaibhav_s_application2/presentation/add_story_page/binding/add_story_bindings.dart';
 import 'package:vaibhav_s_application2/presentation/capture_image_screen/binding/capture-image_bindings.dart';
 import 'package:vaibhav_s_application2/presentation/capture_image_screen/capture_image_page.dart';
+import 'package:vaibhav_s_application2/presentation/chat_screen/personalchat_screen.dart';
 import 'package:vaibhav_s_application2/presentation/container_screen/binding/container_binding.dart';
 import 'package:vaibhav_s_application2/presentation/create_post_page/binding/create_post_binding.dart';
 import 'package:vaibhav_s_application2/presentation/create_post_page/create_post_page.dart';
+import 'package:vaibhav_s_application2/presentation/follow_requests_page/follow_requests_page.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/bindings/chat_search_binding.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/chats_search_screen.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/messages_page.dart';
@@ -18,6 +20,7 @@ import 'package:vaibhav_s_application2/presentation/profile_page/profile_page.da
 import 'package:vaibhav_s_application2/presentation/searched_profile_page/searched_profile_page.dart';
 import 'package:vaibhav_s_application2/presentation/stories_screen/binding/story_binding.dart';
 import 'package:vaibhav_s_application2/presentation/stories_screen/stories_screen.dart';
+import '../presentation/chat_screen/chatroom_screen.dart';
 import '../presentation/splash_screen/splash_screen.dart';
 import '../presentation/splash_screen/binding/splash_binding.dart';
 import '../presentation/login_screen/login_screen.dart';
@@ -46,7 +49,6 @@ import '../presentation/account_view_screen/account_view_screen.dart';
 import '../presentation/account_view_screen/binding/account_view_binding.dart';
 import '../presentation/account_details_screen/account_details_screen.dart';
 import '../presentation/account_details_screen/binding/account_details_binding.dart';
-import '../presentation/chat_screen/chat_screen.dart';
 import '../presentation/chat_screen/binding/chat_binding.dart';
 import '../presentation/friends_screen/friends_screen.dart';
 import '../presentation/friends_screen/binding/friends_binding.dart';
@@ -112,7 +114,9 @@ class AppRoutes {
 
   static const String messagesPage = '/messages_page';
 
-  static const String chatScreen = '/chat_screen';
+  static const String chatroomScreen = '/chat_screen';
+
+  static const String personalChatScreen = '/personal_chat_screen';
 
   static const String friendsScreen = '/friends_screen';
 
@@ -141,6 +145,8 @@ class AppRoutes {
   static const String captureImageScreen = '/capture_image_screen';
 
   static const String searchedProfileScreen = '/searched_profile_screen';
+
+  static const String followRequestsPage = '/follow_requests_page';
 
   static List<GetPage> pages = [
     GetPage(
@@ -263,13 +269,7 @@ class AppRoutes {
         AccountDetailsBinding(),
       ],
     ),
-    GetPage(
-      name: chatScreen,
-      page: () => ChatScreen(),
-      bindings: [
-        ChatBinding(),
-      ],
-    ),
+
     GetPage(
       name: friendsScreen,
       page: () => FriendsScreen(),
@@ -300,8 +300,14 @@ class AppRoutes {
     ),
 
     GetPage(
-        name: chatScreen,
-        page: () => ChatScreen(),
+        name: chatroomScreen,
+        page: () => ChatroomScreen(),
+      bindings: [ChatBinding()]
+    ),
+
+    GetPage(
+        name: personalChatScreen,
+        page: () => PersonalChatScreen(),
       bindings: [ChatBinding()]
     ),
 
@@ -335,10 +341,13 @@ class AppRoutes {
       bindings: [CaptureImageBinding()],
     ),
 
+    GetPage(name: followRequestsPage, page: () => FollowRequestsPage()),
     GetPage(name: messagesPage, page: () => MessagesPage()),
     GetPage(name: searchedProfileScreen, page: () => SearchedProfilePage()),
     GetPage(name: notificationsPage, page: () => NotificationsPage()),
     GetPage(name: profilePage, page: () => ProfilePage()),
 
   ];
+
+
 }

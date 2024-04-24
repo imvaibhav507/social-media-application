@@ -4,7 +4,11 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart' as logger;
+import 'package:uuid/uuid.dart';
 import 'core/app_export.dart';
+
+var uuid = const Uuid();
+
 List<CameraDescription> cameras = <CameraDescription>[];
 Future<void> main() async {
   logger.Logger.root.level = logger.Level.WARNING; // defaults to Level.INFO

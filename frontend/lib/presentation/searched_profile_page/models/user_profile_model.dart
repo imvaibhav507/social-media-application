@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class UserProfileModel {
   int? statusCode;
   ProfileDetails? profileDetails;
@@ -33,6 +35,7 @@ class ProfileDetails {
   int? followings;
   int? followers;
   String? fullname;
+  RxString? imFollowing;
 
   ProfileDetails(
       {this.sId,
@@ -40,6 +43,7 @@ class ProfileDetails {
         this.avatar,
         this.followings,
         this.followers,
+        this.imFollowing,
         this.fullname});
 
   ProfileDetails.fromJson(Map<String, dynamic> json) {
@@ -50,6 +54,7 @@ class ProfileDetails {
     followings = json['followings'];
     followers = json['followers'];
     fullname = json['fullname'];
+    imFollowing = RxString(json['imFollowing']);
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +66,7 @@ class ProfileDetails {
     data['followings'] = this.followings;
     data['followers'] = this.followers;
     data['fullname'] = this.fullname;
+    data['imFollowing'] = this.imFollowing;
     return data;
   }
 }

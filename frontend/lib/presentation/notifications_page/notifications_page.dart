@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_trailing_image.dart';
@@ -20,24 +22,14 @@ class NotificationsPage extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             appBar: _buildAppBar(),
-            body: Container(
-                width: double.maxFinite,
-                padding: EdgeInsets.symmetric(vertical: 21.v),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                          padding: EdgeInsets.only(left: 16.h),
-                          child: Text("lbl_notifications".tr,
-                              style: theme.textTheme.headlineLarge)),
-                      SizedBox(height: 32.v),
-                      _buildNotificationsList()
-                    ]))));
+            body: _buildNotificationsList()
+        ));
   }
 
   /// Section Widget
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
+      height: 85.v,
         leadingWidth: 40.h,
         leading: AppbarLeadingImage(
             imagePath: ImageConstant.imgArrowBackDeepPurpleA200,
@@ -45,6 +37,10 @@ class NotificationsPage extends StatelessWidget {
             onTap: () {
               onTapArrowBack();
             }),
+        title: Padding(
+            padding: EdgeInsets.only(left: 16.h),
+            child: Text("lbl_notifications".tr,
+                style: theme.textTheme.headlineLarge)),
         actions: [
           AppbarTrailingImage(
               imagePath: ImageConstant.imgPersonAddAlt1,
@@ -55,10 +51,77 @@ class NotificationsPage extends StatelessWidget {
         ]);
   }
 
+  Widget _buildFollowRequest() {
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(AppRoutes.followRequestsPage);
+      },
+      child: Container(
+        width: double.maxFinite,
+        padding: EdgeInsets.symmetric(horizontal: 16.h),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 48.h,
+              child: Stack(
+                children: [
+                  CustomImageView(
+                    imagePath: ImageConstant.img32,
+                    height: 40.adaptSize,
+                    width: 40.adaptSize,
+                    radius: BorderRadius.circular(
+                      27.h,
+                    ),
+                    margin: EdgeInsets.only(bottom: 26.v),
+                  ),
+                  Positioned(
+                    left: 8.h,
+                      top: 8.v,
+                      child: CustomImageView(
+                        imagePath: ImageConstant.img22,
+                        height: 40.adaptSize,
+                        width: 40.adaptSize,
+                        radius: BorderRadius.circular(
+                          27.h,
+                        ),
+                        margin: EdgeInsets.only(bottom: 26.v),
+                      ),
+                  )
+                ]
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                left: 20.h,
+                bottom: 28.v,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                      'Follow Requests',
+                      style: CustomTextStyles.titleMediumBlack90001,
+                    ),
+                  SizedBox(height: 7.v),
+                   Text(
+                      '@username',
+                      style: CustomTextStyles.bodyLargeGray600,
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+
   /// Section Widget
   Widget _buildNotificationsList() {
     return Obx(() => ListView.separated(
-        physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         separatorBuilder: (context, index) {
           return Padding(
@@ -71,8 +134,12 @@ class NotificationsPage extends StatelessWidget {
                       color: theme.colorScheme.secondaryContainer)));
         },
         itemCount: controller
-            .notificationsModelObj.value.notificationslistItemList.value.length,
+            .notificationsModelObj.value.notificationslistItemList.value.length+1,
         itemBuilder: (context, index) {
+          if(index == 0) {
+            return _buildFollowRequest();
+          }
+          index--;
           NotificationslistItemModel model = controller.notificationsModelObj
               .value.notificationslistItemList.value[index];
           return NotificationslistItemWidget(model);

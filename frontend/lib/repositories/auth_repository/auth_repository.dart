@@ -29,4 +29,18 @@ class AuthRepository {
     return response;
   }
 
+  Future<dynamic> sendFollowRequest(String userId) async {
+    dynamic response = _apiService.putApi(AppUrl.followRequestApi + '?userId=${userId}', {});
+    return response;
+  }
+
+  Future<dynamic> approveFollowRequest(String requestId, String res) async {
+    dynamic response = _apiService.deleteApi(AppUrl.followRequestApi + '?requestId=${requestId}&response=${res}', {});
+    return response;
+  }
+  Future<dynamic> getFollowRequests() async {
+    dynamic response = _apiService.getApi(AppUrl.followRequestApi);
+    return response;
+  }
+
 }

@@ -27,6 +27,18 @@ class NotificationsModel {
         kevinHasFollowed:
             "Arman has commented on your story\n “hey there” to your timeline"
                 .obs,
-        duration: "2 hours ago".obs)
+        duration: "2 hours ago".obs),
+    NotificationslistItemModel(
+        image: ImageConstant.imgEllipse22.obs,
+        kevinHasFollowed:
+            "Arman has commented on your story\n “hey there” to your timeline"
+                .obs,
+        duration: "2 hours ago".obs),
+    NotificationslistItemModel(
+        image: ImageConstant.imgEllipse22.obs,
+        kevinHasFollowed:
+            "Arman has commented on your story\n “hey there” to your timeline"
+                .obs,
+        duration: "2 hours ago".obs),
   ]);
 }

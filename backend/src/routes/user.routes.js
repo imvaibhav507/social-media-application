@@ -10,6 +10,9 @@ import {
   unfollowUser,
   getUserProfile,
   searchUserProfiles,
+  sendFollowRequest,
+  approveFollowRequest,
+  getFollowRequestsList,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -30,4 +33,9 @@ router
   .route("/follow/")
   .post(verifyJWT, followUser)
   .delete(verifyJWT, unfollowUser);
+router
+  .route("/follow-request/")
+  .put(verifyJWT, sendFollowRequest)
+  .delete(verifyJWT, approveFollowRequest)
+  .get(verifyJWT, getFollowRequestsList);
 export default router;

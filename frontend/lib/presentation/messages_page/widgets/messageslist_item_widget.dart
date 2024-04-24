@@ -1,3 +1,5 @@
+import 'package:vaibhav_s_application2/presentation/home_screen/controller/home_screen_controller.dart';
+
 import '../models/messageslist_item_model.dart';
 import '../controller/messages_controller.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class MessageslistItemWidget extends StatelessWidget {
   int currentIndex;
 
   var controller = Get.find<MessagesController>();
-
+  var homeScreenController = Get.find<HomeScreenController>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,19 +54,23 @@ class MessageslistItemWidget extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child: Container(
-                    height: 13.adaptSize,
-                    width: 13.adaptSize,
-                    decoration: BoxDecoration(
-                      color: appTheme.green600,
-                      borderRadius: BorderRadius.circular(
-                        6.h,
+                  child: Obx(
+                    ()=> (messageslistItemModelObj.isGroupChat?.value == false &&
+                        homeScreenController.onlineUsers.contains(messageslistItemModelObj.otherMembers?.first))?
+                    Container(
+                      height: 13.adaptSize,
+                      width: 13.adaptSize,
+                      decoration: BoxDecoration(
+                        color: appTheme.green600,
+                        borderRadius: BorderRadius.circular(
+                          6.h,
+                        ),
+                        border: Border.all(
+                          color: theme.colorScheme.primary,
+                          width: 2.h,
+                        ),
                       ),
-                      border: Border.all(
-                        color: theme.colorScheme.primary,
-                        width: 2.h,
-                      ),
-                    ),
+                    ): Container()
                   ),
                 ),
               ],
@@ -81,14 +87,14 @@ class MessageslistItemWidget extends StatelessWidget {
               children: [
                 Obx(
                   () => Text(
-                    messageslistItemModelObj.name!.value,
+                    messageslistItemModelObj.name?.value ?? '',
                     style: CustomTextStyles.titleLargeBlack900,
                   ),
                 ),
                 SizedBox(height: 8.v),
                 Obx(
                   () => Text(
-                    messageslistItemModelObj.lastMessage!.value,
+                    messageslistItemModelObj.lastMessage?.value ?? '',
                     style: CustomTextStyles.bodyLargeBlack90001,
                   ),
                 ),
@@ -103,7 +109,7 @@ class MessageslistItemWidget extends StatelessWidget {
             ),
             child: Obx(
               () => Text(
-                messageslistItemModelObj.time!.value,
+                messageslistItemModelObj.time?.value ?? '',
                 style: CustomTextStyles.bodyLargeBlack90001,
               ),
             ),

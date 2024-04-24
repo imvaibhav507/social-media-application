@@ -21,10 +21,9 @@ class ChatroomAppBarWidget extends StatelessWidget {
     if (chatDetailsModelObj == null) {
       return SizedBox(); // Return an empty widget if chatDetailsModelObj is null
     }
-    return Column(children: [
-      SizedBox(
-        height: 28.v,
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+        children: [
       Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.h),
           child: Row(
@@ -36,10 +35,24 @@ class ChatroomAppBarWidget extends StatelessWidget {
                 onTap: () {
                   Get.back();
                 }),
-            Obx(
-                ()=> AppbarTitle(
-                    text: chatDetailsModelObj!.name!.value ?? '',
-                    margin: EdgeInsets.only(left: 108.h, top: 8.v, bottom: 6.v)),
+            Column(
+              children: [
+                Obx(
+                    ()=> AppbarTitle(
+                        text: chatDetailsModelObj!.name!.value ?? '',
+                        margin: EdgeInsets.only(left: 108.h, top: 8.v, bottom: 6.v)),
+                ),
+                Container(
+                  height: 20.v,
+                  margin: EdgeInsets.only(left: 100.h),
+                  child: Obx(() {
+                    if(controller.typingUser?['user'] != null) {
+                      return Text('${controller.typingUser?['user']} is typing...', style: CustomTextStyles.bodyLargeGray600,);
+                    }
+                    return Container();
+                  }),
+                ),
+              ],
             ),
             SizedBox(width: 10.h,),
                 CustomImageView(
@@ -53,8 +66,6 @@ class ChatroomAppBarWidget extends StatelessWidget {
                   alignment: Alignment.center,
                 ),
           ])),
-      SizedBox(height: 29.v),
-      SizedBox(width: double.maxFinite, child: Divider())
     ]);
   }
 }

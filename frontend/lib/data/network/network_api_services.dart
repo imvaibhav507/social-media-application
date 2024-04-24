@@ -20,7 +20,7 @@ class NetworkApiServices extends BaseApiServices {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
         },
-      ).timeout(const Duration(seconds: 10));
+      ).timeout(const Duration(seconds: 60));
       jsonResponse = returnResponse(response);
     }on SocketException {
       throw InternetException('');
@@ -43,7 +43,7 @@ class NetworkApiServices extends BaseApiServices {
           "Authorization": "Bearer $token",
         },
         body: jsonEncode(data),
-      ).timeout(const Duration(seconds: 10));
+      ).timeout(const Duration(seconds: 60));
       jsonResponse = returnResponse(response);
     }on SocketException {
       throw InternetException('No internet available');
@@ -78,7 +78,7 @@ class NetworkApiServices extends BaseApiServices {
       // Add the image file
       request.files.addAll(multipartFiles);
 
-      final streamedResponse = await request.send().timeout(const Duration(seconds: 60));
+      final streamedResponse = await request.send().timeout(const Duration(seconds: 120));
       final response = await streamedResponse.stream.bytesToString();
       jsonResponse = jsonDecode(response);
     } on SocketException {
@@ -104,7 +104,7 @@ class NetworkApiServices extends BaseApiServices {
           "Authorization": "Bearer $token"
         },
         body: jsonEncode(data)
-      ).timeout(const Duration(seconds: 10));
+      ).timeout(const Duration(seconds: 60));
       jsonResponse = returnResponse(response);
     }on SocketException {
       throw InternetException('No internet available');
@@ -129,7 +129,7 @@ class NetworkApiServices extends BaseApiServices {
             "Authorization": "Bearer $token"
           },
           body: jsonEncode(data)
-      ).timeout(const Duration(seconds: 10));
+      ).timeout(const Duration(seconds: 60));
       jsonResponse = returnResponse(response);
     }on SocketException {
       throw InternetException('No internet available');
@@ -163,7 +163,7 @@ class NetworkApiServices extends BaseApiServices {
           "Authorization": "Bearer $token",
         },
         body: jsonEncode(data),
-      ).timeout(const Duration(seconds: 10));
+      ).timeout(const Duration(seconds: 60));
       jsonResponse = returnResponse(response);
     }on SocketException {
       throw InternetException('No internet available');

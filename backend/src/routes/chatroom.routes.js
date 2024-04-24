@@ -8,6 +8,7 @@ import {
   getSingleChatRoom,
   addParticipants,
   getChatRoomDetails,
+  getPersonalChatRoomDetails,
   searchChatRooms,
   renameChatRoom,
   sendMessages,
@@ -21,7 +22,7 @@ const chatroomRouter = Router();
 chatroomRouter
   .route("/new-group-chat")
   .post(verifyJWT, upload.single("avatar"), createGroupChat);
-chatroomRouter.route("/new-personal-chat").post(verifyJWT, createPersonalChat);
+chatroomRouter.route("/new-personal-chat/").get(verifyJWT, createPersonalChat);
 chatroomRouter.route("/chatrooms").get(verifyJWT, getChatRoomsList);
 chatroomRouter.route("/single-chatroom/").get(verifyJWT, getSingleChatRoom);
 chatroomRouter.route("/add-participants").patch(verifyJWT, addParticipants);
@@ -37,5 +38,9 @@ chatroomRouter
   .get(verifyJWT, getChatRoomDetails)
   .delete(verifyJWT, deleteChatRoom)
   .patch(verifyJWT, renameChatRoom);
+
+chatroomRouter
+  .route("/personal-chat/")
+  .get(verifyJWT, getPersonalChatRoomDetails);
 
 export default chatroomRouter;

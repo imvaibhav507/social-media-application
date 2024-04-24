@@ -18,6 +18,9 @@ class CustomTextFormField extends StatelessWidget {
     this.hintText,
     this.hintStyle,
     this.prefix,
+    this.onChanged,
+    this.onEditingComplete,
+    this.onTapOutside,
     this.prefixConstraints,
     this.suffix,
     this.suffixConstraints,
@@ -57,6 +60,12 @@ class CustomTextFormField extends StatelessWidget {
   final TextStyle? hintStyle;
 
   final Widget? prefix;
+
+  final void Function(String)? onChanged;
+
+  final void Function()? onEditingComplete;
+
+  final void Function(PointerDownEvent)? onTapOutside;
 
   final BoxConstraints? prefixConstraints;
 
@@ -100,6 +109,9 @@ class CustomTextFormField extends StatelessWidget {
           decoration: decoration,
           validator: validator,
           cursorColor: appTheme.deepPurpleA200,
+          onChanged: onChanged,
+          onEditingComplete: onEditingComplete,
+          onTapOutside: onTapOutside,
         ),
       );
   InputDecoration get decoration => InputDecoration(

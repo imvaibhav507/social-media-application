@@ -1,6 +1,6 @@
 class AppUrl {
-  static const String hostUrl = 'http://172.24.112.1:8080';
-  static const String baseUrl = 'http://172.24.112.1:8080/api/v1';
+  static const String hostUrl = 'http://192.168.1.7:8080';
+  static const String baseUrl = 'http://192.168.1.7:8080/api/v1';
 
   static const String signupApi = '$baseUrl/users/register';
   static const String loginApi = '$baseUrl/users/login';
@@ -11,10 +11,13 @@ class AppUrl {
   static const String unfollowUserApi = '$baseUrl/users/follow/';
   static const String getUserProfileApi = '$baseUrl/users/get-user-profile/';
   static const String searchUserProfileApi = '$baseUrl/users/search-user-profile/';
+  static const String followRequestApi = '$baseUrl/users/follow-request/';
 
   static const String getChatroomListApi = '$baseUrl/chatroom/chatrooms';
   static const String getSingleChatroomListItemApi = '$baseUrl/chatroom/single-chatroom';
   static const String getChatroomDetails = '$baseUrl/chatroom/';
+  static const String getPersonalChatDetails = '$baseUrl/chatroom/personal-chat/';
+  static const String createPersonalChat = '$baseUrl/chatroom/new-personal-chat/';
   static const String deleteChatroom = '$baseUrl/chatroom/';
   static const String leaveChatroom = '$baseUrl/chatroom/leave-chatroom/';
   static const String renameChatroom = '$baseUrl/chatroom/';

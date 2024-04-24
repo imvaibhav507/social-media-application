@@ -125,7 +125,7 @@ class AppNavigationScreen extends GetWidget<AppNavigationController> {
                         _buildScreenTitle(
                           screenTitle: "Chat".tr,
                           onTapScreenTitle: () =>
-                              onTapScreenTitle(AppRoutes.chatScreen),
+                              onTapScreenTitle(AppRoutes.chatroomScreen),
                         ),
                         _buildScreenTitle(
                           screenTitle: "Friends".tr,

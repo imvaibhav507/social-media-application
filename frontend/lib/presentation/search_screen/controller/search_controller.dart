@@ -13,6 +13,8 @@ class SearchController extends GetxController {
 
   Rx<SearchedUserProfilesModel> searchedUserProfilesModelObj = SearchedUserProfilesModel().obs;
 
+  Rx<SearchedUserProfilesModel> recentUserProfilesModelObj = SearchedUserProfilesModel().obs;
+
   AuthRepository authRepository = AuthRepository();
 
   @override
@@ -35,4 +37,5 @@ class SearchController extends GetxController {
       isListLoading.value = false;
     });
   }
+
 }

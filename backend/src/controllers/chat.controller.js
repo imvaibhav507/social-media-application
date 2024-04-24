@@ -6,7 +6,7 @@ import { Message } from "../models/message.model.js";
 import { mongoose } from "mongoose";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
-
+import { getReceiverSocketId, io } from "../socket/socket.js";
 // chatroom
 
 const createGroupChat = AsyncHandler(async (req, res) => {
@@ -54,28 +54,38 @@ const createGroupChat = AsyncHandler(async (req, res) => {
 });
 
 const createPersonalChat = AsyncHandler(async (req, res) => {
-  const { participantUserId } = req.body;
+  const { participantUserId } = req.query;
 
   if (!participantUserId) {
     throw new ApiError(400, "No participant user id found!!");
   }
 
   const participantUser = await User.findById(participantUserId);
-  console.log(participantUser);
 
   if (!participantUser) {
     throw new ApiError(400, "No user found with thee given id");
   }
 
   const allParticipants = [participantUserId, req.user._id];
-
+  console.log(allParticipants);
   const existingPersonalChatroom = await ChatRoom.findOne({
-    members: allParticipants,
+    members: { $all: allParticipants },
     isGroupChat: false,
   });
 
+  console.log("chatroom id", existingPersonalChatroom);
+
   if (existingPersonalChatroom) {
-    throw new ApiError(401, "Personal chat already exists with the user");
+    console.log("Chatroom already exists");
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          existingPersonalChatroom._id,
+          "Chatroom already exists"
+        )
+      );
   }
 
   const chatRoom = await ChatRoom.create({
@@ -91,11 +101,9 @@ const createPersonalChat = AsyncHandler(async (req, res) => {
     throw new ApiError(500, "Something went wrong while creating chatroom");
   }
 
-  res
+  return res
     .status(200)
-    .json(
-      new ApiResponse(200, createdChatRoom, "Chatroom created successfully")
-    );
+    .json(new ApiResponse(200, chatRoom._id, "Chatroom created successfully"));
 });
 
 const getChatRoomsList = AsyncHandler(async (req, res) => {
@@ -107,7 +115,7 @@ const getChatRoomsList = AsyncHandler(async (req, res) => {
     {
       $match: {
         members: {
-          $in: [userId],
+          $in: [new mongoose.Types.ObjectId(req.user._id)],
         },
       },
     },
@@ -122,7 +130,25 @@ const getChatRoomsList = AsyncHandler(async (req, res) => {
     },
 
     {
+      $lookup: {
+        from: "users", // Assuming the collection name is "users"
+        localField: "members",
+        foreignField: "_id",
+        as: "memberDetails",
+      },
+    },
+
+    {
       $addFields: {
+        filteredMembers: {
+          $filter: {
+            input: "$memberDetails",
+            as: "member",
+            cond: {
+              $ne: ["$$member._id", new mongoose.Types.ObjectId(req.user._id)],
+            },
+          },
+        },
         lastMessage: { $last: "$fetchedMessages" },
       },
     },
@@ -135,9 +161,27 @@ const getChatRoomsList = AsyncHandler(async (req, res) => {
 
     {
       $project: {
-        name: 1,
+        name: {
+          $cond: {
+            if: "$isGroupChat",
+            then: "$name",
+            else: {
+              $first: "$filteredMembers.fullName",
+            },
+          },
+        },
         lastMessage: "$lastMessage.content",
-        avatar: 1,
+        avatar: {
+          $cond: {
+            if: "$isGroupChat",
+            then: "$avatar",
+            else: {
+              $first: "$filteredMembers.avatar",
+            },
+          },
+        },
+        otherMembers: "$filteredMembers._id",
+        isGroupChat: 1,
         time: {
           $dateToString: {
             format: "%H:%M", // Specify the format to show only time
@@ -180,16 +224,58 @@ const getSingleChatRoom = AsyncHandler(async (req, res) => {
     },
 
     {
+      $lookup: {
+        from: "users", // Assuming the collection name is "users"
+        localField: "members",
+        foreignField: "_id",
+        as: "memberDetails",
+      },
+    },
+
+    {
       $addFields: {
+        filteredMembers: {
+          $filter: {
+            input: "$memberDetails",
+            as: "member",
+            cond: {
+              $ne: ["$$member._id", new mongoose.Types.ObjectId(req.user._id)],
+            },
+          },
+        },
         lastMessage: { $last: "$fetchedMessages" },
       },
     },
 
     {
+      $sort: {
+        "lastMessage.createdAt": -1,
+      },
+    },
+
+    {
       $project: {
-        name: 1,
+        name: {
+          $cond: {
+            if: "$isGroupChat",
+            then: "$name",
+            else: {
+              $first: "$filteredMembers.fullName",
+            },
+          },
+        },
         lastMessage: "$lastMessage.content",
-        avatar: 1,
+        avatar: {
+          $cond: {
+            if: "$isGroupChat",
+            then: "$avatar",
+            else: {
+              $first: "$filteredMembers.avatar",
+            },
+          },
+        },
+        otherMembers: "$filteredMembers._id",
+        isGroupChat: 1,
         time: {
           $dateToString: {
             format: "%H:%M", // Specify the format to show only time
@@ -197,6 +283,11 @@ const getSingleChatRoom = AsyncHandler(async (req, res) => {
             timezone: "Asia/Kolkata", // Specify the timezone if needed
           },
         },
+      },
+    },
+    {
+      $sort: {
+        "lastMessage.createdAt": -1,
       },
     },
   ]);
@@ -257,6 +348,78 @@ const getChatRoomDetails = AsyncHandler(async (req, res) => {
     );
 });
 
+const getPersonalChatRoomDetails = AsyncHandler(async (req, res) => {
+  const { id } = req.query;
+
+  const personalChat = await ChatRoom.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(id),
+        isGroupChat: false,
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "members",
+        foreignField: "_id",
+        as: "memberDetails",
+      },
+    },
+
+    {
+      $lookup: {
+        from: "users",
+        localField: "members",
+        foreignField: "_id",
+        as: "memberDetails",
+      },
+    },
+
+    {
+      $addFields: {
+        filteredMembers: {
+          $filter: {
+            input: "$memberDetails",
+            as: "member",
+            cond: {
+              $ne: ["$$member._id", new mongoose.Types.ObjectId(req.user._id)],
+            },
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        name: {
+          $first: "$filteredMembers.fullName",
+        },
+        avatar: {
+          $first: "$filteredMembers.avatar",
+        },
+        username: {
+          $first: "$filteredMembers.username",
+        },
+        email: { $first: "$filteredMembers.email" },
+      },
+    },
+  ]);
+
+  if (!personalChat) {
+    throw new ApiError(400, "No chat found");
+  }
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        personalChat[0],
+        "Personal chat fetched successfully!!"
+      )
+    );
+});
+
 const searchChatRooms = AsyncHandler(async (req, res) => {
   const userId = req.user._id;
   const searchQuery = req.query.search;
@@ -293,12 +456,8 @@ const searchChatRooms = AsyncHandler(async (req, res) => {
     },
 
     {
-      $project: {
-        _id: 1,
-        name: 1,
-        isGroupChat: 1,
-        avatar: 1,
-        members: {
+      $addFields: {
+        filteredMembers: {
           $filter: {
             input: "$participants",
             as: "participant",
@@ -307,6 +466,24 @@ const searchChatRooms = AsyncHandler(async (req, res) => {
             },
           },
         },
+      },
+    },
+
+    {
+      $project: {
+        _id: 1,
+        name: {
+          $cond: {
+            if: "$isGroupChat",
+            then: "$name",
+            else: {
+              $first: "$filteredMembers.fullName",
+            },
+          },
+        },
+        isGroupChat: 1,
+        avatar: 1,
+        members: "$filteredMembers",
       },
     },
     {
@@ -465,20 +642,70 @@ const sendMessages = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Nothing to send");
   }
 
-  const messageForRealTime = {};
-
-  const messageForDB = {
+  const messageForDB = new Message({
     content: message,
     attachments,
     sender: req.user._id,
     chatRoom: chatroomId,
-  };
+  });
 
-  const sentMessage = await Message.create(messageForDB);
+  await messageForDB.save();
+
+  const messageRealTime = await Message.aggregate([
+    {
+      $match: {
+        _id: messageForDB._id,
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "sender",
+        foreignField: "_id",
+        as: "sender",
+      },
+    },
+
+    {
+      $addFields: {
+        name: { $first: "$sender.fullName" },
+        senderId: { $first: "$sender._id" },
+      },
+    },
+
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        senderId: 1,
+        content: 1,
+        attachments: 1,
+
+        time: {
+          $dateToString: {
+            format: "%H:%M", // Specify the format to show only time
+            date: "$createdAt",
+            timezone: "Asia/Kolkata", // Specify the timezone if needed
+          },
+        },
+        createdAt: 1,
+      },
+    },
+  ]);
+
+  console.log("messageForRealtime", messageRealTime[0]);
+
+  const receiverSocketId = getReceiverSocketId(chatroomId);
+
+  if (receiverSocketId && receiverSocketId.length > 0) {
+    io.to(receiverSocketId).emit("new message", messageRealTime[0]);
+  }
 
   return res
     .status(200)
-    .json(new ApiResponse(200, sentMessage, "Message sent successfully"));
+    .json(
+      new ApiResponse(200, messageRealTime[0], "Message sent successfully")
+    );
 });
 
 const getMessages = AsyncHandler(async (req, res) => {
@@ -603,6 +830,7 @@ export {
   addParticipants,
   searchChatRooms,
   getChatRoomDetails,
+  getPersonalChatRoomDetails,
   renameChatRoom,
   deleteChatRoom,
   leaveChatRoom,
