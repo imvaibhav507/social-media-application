@@ -143,8 +143,10 @@ class ChatScreen extends GetWidget<ChatController> {
       chatroomId: controller.chatroomId,
       message: controller.textMessageController.value.text.toString(),
     );
-    controller.addNewMessage(sendMessage.toJson());
+    controller.textMessageController.clear();
+
     await controller.sendMessage(sendMessage);
+    // await controller.addNewMessage();
     controller.update();
   }
 
