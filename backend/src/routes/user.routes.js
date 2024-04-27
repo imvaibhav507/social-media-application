@@ -13,6 +13,7 @@ import {
   sendFollowRequest,
   approveFollowRequest,
   getFollowRequestsList,
+  getRecentFollowRequest,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -38,4 +39,5 @@ router
   .put(verifyJWT, sendFollowRequest)
   .delete(verifyJWT, approveFollowRequest)
   .get(verifyJWT, getFollowRequestsList);
+router.route("/follow-request-item").get(verifyJWT, getRecentFollowRequest);
 export default router;

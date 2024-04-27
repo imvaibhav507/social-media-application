@@ -43,4 +43,9 @@ class AuthRepository {
     return response;
   }
 
+  Future<dynamic> getRecentFollowRequest() async {
+    dynamic response = _apiService.getApi(AppUrl.getRecentRequestApi);
+    return response;
+  }
+
 }

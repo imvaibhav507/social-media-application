@@ -7,11 +7,13 @@ import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/custom_icon_button.dart';
 
+import '../notifications_page/controller/notifications_controller.dart';
+
 class FollowRequestsPage extends StatelessWidget {
   FollowRequestsPage({Key? key}) : super(key: key);
 
   var controller = Get.put(FollowRequestsController(FollowRequestsModel().obs));
-
+  var notificationsController = Get.find<NotificationsController>();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -36,6 +38,7 @@ class FollowRequestsPage extends StatelessWidget {
           imagePath: ImageConstant.imgArrowBackDeepPurpleA200,
           margin: EdgeInsets.only(left: 16.h, top: 13.v, bottom: 13.v),
           onTap: () {
+            notificationsController.getRecentFollowRequest();
             onTapArrowBack();
           }),
       title: Padding(

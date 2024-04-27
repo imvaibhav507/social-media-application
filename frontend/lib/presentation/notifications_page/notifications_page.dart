@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get_state_manager/src/simple/list_notifier.dart';
+import 'package:vaibhav_s_application2/presentation/notifications_page/models/recent_follow_request_model.dart';
+import 'package:vaibhav_s_application2/presentation/notifications_page/widgets/recent_follow_request_item_widget.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_trailing_image.dart';
@@ -15,7 +18,7 @@ class NotificationsPage extends StatelessWidget {
   NotificationsPage({Key? key}) : super(key: key);
 
   NotificationsController controller =
-      Get.put(NotificationsController(NotificationsModel().obs));
+      Get.put(NotificationsController(NotificationsModel().obs, RecentFollowRequestModel().obs));
 
   @override
   Widget build(BuildContext context) {
@@ -51,99 +54,37 @@ class NotificationsPage extends StatelessWidget {
         ]);
   }
 
-  Widget _buildFollowRequest() {
-    return GestureDetector(
-      onTap: () {
-        Get.toNamed(AppRoutes.followRequestsPage);
-      },
-      child: Container(
-        width: double.maxFinite,
-        padding: EdgeInsets.symmetric(horizontal: 16.h),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 48.h,
-              child: Stack(
-                children: [
-                  CustomImageView(
-                    imagePath: ImageConstant.img32,
-                    height: 40.adaptSize,
-                    width: 40.adaptSize,
-                    radius: BorderRadius.circular(
-                      27.h,
-                    ),
-                    margin: EdgeInsets.only(bottom: 26.v),
-                  ),
-                  Positioned(
-                    left: 8.h,
-                      top: 8.v,
-                      child: CustomImageView(
-                        imagePath: ImageConstant.img22,
-                        height: 40.adaptSize,
-                        width: 40.adaptSize,
-                        radius: BorderRadius.circular(
-                          27.h,
-                        ),
-                        margin: EdgeInsets.only(bottom: 26.v),
-                      ),
-                  )
-                ]
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                left: 20.h,
-                bottom: 28.v,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                      'Follow Requests',
-                      style: CustomTextStyles.titleMediumBlack90001,
-                    ),
-                  SizedBox(height: 7.v),
-                   Text(
-                      '@username',
-                      style: CustomTextStyles.bodyLargeGray600,
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
 
 
   /// Section Widget
   Widget _buildNotificationsList() {
-    return Obx(() => ListView.separated(
-        shrinkWrap: true,
-        separatorBuilder: (context, index) {
-          return Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.5.v),
-              child: SizedBox(
-                  width: double.maxFinite,
-                  child: Divider(
-                      height: 2.v,
-                      thickness: 2.v,
-                      color: theme.colorScheme.secondaryContainer)));
-        },
-        itemCount: controller
-            .notificationsModelObj.value.notificationslistItemList.value.length+1,
-        itemBuilder: (context, index) {
-          if(index == 0) {
-            return _buildFollowRequest();
-          }
-          index--;
-          NotificationslistItemModel model = controller.notificationsModelObj
-              .value.notificationslistItemList.value[index];
-          return NotificationslistItemWidget(model);
-        }));
+    return  Obx(
+        ()=> ListView.separated(
+            shrinkWrap: false,
+            separatorBuilder: (context, index) {
+              return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.5.v),
+                  child: SizedBox(
+                      width: double.maxFinite,
+                      child: Divider(
+                          height: 2.v,
+                          thickness: 2.v,
+                          color: theme.colorScheme.secondaryContainer)));
+            },
+            itemCount: controller
+                .notificationsModelObj.value.notificationslistItemList.value.length,
+            itemBuilder: (context, index) {
+              NotificationslistItemModel model = controller.notificationsModelObj
+                  .value.notificationslistItemList.value[index];
+              if(index==0) {
+                return Obx(
+                        ()=> (controller.recentFollowRequestModelObj.value.recentRequestModelObj==null) ? Container():
+                RecentFollowRequestItemWidget(controller.recentFollowRequestModelObj.value.recentRequestModelObj!.value));
+              }
+              index--;
+              return NotificationslistItemWidget(model);
+            }),
+    );
   }
 
   /// Navigates to the previous screen.

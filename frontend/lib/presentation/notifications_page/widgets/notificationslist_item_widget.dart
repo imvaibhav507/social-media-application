@@ -39,7 +39,7 @@ class NotificationslistItemWidget extends StatelessWidget {
             padding: EdgeInsets.only(
               left: 20.h,
               top: 4.v,
-              bottom: 28.v,
+              bottom: 16.v,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

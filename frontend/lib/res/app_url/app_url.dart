@@ -1,6 +1,8 @@
 class AppUrl {
-  static const String hostUrl = 'http://192.168.1.7:8080';
-  static const String baseUrl = 'http://192.168.1.7:8080/api/v1';
+  // static const String hostUrl = 'http://172.17.192.1:8080';
+  // static const String baseUrl = 'http://172.17.192.1:8080/api/v1';
+  static const String hostUrl = 'https://social-media-application-9ykb.onrender.com';
+  static const String baseUrl = 'https://social-media-application-9ykb.onrender.com/api/v1';
 
   static const String signupApi = '$baseUrl/users/register';
   static const String loginApi = '$baseUrl/users/login';
@@ -12,6 +14,7 @@ class AppUrl {
   static const String getUserProfileApi = '$baseUrl/users/get-user-profile/';
   static const String searchUserProfileApi = '$baseUrl/users/search-user-profile/';
   static const String followRequestApi = '$baseUrl/users/follow-request/';
+  static const String getRecentRequestApi = '$baseUrl/users/follow-request-item';
 
   static const String getChatroomListApi = '$baseUrl/chatroom/chatrooms';
   static const String getSingleChatroomListItemApi = '$baseUrl/chatroom/single-chatroom';

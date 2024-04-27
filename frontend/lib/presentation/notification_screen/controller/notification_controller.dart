@@ -9,4 +9,5 @@ class NotificationController extends GetxController {
   Rx<NotificationModel> notificationModelObj = NotificationModel().obs;
 
   Rx<bool> isSelectedSwitch = false.obs;
+
 }

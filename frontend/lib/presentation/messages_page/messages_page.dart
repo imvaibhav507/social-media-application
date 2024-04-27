@@ -29,8 +29,6 @@ class MessagesPage extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // _buildStories(),
-                      // SizedBox(height: 23.v),
                       _buildMessagesList()
                     ]))));
   }
@@ -88,10 +86,11 @@ class MessagesPage extends StatelessWidget {
             String chatRoomId = messagesListModel.messagesItems![index].sId!.value;
             return GestureDetector(
               onTap: (){
-                if(messagesListModel.messagesItems![index].isGroupChat?.value == true) {
-                  Get.toNamed(AppRoutes.chatroomScreen, arguments: {'chatroomId':chatRoomId, 'isGroupChat': true, 'index': index});
-                }
-                else Get.toNamed(AppRoutes.personalChatScreen, arguments: {'chatroomId':chatRoomId, 'isGroupChat': false, 'index': index});
+                  Get.toNamed(
+                      (model.isGroupChat?.value == true)?AppRoutes.chatroomScreen
+                          :AppRoutes.personalChatScreen,
+                      arguments: {'chatroomId':model.sId?.value, 'isGroupChat': model.isGroupChat?.value,}
+                  );
               },
                 child: MessageslistItemWidget(model,index));
           });

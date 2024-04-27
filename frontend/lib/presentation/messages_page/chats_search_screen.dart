@@ -90,8 +90,8 @@ class ChatsSearchScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             FoundChatroom model = searchResultListModel.foundChatrooms![index];
             return InkWell(
-              onTap:()=> onTapGotoChatroom(model.sId!.value),
-                child: FoundChatroomItemWidget(model,));
+              onTap:()=> onTapGotoChatroom(model),
+                child: FoundChatroomItemWidget(model));
           },
         );
       }),
@@ -107,8 +107,12 @@ class ChatsSearchScreen extends StatelessWidget {
       controller.getSearchResults(text);
   }
 
-  void onTapGotoChatroom(String chatroomId) {
-    Get.offNamed(AppRoutes.chatroomScreen, arguments: chatroomId);
+  void onTapGotoChatroom(FoundChatroom model) {
+    Get.offNamed(
+        (model.isGroupChat?.value == true)?AppRoutes.chatroomScreen
+            :AppRoutes.personalChatScreen,
+        arguments: {'chatroomId':model.sId?.value, 'isGroupChat': model.isGroupChat?.value,}
+    );
   }
 }
 

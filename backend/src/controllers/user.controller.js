@@ -486,6 +486,76 @@ const getFollowRequestsList = AsyncHandler(async (req, res) => {
     );
 });
 
+const getRecentFollowRequest = AsyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const fetchedRequestItem = await FollowRequest.aggregate([
+    {
+      $match: {
+        requestedTo: new mongoose.Types.ObjectId(userId),
+      },
+    },
+
+    {
+      $lookup: {
+        from: "users",
+        localField: "requestedBy",
+        foreignField: "_id",
+        as: "users",
+      },
+    },
+
+    {
+      $addFields: {
+        count: { $size: "$users" },
+      },
+    },
+
+    { $sort: { createdAt: -1 } },
+
+    {
+      $unwind: "$users",
+    },
+
+    {
+      $group: {
+        _id: null,
+        usernames: {
+          $push: "$users.username",
+        },
+        avatars: {
+          $push: "$users.avatar",
+        },
+      },
+    },
+
+    {
+      $project: {
+        _id: 0,
+        username: { $first: "$usernames" },
+        avatars: {
+          $firstN: {
+            input: "$avatars",
+            n: 2,
+          },
+        },
+        count: {
+          $size: "$usernames",
+        },
+      },
+    },
+  ]);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        fetchedRequestItem[0],
+        "Request item fetched successfully !!"
+      )
+    );
+});
+
 const followUser = AsyncHandler(async (req, res) => {
   const userId = req.query.userId;
 
@@ -567,5 +637,6 @@ export {
   unfollowUser,
   getUserProfile,
   getFollowRequestsList,
+  getRecentFollowRequest,
   searchUserProfiles,
 };

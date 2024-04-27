@@ -34,7 +34,6 @@ class ChatController extends GetxController {
   String? chatroomId;
   bool? isGroupChat;
   String? userId;
-  int? index;
   RxMap? typingUser = {}.obs;
   late Socket socket;
   int page = 1;
@@ -55,7 +54,6 @@ class ChatController extends GetxController {
     super.onInit();
     chatroomId = Get.arguments['chatroomId'];
     isGroupChat = Get.arguments['isGroupChat'];
-    index = Get.arguments['index'] ?? 0;
     print('chatroom: ${chatroomId}');
     print('isGroupChat: ${isGroupChat}');
     await getUserId();
