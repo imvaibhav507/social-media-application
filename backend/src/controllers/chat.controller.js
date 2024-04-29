@@ -46,10 +46,75 @@ const createGroupChat = AsyncHandler(async (req, res) => {
   if (!createdChatRoom) {
     throw new ApiError(500, "Something went wrong while creating chatroom");
   }
+
+  const fetchChatroom = await ChatRoom.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(createdChatRoom._id),
+      },
+    },
+
+    {
+      $lookup: {
+        from: "users", // Assuming the collection name is "users"
+        localField: "members",
+        foreignField: "_id",
+        as: "memberDetails",
+      },
+    },
+
+    {
+      $addFields: {
+        filteredMembers: {
+          $filter: {
+            input: "$memberDetails",
+            as: "member",
+            cond: {
+              $ne: ["$$member._id", new mongoose.Types.ObjectId(req.user._id)],
+            },
+          },
+        },
+      },
+    },
+
+    {
+      $project: {
+        name: {
+          $cond: {
+            if: "$isGroupChat",
+            then: "$name",
+            else: {
+              $first: "$filteredMembers.fullName",
+            },
+          },
+        },
+        lastMessage: "$lastMessage.content",
+        avatar: {
+          $cond: {
+            if: "$isGroupChat",
+            then: "$avatar",
+            else: {
+              $first: "$filteredMembers.avatar",
+            },
+          },
+        },
+        otherMembers: "$filteredMembers._id",
+        isGroupChat: 1,
+        lastMessage: "You were added to group",
+        time: {
+          $dateToString: {
+            format: "%H:%M", // Specify the format to show only time
+            date: "$createdAt",
+            timezone: "Asia/Kolkata", // Specify the timezone if needed
+          },
+        },
+      },
+    },
+  ]);
   res
     .status(200)
     .json(
-      new ApiResponse(200, createdChatRoom, "Chatroom created successfully")
+      new ApiResponse(200, fetchChatroom[0], "Chatroom created successfully")
     );
 });
 
@@ -326,7 +391,7 @@ const getChatRoomDetails = AsyncHandler(async (req, res) => {
         name: 1,
         avatar: 1,
         "memberDetails.username": 1,
-        "memberDetails.username": 1,
+        "memberDetails.fullName": 1,
         "memberDetails.email": 1,
         "memberDetails.avatar": 1,
       },
@@ -555,13 +620,13 @@ const deleteChatRoom = AsyncHandler(async (req, res) => {
 });
 
 const leaveChatRoom = AsyncHandler(async (req, res) => {
-  const { chatroomId } = req.query.id;
+  const chatroomId = req.query.chatroomId;
 
   const chatroom = await ChatRoom.findByIdAndUpdate(
     chatroomId,
     {
       $pull: {
-        members: req.user._id,
+        members: new mongoose.Types.ObjectId(req.user._id),
       },
     },
     { new: true }

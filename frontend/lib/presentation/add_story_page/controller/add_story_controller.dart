@@ -19,7 +19,6 @@ class AddStoryController extends GetxController {
       final response = await ApiResponse.completed(value);
       print(response.data);
       final data = response.data as Map<String, dynamic>;
-      Get.offAllNamed(AppRoutes.containerScreen);
     });
   }
 

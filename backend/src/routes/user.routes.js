@@ -8,12 +8,15 @@ import {
   getUser,
   followUser,
   unfollowUser,
+  removeFollowerUser,
   getUserProfile,
   searchUserProfiles,
   sendFollowRequest,
   approveFollowRequest,
   getFollowRequestsList,
   getRecentFollowRequest,
+  getFollowersList,
+  getFollowingsList,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -34,6 +37,9 @@ router
   .route("/follow/")
   .post(verifyJWT, followUser)
   .delete(verifyJWT, unfollowUser);
+router.route("/remove-follower/").delete(verifyJWT, removeFollowerUser);
+router.route("/followers").get(verifyJWT, getFollowersList);
+router.route("/followings").get(verifyJWT, getFollowingsList);
 router
   .route("/follow-request/")
   .put(verifyJWT, sendFollowRequest)

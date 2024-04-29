@@ -47,7 +47,10 @@ class DailyNewPage extends StatelessWidget {
   Widget _buildPostsList() {
     var postsModelObj = controller.postsModelObj.value.posts;
     if(postsModelObj == null || postsModelObj.isEmpty) {
-      return CircularProgressIndicator();
+      return Center(
+        heightFactor: 20.v,
+        child: Text('No Posts Available', style: CustomTextStyles.titleLargeBlack900,),
+      );
     }
     return Obx(
           ()=> ListView.separated(
@@ -188,7 +191,7 @@ class DailyNewPage extends StatelessWidget {
           SizedBox(height: 10.v,),
           Container(
             width: double.maxFinite,
-            padding: EdgeInsets.only(left: 8.h),
+            padding: EdgeInsets.symmetric(vertical: 12.v, horizontal: 8.h),
             margin: EdgeInsets.only(right: 8.h),
             child: Text(
               postModel.caption!,

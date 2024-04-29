@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/presentation/add_member_screen/controller/add_members_controller.dart';
 import 'package:vaibhav_s_application2/presentation/add_member_screen/models/add_members_model.dart';
-import 'package:vaibhav_s_application2/presentation/messages_page/models/search_chatroom_model.dart';
-import 'package:vaibhav_s_application2/presentation/messages_page/widgets/found_chatrooms_Item_widget.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart';
 import 'package:vaibhav_s_application2/widgets/custom_search_view.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 
+import 'models/create_group_chat_model.dart';
 import 'models/search_users_model.dart';
 import 'widgets/found_users_item_widget.dart';
 
@@ -17,7 +16,7 @@ class AddMemberScreen extends StatelessWidget {
       : super(
           key: key,
         );
-  AddMemberController controller = Get.find<AddMemberController>();
+  AddMemberController controller = Get.put(AddMemberController(SearchUsersModel().obs));
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -49,13 +48,13 @@ class AddMemberScreen extends StatelessWidget {
           imagePath: ImageConstant.imgVector,
           margin: EdgeInsets.all(12.0)),
       title: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding:  EdgeInsets.symmetric(vertical: 20.v, horizontal: 16.h),
         child: CustomSearchView(
           textStyle: CustomTextStyles.titleLargeBlack900,
           hintStyle: CustomTextStyles.titleLargeGray500,
           alignment: Alignment.bottomCenter,
           // controller: controller.searchController,
-          hintText: "lbl_search".tr,
+          hintText: (controller.groupName==null)?"lbl_search".tr : 'Add members to your group',
           onChanged: (text) => onChangedGetSearchResults(
               chatroomId: controller.chatroomId!, searchQuery: text.toString()),
         ),
@@ -73,7 +72,8 @@ class AddMemberScreen extends StatelessWidget {
               }
               return IconButton(
                 icon: Icon(Icons.done),
-                onPressed: onPressedAddMembers,
+                onPressed: (controller.groupName == null)?
+                onPressedAddMembers : onPressCreateGroup,
               );
             }
             return Container();
@@ -162,12 +162,13 @@ class AddMemberScreen extends StatelessWidget {
                         27.h,
                       ),
                       alignment: Alignment.center,
+                      fit: BoxFit.cover,
                     ),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Container(
-                        height: 35.adaptSize,
-                        width: 35.adaptSize,
+                        height: 30.adaptSize,
+                        width: 30.adaptSize,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(
                             20.h,
@@ -177,10 +178,13 @@ class AddMemberScreen extends StatelessWidget {
                             width: 2.h,
                           ),
                         ),
-                        child: Icon(
-                          Icons.cancel,
-                          color: Colors.grey.shade500,
-                          size: 35.adaptSize,
+                        child: CustomImageView(
+                          border: Border.all(
+                            color: theme.colorScheme.primary,
+                            width: 2.h,
+                          ),
+                          imagePath: ImageConstant.imgClose,
+                          color: Colors.grey.shade600,
                         ),
                       ),
                     ),
@@ -199,5 +203,11 @@ class AddMemberScreen extends StatelessWidget {
       participants: memberIds
     );
     await controller.addMembersToChatroom(model.toJson());
+  }
+
+  void onPressCreateGroup() async {
+    final memberIds = controller.userModels.map((user) => user.sId).toList();
+    NewGroupChatModel model = NewGroupChatModel(name: controller.groupName, participants: memberIds);
+    await controller.createNewGroup(model.toJson());
   }
 }

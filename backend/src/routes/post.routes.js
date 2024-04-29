@@ -20,8 +20,8 @@ import {
 const postRouter = Router();
 
 postRouter
-  .route("/create-post")
-  .post(verifyJWT, upload.array("attachments", 10), createNewPost);
+  .route("/create-post/")
+  .patch(verifyJWT, upload.array("attachments", 10), createNewPost);
 
 postRouter.route("/get-posts").get(verifyJWT, getAllPosts);
 postRouter.route("/user-posts-list/").get(verifyJWT, getUserPostList);

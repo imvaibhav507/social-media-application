@@ -8,7 +8,7 @@ import { Comment } from "../models/comment.model.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 
 const createNewPost = AsyncHandler(async (req, res) => {
-  const caption = req.body.caption;
+  const caption = req.query.caption;
   const files = req.files;
   console.log(caption, files);
   if (!files || !caption) {

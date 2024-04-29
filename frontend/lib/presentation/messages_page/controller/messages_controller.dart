@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:vaibhav_s_application2/presentation/home_screen/controller/home_screen_controller.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/models/messageslist_item_model.dart';
 import 'package:vaibhav_s_application2/repositories/chatroom_repository.dart';
@@ -17,6 +18,8 @@ class MessagesController extends GetxController {
   final ChatroomRepository chatroomRepository = ChatroomRepository();
 
   final homeScreenController  = Get.find<HomeScreenController>();
+
+  TextEditingController groupNameController = TextEditingController();
 
   Rx<MessageslistModel> messagesListModelObj;
 

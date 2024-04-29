@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CustomPopupMenuButton extends StatelessWidget {
-  CustomPopupMenuButton({Key? key})
+  CustomPopupMenuButton({Key? key, this.onTapCreateGroup, this.onTapSettings})
       : super(
           key: key,
         );
-
+  VoidCallback? onTapCreateGroup;
+  VoidCallback? onTapSettings;
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<MenuItem>(
@@ -29,8 +30,11 @@ class CustomPopupMenuButton extends StatelessWidget {
   onSelected(BuildContext context, MenuItem item) {
     switch (item) {
       case MenuItems.itemCreateGroup :
-
+        onTapCreateGroup?.call();
+        return;
       case MenuItems.itemSettings:
+        onTapSettings?.call();
+        return;
     }
   }
 }

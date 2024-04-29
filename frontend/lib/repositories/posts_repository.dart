@@ -39,6 +39,11 @@ class PostsRepository{
     return response;
   }
 
+  Future<dynamic> createPost(imageFiles, filename, String caption) async{
+    dynamic response = await _apiServices.uploadImageApi(AppUrl.createPostApi + '?caption=${caption}', imageFiles, filename);
+    return response;
+  }
+
   Future<dynamic> getAllComments(String postId) async {
     dynamic response = await _apiServices.getApi(AppUrl.getAllCommentsApi + '?postId=${postId}');
     return response;

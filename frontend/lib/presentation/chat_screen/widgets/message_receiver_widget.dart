@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 import 'package:vaibhav_s_application2/presentation/chat_screen/controller/chat_controller.dart';
@@ -19,38 +20,48 @@ class MessageReceiverWidget extends StatelessWidget {
           SizedBox(height: 6.v),
           (controller.userId! == chatModelObj.senderId!.value)
               ? Container(
-                  margin: EdgeInsets.only(left: 100.h),
                   padding:
-                      EdgeInsets.symmetric(horizontal: 20.h, vertical: 12.v),
+                      EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.v),
                   decoration: AppDecoration.white.copyWith(
                       borderRadius: BorderRadiusStyle.customBorderTL15),
+                  constraints: BoxConstraints(maxWidth: 270.h, minWidth: 100.h),
                   child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        SizedBox(height: 3.v),
+                        (controller.isGroupChat == true)? Text(chatModelObj.name!.value, style: CustomTextStyles.bodyLargePrimary.copyWith(
+                            height: 1.50, fontWeight: FontWeight.w600)) : Container(width: 0,),
+                        SizedBox(height: 4.h,),
                         Text(chatModelObj.content!.value,
-                            style: theme.textTheme.titleMedium),
+                            softWrap: true,
+                            style: CustomTextStyles.bodyLargePrimary.copyWith(
+                                height: 1.50, fontWeight: FontWeight.w500)),
+                        Text(chatModelObj.time!.value, style: CustomTextStyles.labelMediumPrimary,)
                       ]))
               : Container(
-                  margin: EdgeInsets.only(right: 96.h),
                   padding:
-                      EdgeInsets.symmetric(horizontal: 23.h, vertical: 12.v),
-                  decoration: AppDecoration.fillDeepPurple.copyWith(
+                      EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.v),
+                  decoration: AppDecoration.fillGray.copyWith(
                       borderRadius: BorderRadiusStyle.customBorderBL15),
+                  constraints: BoxConstraints(maxWidth: 270.h, minWidth: 100.h),
                   child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 6.v),
+                        (controller.isGroupChat == true)? Text(chatModelObj.name!.value, style: CustomTextStyles.bodyLargeBlack90001.copyWith(
+                            height: 1.50, fontWeight: FontWeight.w600)):Container(width: 0,),
+                        SizedBox(height: 4.h,),
                         Container(
-                            margin: EdgeInsets.only(right: 19.h),
+                            margin: EdgeInsets.only(right: 6.h),
                             child: Text(chatModelObj.content!.value,
-                                maxLines: 3,
+                                softWrap: true,
                                 overflow: TextOverflow.ellipsis,
-                                style: CustomTextStyles
-                                    .titleMediumDeeppurpleA200
-                                    .copyWith(height: 1.50)))
+                                style: CustomTextStyles.bodyLargeBlack90001
+                                    .copyWith(
+                                        height: 1.50,
+                                        fontWeight: FontWeight.w500))),
+                        Text(chatModelObj.time!.value, style: CustomTextStyles.labelMediumGray500,)
                       ])),
           SizedBox(height: 9.v),
           if (controller.userId! == chatModelObj.senderId!.value)

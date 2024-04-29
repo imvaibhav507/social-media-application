@@ -86,16 +86,25 @@ class MessageslistItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Obx(
-                  () => Text(
-                    messageslistItemModelObj.name?.value ?? '',
-                    style: CustomTextStyles.titleLargeBlack900,
+                  () => Container(
+                    constraints: BoxConstraints(maxWidth: 220.h),
+                    child: Text(
+                      messageslistItemModelObj.name?.value ?? '',
+                      softWrap: false,
+                      style: CustomTextStyles.titleLargeBlack900,
+                    ),
                   ),
                 ),
                 SizedBox(height: 8.v),
                 Obx(
-                  () => Text(
-                    messageslistItemModelObj.lastMessage?.value ?? '',
-                    style: CustomTextStyles.bodyLargeBlack90001,
+                  () => Container(
+                    constraints: BoxConstraints(maxWidth: 220.h),
+                    child: Text(
+                      messageslistItemModelObj.lastMessage?.value ?? '',
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis,
+                      style: CustomTextStyles.bodyLargeBlack90001,
+                    ),
                   ),
                 ),
               ],

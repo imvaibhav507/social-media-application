@@ -325,4 +325,6 @@ class ImageConstant {
 
   static String imgImages = 'assets/images/img_images.png';
 
+  static String addImage = 'assets/images/img_add_image.png';
+
 }

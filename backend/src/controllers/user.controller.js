@@ -445,7 +445,7 @@ const sendFollowRequest = AsyncHandler(async (req, res) => {
 
 const getFollowRequestsList = AsyncHandler(async (req, res) => {
   const userId = req.user._id;
-  const fetchedRequestList = await FollowRequest.aggregate([
+  const fetchedRequestList = await Follow.aggregate([
     {
       $match: {
         requestedTo: new mongoose.Types.ObjectId(userId),
@@ -482,6 +482,86 @@ const getFollowRequestsList = AsyncHandler(async (req, res) => {
         200,
         fetchedRequestList,
         "Pending requested fetched successfully"
+      )
+    );
+});
+
+const getFollowersList = AsyncHandler(async (req, res) => {
+  const followersList = await Follow.aggregate([
+    {
+      $match: {
+        following: new mongoose.Types.ObjectId(req.user._id),
+      },
+    },
+
+    {
+      $lookup: {
+        from: "users",
+        localField: "follower",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+
+    {
+      $unwind: "$user",
+    },
+
+    {
+      $project: {
+        userId: "$user._id",
+        name: "$user.fullName",
+        username: "$user.username",
+        avatar: "$user.avatar",
+      },
+    },
+  ]);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, followersList, "Followers list fetched successfully")
+    );
+});
+
+const getFollowingsList = AsyncHandler(async (req, res) => {
+  const followingsList = await Follow.aggregate([
+    {
+      $match: {
+        follower: new mongoose.Types.ObjectId(req.user._id),
+      },
+    },
+
+    {
+      $lookup: {
+        from: "users",
+        localField: "following",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+
+    {
+      $unwind: "$user",
+    },
+
+    {
+      $project: {
+        userId: "$user._id",
+        name: "$user.fullName",
+        username: "$user.username",
+        avatar: "$user.avatar",
+      },
+    },
+  ]);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        followingsList,
+        "Followings list fetched successfully"
       )
     );
 });
@@ -624,6 +704,20 @@ const unfollowUser = AsyncHandler(async (req, res) => {
     );
 });
 
+const removeFollowerUser = AsyncHandler(async (req, res) => {
+  const userId = req.query.userId;
+  const removedFollower = await Follow.deleteOne({
+    follower: new mongoose.Types.ObjectId(userId),
+    following: new mongoose.Types.ObjectId(req.user._id),
+  });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, removedFollower, "User unfollowed successfully !!")
+    );
+});
+
 export {
   registerUser,
   loginUser,
@@ -632,9 +726,12 @@ export {
   searchUsers,
   getUser,
   followUser,
+  getFollowersList,
+  getFollowingsList,
   sendFollowRequest,
   approveFollowRequest,
   unfollowUser,
+  removeFollowerUser,
   getUserProfile,
   getFollowRequestsList,
   getRecentFollowRequest,

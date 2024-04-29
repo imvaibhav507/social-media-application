@@ -36,11 +36,29 @@ class ChatroomAppBarWidget extends StatelessWidget {
                   Get.back();
                 }),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Obx(
                     ()=> AppbarTitle(
                         text: chatDetailsModelObj!.name!.value ?? '',
                         margin: EdgeInsets.only(left: 108.h, top: 8.v, bottom: 6.v)),
+                ),
+                Container(
+                  height: 20.v,
+                  width: 180.h,
+                  margin: EdgeInsets.only(left: 65.h),
+                  child: Obx(() {
+                    String members = '';
+                    chatDetailsModelObj?.memberDetails?.value
+                        .forEach((member) {
+                      members = members + '${member.fullname}, ';
+                    });
+                    print(members);
+                    if(controller.typingUser?['user'] == null) {
+                      return Text('${members}You', style: CustomTextStyles.bodyLargeGray600, softWrap: true,);
+                    }
+                    return Container();
+                  }),
                 ),
                 Container(
                   height: 20.v,

@@ -1,4 +1,5 @@
 import 'package:vaibhav_s_application2/presentation/search_screen/models/search_model.dart';
+import 'package:vaibhav_s_application2/widgets/custom_icon_button.dart';
 import '../controller/search_controller.dart';
 import 'package:vaibhav_s_application2/widgets/custom_outlined_button.dart';
 import 'package:flutter/material.dart' hide SearchController;
@@ -23,7 +24,7 @@ class RecentsearchesItemWidget extends StatelessWidget {
       width: double.maxFinite,
       padding: EdgeInsets.symmetric(horizontal: 16.h),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomImageView(
@@ -56,21 +57,7 @@ class RecentsearchesItemWidget extends StatelessWidget {
               ],
             ),
           ),
-          Spacer(),
-          (foundUserProfileModelObj.followedByYou == false) ? _buildFollowButton1() : Container(),
         ],
-      ),
-    );
-  }
-
-  /// Section Widget
-  Widget _buildFollowButton1() {
-    return CustomOutlinedButton(
-      width: 76.h,
-      text: "lbl_follow".tr,
-      margin: EdgeInsets.only(
-        top: 9.v,
-        bottom: 26.v,
       ),
     );
   }

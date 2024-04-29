@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
-import 'package:get/get_state_manager/src/simple/list_notifier.dart';
 import 'package:vaibhav_s_application2/presentation/notifications_page/models/recent_follow_request_model.dart';
 import 'package:vaibhav_s_application2/presentation/notifications_page/widgets/recent_follow_request_item_widget.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/appbar_leading_image.dart';
-import 'package:vaibhav_s_application2/widgets/app_bar/appbar_trailing_image.dart';
 import 'widgets/notificationslist_item_widget.dart';
 import 'models/notificationslist_item_model.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +21,11 @@ class NotificationsPage extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             appBar: _buildAppBar(),
-            body: _buildNotificationsList()
+            body: RefreshIndicator(
+                color: appTheme.deepPurpleA200,
+                triggerMode: RefreshIndicatorTriggerMode.onEdge,
+                onRefresh: refresh,
+                child: _buildNotificationsList())
         ));
   }
 
@@ -44,14 +44,15 @@ class NotificationsPage extends StatelessWidget {
             padding: EdgeInsets.only(left: 16.h),
             child: Text("lbl_notifications".tr,
                 style: theme.textTheme.headlineLarge)),
-        actions: [
-          AppbarTrailingImage(
-              imagePath: ImageConstant.imgPersonAddAlt1,
-              margin: EdgeInsets.symmetric(horizontal: 16.h, vertical: 13.v),
-              onTap: () {
-                onTapPersonAddAltOne();
-              })
-        ]);
+        // actions: [
+        //   AppbarTrailingImage(
+        //       imagePath: ImageConstant.imgPersonAddAlt1,
+        //       margin: EdgeInsets.symmetric(horizontal: 16.h, vertical: 13.v),
+        //       onTap: () {
+        //         onTapPersonAddAltOne();
+        //       })
+        // ]
+    );
   }
 
 
@@ -59,7 +60,14 @@ class NotificationsPage extends StatelessWidget {
   /// Section Widget
   Widget _buildNotificationsList() {
     return  Obx(
-        ()=> ListView.separated(
+        () {
+          if(controller
+              .notificationsModelObj.value.notificationslistItemList.value.length == 0) {
+            return Center(
+              child: Text('No new notifications', style: CustomTextStyles.titleLargeBlack900,),
+            );
+          }
+          return ListView.separated(
             shrinkWrap: false,
             separatorBuilder: (context, index) {
               return Padding(
@@ -83,7 +91,8 @@ class NotificationsPage extends StatelessWidget {
               }
               index--;
               return NotificationslistItemWidget(model);
-            }),
+            });
+          },
     );
   }
 
@@ -102,5 +111,10 @@ class NotificationsPage extends StatelessWidget {
     if (!await launchUrlString(url)) {
       throw 'Could not launch https://accounts.google.com/';
     }
+  }
+
+  Future<void> refresh() async{
+    await Future.delayed(Duration(seconds: 2));
+    controller.getRecentFollowRequest();
   }
 }

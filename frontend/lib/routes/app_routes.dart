@@ -12,6 +12,8 @@ import 'package:vaibhav_s_application2/presentation/container_screen/binding/con
 import 'package:vaibhav_s_application2/presentation/create_post_page/binding/create_post_binding.dart';
 import 'package:vaibhav_s_application2/presentation/create_post_page/create_post_page.dart';
 import 'package:vaibhav_s_application2/presentation/follow_requests_page/follow_requests_page.dart';
+import 'package:vaibhav_s_application2/presentation/follows_page/followers_list_model/followers_list_model.dart';
+import 'package:vaibhav_s_application2/presentation/follows_page/followings_list_page.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/bindings/chat_search_binding.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/chats_search_screen.dart';
 import 'package:vaibhav_s_application2/presentation/messages_page/messages_page.dart';
@@ -21,6 +23,7 @@ import 'package:vaibhav_s_application2/presentation/searched_profile_page/search
 import 'package:vaibhav_s_application2/presentation/stories_screen/binding/story_binding.dart';
 import 'package:vaibhav_s_application2/presentation/stories_screen/stories_screen.dart';
 import '../presentation/chat_screen/chatroom_screen.dart';
+import '../presentation/follows_page/followers_list_page.dart';
 import '../presentation/splash_screen/splash_screen.dart';
 import '../presentation/splash_screen/binding/splash_binding.dart';
 import '../presentation/login_screen/login_screen.dart';
@@ -147,6 +150,10 @@ class AppRoutes {
   static const String searchedProfileScreen = '/searched_profile_screen';
 
   static const String followRequestsPage = '/follow_requests_page';
+
+  static const String followingsPage = '/followings_page';
+
+  static const String followersPage = '/followers_page';
 
   static List<GetPage> pages = [
     GetPage(
@@ -340,7 +347,8 @@ class AppRoutes {
         page: () => CaptureImageScreen(),
       bindings: [CaptureImageBinding()],
     ),
-
+    GetPage(name: followingsPage, page: () => FollowingsPage()),
+    GetPage(name: followersPage, page: () => FollowersPage()),
     GetPage(name: followRequestsPage, page: () => FollowRequestsPage()),
     GetPage(name: messagesPage, page: () => MessagesPage()),
     GetPage(name: searchedProfileScreen, page: () => SearchedProfilePage()),

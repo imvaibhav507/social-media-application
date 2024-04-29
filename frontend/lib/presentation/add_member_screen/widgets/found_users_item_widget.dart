@@ -95,12 +95,12 @@ class FoundUsersItemWidget extends StatelessWidget {
               height: 35.v,
               width: 88.h,
               decoration: BoxDecoration(
-                color: (controller.userModels.contains(foundUserObj))? Colors.grey.shade400: appTheme.deepPurpleA200,
+                color: (controller.userModels.any((user) => user.sId == foundUserObj.sId))? Colors.grey.shade400: appTheme.deepPurpleA200,
                 borderRadius: BorderRadius.circular(16.h),
               ),
               onTap: onTapAddMemberToList,
               child: Center(
-                  child: (controller.userModels.contains(foundUserObj))? Icon(Icons.check, color: Colors.white,):Text("Add",
+                  child: (controller.userModels.any((user) => user.sId == foundUserObj.sId))? Icon(Icons.check, color: Colors.white,):Text("Add",
                       style: CustomTextStyles.titleSmallPrimary)),
             ),
           ),

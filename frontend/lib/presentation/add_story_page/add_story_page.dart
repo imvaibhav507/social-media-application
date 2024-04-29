@@ -108,6 +108,7 @@ class AddStoryScreen extends GetWidget<AddStoryController> {
   }
 
   Future<void> onTapAddStory() async{
-    await controller.addStory();
+    controller.addStory();
+    Get.offAllNamed(AppRoutes.containerScreen);
   }
 }

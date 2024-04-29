@@ -34,7 +34,10 @@ class PersonalChatAppBarWidget extends StatelessWidget {
                 AppbarTitleImage(
                     imagePath: ImageConstant.imgClose,
                     margin: EdgeInsets.symmetric(vertical: 8.v),
-                    onTap: () {
+                    onTap: () async {
+                      if(controller.chatScreenModelObj.value.chatItems?.length ==0) {
+                        await controller.deleteGroup();
+                      }
                       Get.back();
                     }),
                 Column(

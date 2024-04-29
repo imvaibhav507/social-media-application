@@ -21,30 +21,30 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool isScrolled) {
-          return [_buildAppBar()];
-        },
-        body: SizedBox(
-          width: double.maxFinite,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 6.v),
-              _buildTabview(),
-              Expanded(
-                child: TabBarView(
-                  controller: controller.tabviewController,
-                  children: [
-                    DailyNewPage(),
-                    DailyNewPage(),
-                  ],
+          body: RefreshIndicator(
+            color: appTheme.deepPurpleA200,
+            triggerMode: RefreshIndicatorTriggerMode.onEdge,
+            onRefresh: refresh,
+            child: NestedScrollView(
+              physics: BouncingScrollPhysics(),
+                    headerSliverBuilder: (BuildContext context, bool isScrolled) {
+            return [_buildAppBar()];
+                    },
+                    body: SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 6.v),
+                // _buildTabview(),
+                Expanded(
+                  child: DailyNewPage(),
                 ),
-              ),
-            ],
-          ),
-        ),
-      )),
+              ],
+            ),
+                    ),
+                  ),
+          )),
     );
   }
 
@@ -133,9 +133,10 @@ class HomeScreen extends StatelessWidget {
                 null ||
             storiesController
                 .storiesListModelObj.value.storiesListModel!.isEmpty) {
-          return Container();
+          return _buildAddStoryWidget();
         }
         return ListView.separated(
+          physics: BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           separatorBuilder: (
             context,
@@ -231,5 +232,12 @@ class HomeScreen extends StatelessWidget {
 
   void onTapOpenStories(String? postId) {
     Get.toNamed(AppRoutes.storyScreen, arguments: postId);
+  }
+
+  Future<void> refresh() async{
+    await Future.delayed(Duration(seconds: 2));
+    controller.getLoggedInUser();
+    storiesController.getAllStories();
+    controller.postsController.getAllPosts();
   }
 }

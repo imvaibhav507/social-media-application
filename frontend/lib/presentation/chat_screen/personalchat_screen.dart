@@ -135,11 +135,6 @@ class PersonalChatScreen extends GetWidget<ChatController> {
     });
   }
 
-  /// Navigates to the previous screen.
-  onTapClose() {
-    Get.back();
-  }
-
   onTapSendMessage() async{
     final sendMessage = SendMessageModel(
       chatroomId: controller.chatroomId,
@@ -148,7 +143,6 @@ class PersonalChatScreen extends GetWidget<ChatController> {
     controller.textMessageController.clear();
 
     await controller.sendMessage(sendMessage);
-    // await controller.addNewMessage();
     controller.update();
   }
 }

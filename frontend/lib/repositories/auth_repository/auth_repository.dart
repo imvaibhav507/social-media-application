@@ -48,4 +48,24 @@ class AuthRepository {
     return response;
   }
 
+  Future<dynamic> getFollowingsList() async {
+    dynamic response = _apiService.getApi(AppUrl.getFollowingsApi);
+    return response;
+  }
+
+  Future<dynamic> getFollowersList() async {
+    dynamic response = _apiService.getApi(AppUrl.getFollowersApi);
+    return response;
+  }
+
+  Future<dynamic> unfollowUser(String userId) async {
+    dynamic response = _apiService.deleteApi(AppUrl.unfollowUserApi + '?userId=${userId}', {});
+    return response;
+  }
+
+  Future<dynamic> removeFollowerUser(String userId) async {
+    dynamic response = _apiService.deleteApi(AppUrl.removeFollowerUserApi + '?userId=${userId}', {});
+    return response;
+  }
+
 }

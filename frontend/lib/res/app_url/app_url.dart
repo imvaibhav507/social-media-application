@@ -1,8 +1,8 @@
 class AppUrl {
-  // static const String hostUrl = 'http://172.17.192.1:8080';
-  // static const String baseUrl = 'http://172.17.192.1:8080/api/v1';
-  static const String hostUrl = 'https://social-media-application-9ykb.onrender.com';
-  static const String baseUrl = 'https://social-media-application-9ykb.onrender.com/api/v1';
+  static const String hostUrl = 'http://192.168.1.6:8080';
+  static const String baseUrl = 'http://192.168.1.6:8080/api/v1';
+  // static const String hostUrl = 'https://social-media-application-9ykb.onrender.com';
+  // static const String baseUrl = 'https://social-media-application-9ykb.onrender.com/api/v1';
 
   static const String signupApi = '$baseUrl/users/register';
   static const String loginApi = '$baseUrl/users/login';
@@ -11,16 +11,20 @@ class AppUrl {
   static const String getLoggedInUserApi = '$baseUrl/users/get-user';
   static const String followUserApi = '$baseUrl/users/follow/';
   static const String unfollowUserApi = '$baseUrl/users/follow/';
+  static const String removeFollowerUserApi = '$baseUrl/users/remove-follower/';
   static const String getUserProfileApi = '$baseUrl/users/get-user-profile/';
   static const String searchUserProfileApi = '$baseUrl/users/search-user-profile/';
   static const String followRequestApi = '$baseUrl/users/follow-request/';
   static const String getRecentRequestApi = '$baseUrl/users/follow-request-item';
+  static const String getFollowingsApi = '$baseUrl/users/followings';
+  static const String getFollowersApi = '$baseUrl/users/followers';
 
   static const String getChatroomListApi = '$baseUrl/chatroom/chatrooms';
   static const String getSingleChatroomListItemApi = '$baseUrl/chatroom/single-chatroom';
   static const String getChatroomDetails = '$baseUrl/chatroom/';
   static const String getPersonalChatDetails = '$baseUrl/chatroom/personal-chat/';
   static const String createPersonalChat = '$baseUrl/chatroom/new-personal-chat/';
+  static const String createGroupChat = '$baseUrl/chatroom/new-group-chat';
   static const String deleteChatroom = '$baseUrl/chatroom/';
   static const String leaveChatroom = '$baseUrl/chatroom/leave-chatroom/';
   static const String renameChatroom = '$baseUrl/chatroom/';
@@ -38,6 +42,7 @@ class AppUrl {
   static const String getAllStoriesApi = '$baseUrl/post/get-stories';
   static const String getSingleStoryApi = '$baseUrl/post/get-single-story/';
   static const String addStoryApi = '$baseUrl/post/add-story';
+  static const String createPostApi = '$baseUrl/post/create-post/';
 
   static const String getAllCommentsApi = '$baseUrl/post/all-comments/';
   static const String addCommentApi = '$baseUrl/post/add-comment';

@@ -27,7 +27,7 @@ chatroomRouter.route("/chatrooms").get(verifyJWT, getChatRoomsList);
 chatroomRouter.route("/single-chatroom/").get(verifyJWT, getSingleChatRoom);
 chatroomRouter.route("/add-participants").patch(verifyJWT, addParticipants);
 chatroomRouter.route("/search-chatrooms/").get(verifyJWT, searchChatRooms);
-chatroomRouter.route("/leave-chatroom").patch(verifyJWT, leaveChatRoom);
+chatroomRouter.route("/leave-chatroom/").patch(verifyJWT, leaveChatRoom);
 chatroomRouter
   .route("/send-message")
   .post(verifyJWT, upload.array("attachments", 10), sendMessages);

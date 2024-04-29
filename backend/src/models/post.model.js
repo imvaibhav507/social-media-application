@@ -23,6 +23,11 @@ const postSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+
+    createdAt: {
+      type: Date,
+      expires: 30,
+    },
   },
   { timestamps: true }
 );

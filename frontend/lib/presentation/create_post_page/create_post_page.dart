@@ -63,29 +63,50 @@ class CreatePostPage extends GetWidget<CreatePostController> {
         margin: EdgeInsets.symmetric(vertical: 16.v, horizontal: 8.h),
         width: double.maxFinite,
         height: 450.v,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         decoration: BoxDecoration(
-            color: appTheme.blueGray400,
+            color: appTheme.gray200,
           borderRadius: BorderRadius.circular(16.adaptSize)
         ),
-        child: CarouselSlider(
+        child: (controller.createPostModelObj
+            .value.files!.isEmpty)? Padding(
+              padding: EdgeInsets.all(140.adaptSize),
+              child: CustomImageView(
+                        imagePath: ImageConstant.addImage,
+                        color: appTheme.blueGray700,
+                onTap: () {controller.openImagePicker();},
+                      ),
+            )
+            : CarouselSlider(
           options: CarouselOptions(
             height: 400.0,
-            autoPlay: true,
-            pauseAutoPlayOnTouch: true,
+            autoPlay: false,
             enableInfiniteScroll: false,
             aspectRatio: 1/1,
             autoPlayCurve: Curves.fastOutSlowIn,
             autoPlayAnimationDuration: Duration(milliseconds: 800),
             viewportFraction: 1,
+            clipBehavior: Clip.antiAlias
           ),
-          items: controller.createPostModelObj
+          items: [...?controller.createPostModelObj
               .value.files?.map(
-                  (file)=> Container(
+                  (file)=> Padding(
+                    padding: EdgeInsets.all(2.adaptSize),
                     child: Image.file(
-                      File(file!.path)
+                      File(file!.path),
+                        isAntiAlias: true,
+                      fit: BoxFit.fitWidth,
                     ),
-                  )
-          ).toList()
+                  )).toList(),
+            Padding(
+              padding: EdgeInsets.all(140.adaptSize),
+              child: CustomImageView(
+                imagePath: ImageConstant.addImage,
+                color: appTheme.blueGray700,
+                onTap: () {controller.openImagePicker();},
+              ),
+            )
+          ]
         ),
       ),
     );
@@ -128,15 +149,23 @@ class CreatePostPage extends GetWidget<CreatePostController> {
   buildShareButton() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 25.h, vertical: 10.v),
-      child: CustomElevatedButton(
-          text: 'Share',
-        buttonTextStyle: CustomTextStyles.titleLargePrimary,
-        onPressed: onPressedUploadPost(),
+      child: Obx(
+          ()=> CustomElevatedButton(
+            rightIcon: (controller.isLoading.isTrue)?
+            Container(
+              width: 30.adaptSize,
+                height: 30.adaptSize,
+                child: CircularProgressIndicator(strokeWidth: 2.adaptSize,)): null,
+            text: (controller.isLoading.isTrue)? '': 'Share' ,
+          buttonTextStyle: CustomTextStyles.titleLargePrimary,
+          onPressed: () {onPressedUploadPost();}
+        ),
       ),
     );
   }
 
-  onPressedUploadPost() {
-
+  onPressedUploadPost() async {
+    await controller.createPost();
+    Get.offAllNamed(AppRoutes.containerScreen);
   }
 }

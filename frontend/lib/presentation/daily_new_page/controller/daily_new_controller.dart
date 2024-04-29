@@ -26,7 +26,6 @@ class DailyNewController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    commentController.dispose();
   }
 
   Future<void> getAllPosts() async {

@@ -13,6 +13,7 @@ import 'package:vaibhav_s_application2/presentation/messages_page/controller/mes
 import 'package:vaibhav_s_application2/presentation/messages_page/models/messageslist_item_model.dart';
 import 'package:vaibhav_s_application2/repositories/chatroom_repository.dart';
 import 'package:vaibhav_s_application2/res/app_url/app_url.dart';
+import 'package:vaibhav_s_application2/widgets/custom_snackbar.dart';
 import '../../../core/app_export.dart';
 import '../models/chat_model.dart';
 
@@ -39,11 +40,13 @@ class ChatController extends GetxController {
   int page = 1;
   final int limit = 10;
   bool isLoading = false;
+  RxBool canMessage = true.obs;
 
   @override
   void onClose() {
     // TODO: implement onClose
     super.onClose();
+
     textMessageController.dispose();
     socket.emit("leave chatroom", chatroomId);
   }
@@ -221,6 +224,19 @@ class ChatController extends GetxController {
     });
   }
 
+  Future<void> leaveChatroom() async {
+    await chatroomRepository.leaveChatroom(chatroomId!).then((value) async{
+      final response = await ApiResponse.completed(value);
+      final data = response.data as Map<String, dynamic>;
+      var messagesController = Get.find<MessagesController>();
+      if(data['statusCode'] == 200) {
+         messagesController.messagesListModelObj.value
+            .messagesItems?.removeWhere((item) => item.sId == chatroomId);
+        CustomSnackBar().showSnackBar(text: 'You left the group');
+         canMessage.value = false;
+      }
+    });
+  }
   void scrollListener() {
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {

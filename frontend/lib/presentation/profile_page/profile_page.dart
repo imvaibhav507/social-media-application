@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:vaibhav_s_application2/presentation/profile_page/models/user_posts_list.dart';
 import 'package:vaibhav_s_application2/presentation/profile_page/models/user_profile_model.dart';
 import 'package:vaibhav_s_application2/widgets/app_bar/custom_app_bar.dart';
+import 'package:vaibhav_s_application2/widgets/custom_dialog_box.dart';
 import 'package:vaibhav_s_application2/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
@@ -16,63 +16,68 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            appBar: _buildAppBar(),
-            body: SizedBox(
-                width: double.maxFinite,
-                child: Column(children: [
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: GestureDetector(
-                          onTap: () {
-                            onTapProfileDetails();
-                          },
-                          child: Padding(
-                              padding: EdgeInsets.only(left: 16.h),
-                              child: Row(children: [
-                                Obx(
-                                  () => CustomImageView(
-                                      imagePath: controller.userProfileModelObj
-                                          .value.profileDetails?.avatar,
-                                      height: 80.adaptSize,
-                                      width: 80.adaptSize,
-                                      radius: BorderRadius.circular(40.h)),
-                                ),
-                                Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 16.h, top: 11.v, bottom: 4.v),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Obx(
-                                            () => Text(
-                                                controller
-                                                        .userProfileModelObj
-                                                        .value
-                                                        .profileDetails
-                                                        ?.fullname ??
-                                                    "null",
-                                                style: CustomTextStyles
-                                                    .headlineLargeBlack90001),
-                                          ),
-                                          SizedBox(height: 4.v),
-                                          Obx(
-                                            () => Text(
-                                                "@${controller.userProfileModelObj.value.profileDetails?.username}" ??
-                                                    "null",
-                                                style: CustomTextStyles
-                                                    .bodyMediumBluegray400),
-                                          )
-                                        ]))
-                              ])))),
-                  SizedBox(height: 16.v),
-                  _buildCountsRow(),
-                  SizedBox(height: 16.v),
-                  _buildMenuRow(),
-                  SizedBox(height: 2.v),
-                  _buildProfileList()
-                ]))));
+        child: RefreshIndicator(
+          color: appTheme.deepPurpleA200,
+          triggerMode: RefreshIndicatorTriggerMode.onEdge,
+          onRefresh: refresh,
+          child: Scaffold(
+              appBar: _buildAppBar(),
+              body: SizedBox(
+                  width: double.maxFinite,
+                  child: Column(children: [
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: GestureDetector(
+                            onTap: () {
+                              onTapProfileDetails();
+                            },
+                            child: Padding(
+                                padding: EdgeInsets.only(left: 16.h),
+                                child: Row(children: [
+                                  Obx(
+                                    () => CustomImageView(
+                                        imagePath: controller.userProfileModelObj
+                                            .value.profileDetails?.avatar,
+                                        height: 80.adaptSize,
+                                        width: 80.adaptSize,
+                                        radius: BorderRadius.circular(40.h)),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 16.h, top: 11.v, bottom: 4.v),
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Obx(
+                                              () => Text(
+                                                  controller
+                                                          .userProfileModelObj
+                                                          .value
+                                                          .profileDetails
+                                                          ?.fullname ??
+                                                      "null",
+                                                  style: CustomTextStyles
+                                                      .headlineLargeBlack90001),
+                                            ),
+                                            SizedBox(height: 4.v),
+                                            Obx(
+                                              () => Text(
+                                                  "@${controller.userProfileModelObj.value.profileDetails?.username}" ??
+                                                      "null",
+                                                  style: CustomTextStyles
+                                                      .bodyMediumBluegray400),
+                                            )
+                                          ]))
+                                ])))),
+                    SizedBox(height: 16.v),
+                    _buildCountsRow(),
+                    SizedBox(height: 16.v),
+                    _buildMenuRow(),
+                    SizedBox(height: 2.v),
+                    _buildProfileList()
+                  ]))),
+        ));
   }
 
   /// Section Widget
@@ -106,20 +111,30 @@ class ProfilePage extends StatelessWidget {
                 style: CustomTextStyles.titleLargeDeeppurpleA200))
           ]),
           Obx(
-            () => _buildFollowersColumn(
-                followersText: "lbl_following".tr,
-                zipcodeText: controller
-                        .userProfileModelObj.value.profileDetails?.followings
-                        .toString() ??
-                    "0"),
+            () => GestureDetector(
+              onTap: () {
+                Get.toNamed(AppRoutes.followingsPage, arguments: 'followings');
+              },
+              child: _buildFollowersColumn(
+                  followersText: "lbl_following".tr,
+                  zipcodeText: controller
+                          .userProfileModelObj.value.profileDetails?.followings
+                          .toString() ??
+                      "0"),
+            ),
           ),
           Obx(
-            () => _buildFollowersColumn(
-                followersText: "lbl_followers".tr,
-                zipcodeText: controller
-                        .userProfileModelObj.value.profileDetails?.followers
-                        .toString() ??
-                    "0"),
+            () => GestureDetector(
+              onTap: () {
+                Get.toNamed(AppRoutes.followersPage, arguments: 'followers');
+              },
+              child: _buildFollowersColumn(
+                  followersText: "lbl_followers".tr,
+                  zipcodeText: controller
+                          .userProfileModelObj.value.profileDetails?.followers
+                          .toString() ??
+                      "0"),
+            ),
           )
         ]));
   }
@@ -157,7 +172,7 @@ class ProfilePage extends StatelessWidget {
       () => Expanded(
         child: GridView.count(
           mainAxisSpacing: 2.adaptSize,
-          crossAxisSpacing: 2.adaptSize,
+          crossAxisSpacing: 1.adaptSize,
           crossAxisCount: 3,
           children: List.generate(
               controller.userPostListItemObj.value.userPostsList?.length ?? 0,
@@ -165,14 +180,17 @@ class ProfilePage extends StatelessWidget {
             return Stack(children: [
               Obx(
                 () => Container(
+                  padding: EdgeInsets.symmetric(horizontal: 1.h),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12.adaptSize),
                   ),
                   clipBehavior: Clip.antiAlias,
-                  child: CustomImageView(
-                    imagePath: controller.userPostListItemObj.value
-                            .userPostsList?[index].cover ??
-                        "null",
+                  child: Center(
+                    child: CustomImageView(
+                      imagePath: controller.userPostListItemObj.value
+                              .userPostsList?[index].cover ??
+                          "null",
+                    ),
                   ),
                 ),
               ),
@@ -196,7 +214,7 @@ class ProfilePage extends StatelessWidget {
   /// Common widget
   Widget _buildFollowersColumn({
     required String followersText,
-    required String zipcodeText,
+    required String zipcodeText
   }) {
     return Column(children: [
       Text(followersText,
@@ -217,6 +235,21 @@ class ProfilePage extends StatelessWidget {
   }
 
   onPressedLogout() async {
-    await controller.logoutUser();
+    CustomDialogBox().showDialogBox(
+        context: Get.context!,
+      title: 'Do you want to log out ?',
+      onTapYes: () async{
+        await controller.logoutUser();
+      },
+      onTapNo: () {
+          Get.back();
+    }
+    );
+  }
+
+  Future<void> refresh() async{
+    await Future.delayed(Duration(seconds: 2));
+    controller.getUserPostsList();
+    controller.getUserProfile();
   }
 }

@@ -40,13 +40,15 @@ class ChatDetailsModel {
 
 class MemberDetails {
   Rx<String>? username;
+  Rx<String>? fullname;
   Rx<String>? email;
   Rx<String>? avatar;
 
-  MemberDetails({this.username, this.email, this.avatar});
+  MemberDetails({this.username, this.email, this.avatar, this.fullname});
 
   MemberDetails.fromJson(Map<String, dynamic> json) {
     username = Rx(json['username']);
+    fullname = Rx(json['fullName']);
     email = Rx(json['email']);
     avatar = Rx(json['avatar']);
   }
