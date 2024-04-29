@@ -107,12 +107,18 @@ io.on("connection", (socket) => {
   });
 
   socket.on("update chat", async (data) => {
+    console.log("data", data);
     const fetchedChatroom = await ChatRoom.findById(data.chatroom);
+
+    if (!fetchedChatroom) {
+      throw new ApiError(400, "chatroom not found");
+    }
+    console.log("fetched chatroom", fetchedChatroom);
 
     const chatItem = await ChatRoom.aggregate([
       {
         $match: {
-          _id: new mongoose.Types.ObjectId(data.chatroom),
+          _id: fetchedChatroom._id,
         },
       },
 
@@ -198,9 +204,6 @@ io.on("connection", (socket) => {
       member.toString()
     );
 
-    if (!memberIds) {
-      throw new ApiError(400, "No ids found");
-    }
     memberIds.forEach((memberId) => {
       const socketId = userSocketMap[memberId];
       if (socketId) {
