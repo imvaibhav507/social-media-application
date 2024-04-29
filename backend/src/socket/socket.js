@@ -4,6 +4,7 @@ import { app } from "../app.js";
 import { mongoose } from "mongoose";
 import { v4 as uuid } from "uuid";
 import { ChatRoom } from "../models/chatroom.model.js";
+import { ApiError } from "../utils/ApiError.js";
 
 const server = http.createServer(app);
 
@@ -196,6 +197,10 @@ io.on("connection", (socket) => {
     const memberIds = fetchedChatroom.members.map((member) =>
       member.toString()
     );
+
+    if (!memberIds) {
+      throw new ApiError(400, "No ids found");
+    }
     memberIds.forEach((memberId) => {
       const socketId = userSocketMap[memberId];
       if (socketId) {

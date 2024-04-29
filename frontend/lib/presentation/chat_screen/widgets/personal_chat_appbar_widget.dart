@@ -41,13 +41,15 @@ class PersonalChatAppBarWidget extends StatelessWidget {
                       Get.back();
                     }),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppbarTitle(
                           text: memberDetailsModelObj!.name! ?? '',
                           margin: EdgeInsets.only(left: 108.h, top: 8.v, bottom: 6.v)),
                     Container(
                         height: 20.v,
-                      margin: EdgeInsets.only(left: 100.h),
+                      width: 180.h,
+                      margin: EdgeInsets.only(left: 65.h),
                         child: Obx(() {
                           if(controller.typingUser?['user'] != null) {
                             return Text('${controller.typingUser?['user']} is typing...', style: CustomTextStyles.bodyLargeGray600,);

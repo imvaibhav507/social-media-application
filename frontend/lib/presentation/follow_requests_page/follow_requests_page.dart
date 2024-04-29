@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vaibhav_s_application2/core/app_export.dart';
 import 'package:vaibhav_s_application2/presentation/follow_requests_page/controller/follow_requests_controller.dart';
