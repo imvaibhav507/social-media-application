@@ -445,7 +445,7 @@ const sendFollowRequest = AsyncHandler(async (req, res) => {
 
 const getFollowRequestsList = AsyncHandler(async (req, res) => {
   const userId = req.user._id;
-  const fetchedRequestList = await Follow.aggregate([
+  const fetchedRequestList = await FollowRequest.aggregate([
     {
       $match: {
         requestedTo: new mongoose.Types.ObjectId(userId),
@@ -474,6 +474,8 @@ const getFollowRequestsList = AsyncHandler(async (req, res) => {
       },
     },
   ]);
+
+  console.log(fetchedRequestList);
 
   return res
     .status(200)

@@ -13,8 +13,8 @@ import 'models/notifications_model.dart';
 class NotificationsPage extends StatelessWidget {
   NotificationsPage({Key? key}) : super(key: key);
 
-  NotificationsController controller =
-      Get.put(NotificationsController(NotificationsModel().obs, RecentFollowRequestModel().obs));
+  NotificationsController controller = Get.put(NotificationsController(
+      NotificationsModel().obs, RecentFollowRequestModel().obs));
 
   @override
   Widget build(BuildContext context) {
@@ -25,74 +25,74 @@ class NotificationsPage extends StatelessWidget {
                 color: appTheme.deepPurpleA200,
                 triggerMode: RefreshIndicatorTriggerMode.onEdge,
                 onRefresh: refresh,
-                child: _buildNotificationsList())
-        ));
+                child: _buildNotificationsList())));
   }
 
   /// Section Widget
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
       height: 85.v,
-        leadingWidth: 40.h,
-        leading: AppbarLeadingImage(
-            imagePath: ImageConstant.imgArrowBackDeepPurpleA200,
-            margin: EdgeInsets.only(left: 16.h, top: 13.v, bottom: 13.v),
-            onTap: () {
-              onTapArrowBack();
-            }),
-        title: Padding(
-            padding: EdgeInsets.only(left: 16.h),
-            child: Text("lbl_notifications".tr,
-                style: theme.textTheme.headlineLarge)),
-        // actions: [
-        //   AppbarTrailingImage(
-        //       imagePath: ImageConstant.imgPersonAddAlt1,
-        //       margin: EdgeInsets.symmetric(horizontal: 16.h, vertical: 13.v),
-        //       onTap: () {
-        //         onTapPersonAddAltOne();
-        //       })
-        // ]
+      leadingWidth: 40.h,
+      leading: AppbarLeadingImage(
+          imagePath: ImageConstant.imgArrowBackDeepPurpleA200,
+          margin: EdgeInsets.only(left: 16.h, top: 13.v, bottom: 13.v),
+          onTap: () {
+            onTapArrowBack();
+          }),
+      title: Padding(
+          padding: EdgeInsets.only(left: 16.h),
+          child: Text("lbl_notifications".tr,
+              style: theme.textTheme.headlineLarge)),
+      // actions: [
+      //   AppbarTrailingImage(
+      //       imagePath: ImageConstant.imgPersonAddAlt1,
+      //       margin: EdgeInsets.symmetric(horizontal: 16.h, vertical: 13.v),
+      //       onTap: () {
+      //         onTapPersonAddAltOne();
+      //       })
+      // ]
     );
   }
 
-
-
   /// Section Widget
   Widget _buildNotificationsList() {
-    return  Obx(
-        () {
-          if(controller
-              .notificationsModelObj.value.notificationslistItemList.value.length == 0) {
-            return Center(
-              child: Text('No new notifications', style: CustomTextStyles.titleLargeBlack900,),
-            );
-          }
-          return ListView.separated(
-            shrinkWrap: false,
-            separatorBuilder: (context, index) {
-              return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.5.v),
-                  child: SizedBox(
-                      width: double.maxFinite,
-                      child: Divider(
-                          height: 2.v,
-                          thickness: 2.v,
-                          color: theme.colorScheme.secondaryContainer)));
-            },
-            itemCount: controller
-                .notificationsModelObj.value.notificationslistItemList.value.length,
-            itemBuilder: (context, index) {
-              NotificationslistItemModel model = controller.notificationsModelObj
-                  .value.notificationslistItemList.value[index];
-              if(index==0) {
-                return Obx(
-                        ()=> (controller.recentFollowRequestModelObj.value.recentRequestModelObj==null) ? Container():
-                RecentFollowRequestItemWidget(controller.recentFollowRequestModelObj.value.recentRequestModelObj!.value));
-              }
-              index--;
-              return NotificationslistItemWidget(model);
-            });
+    return Obx(
+      () => ListView.separated(
+          shrinkWrap: false,
+          separatorBuilder: (context, index) {
+            return Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.5.v),
+                child: SizedBox(
+                    width: double.maxFinite,
+                    child: Divider(
+                        height: 2.v,
+                        thickness: 2.v,
+                        color: theme.colorScheme.secondaryContainer)));
           },
+          itemCount: controller.notificationsModelObj.value
+              .notificationslistItemList.value.length,
+          itemBuilder: (context, index) {
+            NotificationslistItemModel model = controller.notificationsModelObj
+                .value.notificationslistItemList.value[index];
+            if (index == 0) {
+              return Obx(() => (controller.recentFollowRequestModelObj.value
+                          .recentRequestModelObj ==
+                      null)
+                  ? Center(
+                      child: Text(
+                        'No new notifications',
+                        style: CustomTextStyles.titleLargeBlack900,
+                      ),
+                    )
+                  : RecentFollowRequestItemWidget(controller
+                      .recentFollowRequestModelObj
+                      .value
+                      .recentRequestModelObj!
+                      .value));
+            }
+            index--;
+            return NotificationslistItemWidget(model);
+          }),
     );
   }
 
@@ -113,7 +113,7 @@ class NotificationsPage extends StatelessWidget {
     }
   }
 
-  Future<void> refresh() async{
+  Future<void> refresh() async {
     await Future.delayed(Duration(seconds: 2));
     controller.getRecentFollowRequest();
   }

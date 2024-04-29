@@ -49,16 +49,18 @@ class FollowRequestsPage extends StatelessWidget {
   }
 
   Widget _buildFollowRequestsList() {
-    if (controller.followRequestsModelObj.value.followRequestsList != null &&
-        controller.followRequestsModelObj.value.followRequestsList!.isEmpty) {
-      return Center(
-          child: Text(
-        'No Pending Requests!',
-        style: CustomTextStyles.titleLargeBlack900,
-      ));
-    }
+
     return Obx(
-      () => ListView.separated(
+      () {
+        if (controller.followRequestsModelObj.value.followRequestsList != null &&
+            controller.followRequestsModelObj.value.followRequestsList!.isEmpty) {
+          return Center(
+              child: Text(
+                'No Pending Requests!',
+                style: CustomTextStyles.titleLargeBlack900,
+              ));
+        }
+        return ListView.separated(
           shrinkWrap: true,
           separatorBuilder: (context, index) {
             return Padding(
@@ -77,7 +79,8 @@ class FollowRequestsPage extends StatelessWidget {
             final requestListItem = controller
                 .followRequestsModelObj.value.followRequestsList?[index];
             return _buildFollowRequest(requestListItem);
-          }),
+          });
+      }
     );
   }
 

@@ -1,8 +1,8 @@
 class AppUrl {
-  static const String hostUrl = 'http://192.168.1.6:8080';
-  static const String baseUrl = 'http://192.168.1.6:8080/api/v1';
-  // static const String hostUrl = 'https://social-media-application-9ykb.onrender.com';
-  // static const String baseUrl = 'https://social-media-application-9ykb.onrender.com/api/v1';
+  // static const String hostUrl = 'http://192.168.1.6:8080';
+  // static const String baseUrl = 'http://192.168.1.6:8080/api/v1';
+  static const String hostUrl = 'https://social-media-application-9ykb.onrender.com';
+  static const String baseUrl = 'https://social-media-application-9ykb.onrender.com/api/v1';
 
   static const String signupApi = '$baseUrl/users/register';
   static const String loginApi = '$baseUrl/users/login';
