@@ -48,7 +48,7 @@ class PersonalChatScreen extends GetWidget<ChatController> {
   /// Section Widget
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
-      height: 84.v,
+      height: 90.v,
       centerTitle: true,
       title: Obx(() {
         final chatDetailsModel = controller.personalChatDetailsObj;

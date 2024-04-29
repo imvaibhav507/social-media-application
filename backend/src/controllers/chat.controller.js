@@ -131,7 +131,10 @@ const createPersonalChat = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "No user found with thee given id");
   }
 
-  const allParticipants = [participantUserId, req.user._id];
+  const allParticipants = [
+    new mongoose.Types.ObjectId(participantUserId),
+    new mongoose.Types.ObjectId(req.user._id),
+  ];
   console.log(allParticipants);
   const existingPersonalChatroom = await ChatRoom.findOne({
     members: { $all: allParticipants },

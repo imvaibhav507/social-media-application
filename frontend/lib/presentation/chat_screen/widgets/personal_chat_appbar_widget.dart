@@ -41,7 +41,7 @@ class PersonalChatAppBarWidget extends StatelessWidget {
                       Get.back();
                     }),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     AppbarTitle(
                           text: memberDetailsModelObj!.name! ?? '',
@@ -60,15 +60,18 @@ class PersonalChatAppBarWidget extends StatelessWidget {
                   ],
                 ),
                 SizedBox(width: 10.h,),
-                CustomImageView(
-                  imagePath: memberDetailsModelObj!.avatar!,
-                  height: 54.v,
-                  width: 52.h,
-                  radius: BorderRadius.circular(
-                    27.h,
+                Container(
+                  height: 52.adaptSize,
+                  width: 52.adaptSize,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
                   ),
-                  border: Border.all(width: 0.95),
-                  alignment: Alignment.center,
+                  clipBehavior: Clip.antiAlias,
+                  child: CustomImageView(
+                    imagePath: memberDetailsModelObj!.avatar!,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  ),
                 ),
               ])),
 
